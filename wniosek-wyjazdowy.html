@@ -1532,6 +1532,15 @@ const TRANSLATIONS = {
     exportDocx: "Export DOCX",
     printPdf: "Print / PDF",
     clearForm: "Clear form",
+    rowTickets: "Tickets",
+    rowVisa: "Visa",
+    ticketCost: "Tickets (amount)",
+    ticketCurrency: "Ticket currency",
+    ticketHint: "Flight/train ticket cost (if known)",
+    visaCost: "Visa (amount)",
+    visaCurrency: "Visa currency",
+    visaHint: "Visa fee (if applicable)",
+    advanceCurrency: "Advance currency",
     rowPerDiem: "Per diem allowance",
     rowTravelAllowance: "Travel allowance (lump sum)",
     rowHotel: "Hotel allowance",
@@ -1821,13 +1830,6 @@ document.addEventListener('click', function(e) {
 // ============================================================
 function recalculate() {
   var tripType = document.querySelector('input[name="tripType"]:checked').value;
-  var ticketCost = parseFloat(document.getElementById('ticketCost').value) || 0;
-  var ticketCurr = document.getElementById('ticketCurrency').value || 'PLN';
-  var visaCost = parseFloat(document.getElementById('visaCost').value) || 0;
-  var visaCurr = document.getElementById('visaCurrency').value || 'PLN';
-  var _adv = getAdvanceAmount();
-  var advanceAmt = _adv.amount;
-  var advanceCurr = _adv.currency;
   var depDate = document.getElementById('departureDate').value;
   var retDate = document.getElementById('returnDate').value;
 
@@ -2280,6 +2282,14 @@ function clearForm() {
   document.getElementById('mealsDetails').style.display = 'none';
   document.getElementById('advanceDetailsBlock').style.display = 'none';
   document.getElementById('requestAdvance').checked = false;
+  // Reset yes/no radios to defaults: meals=No, hotel=No, localTransport=Yes
+  document.getElementById('mealsNo').checked = true;
+  document.getElementById('mealsYes').checked = false;
+  document.getElementById('hotelNo').checked = true;
+  document.getElementById('hotelYes').checked = false;
+  document.getElementById('ltYes').checked = true;
+  document.getElementById('ltNo').checked = false;
+  document.getElementById('localTransportIncluded').checked = true;
   // Reset currency selection
   document.getElementById('advanceCurrency').removeAttribute('data-user-changed');
   var countryOpt = document.getElementById('advanceCurrency').querySelector('option[data-country-currency]');
@@ -2413,8 +2423,9 @@ async function exportDocx() {
   var calcRows = [];
   var grandTotal = '';
   var curr = '';
+  var requestAdvanceChecked = document.getElementById('requestAdvance').checked;
   var _adv = getAdvanceAmount();
-  var advanceAmt = _adv.amount;
+  var advanceAmt = requestAdvanceChecked ? _adv.amount : 0;
   var advanceCurr = _adv.currency;
 
   if (tripType === 'domestic' && depDate && retDate) {
@@ -2438,7 +2449,8 @@ async function exportDocx() {
     var hotelProv = document.getElementById('hotelProvided').checked;
     var pdTotal = roundCurr(effectiveDays * DOMESTIC_RATE - mealReductionTotal);
     var htTotal = hotelProv ? 0 : roundCurr(nights * DOMESTIC_HOTEL);
-    var ltTotal = roundCurr(effectiveDays * DOMESTIC_TRANSPORT);
+    var ltIncl = document.getElementById('localTransportIncluded').checked;
+    var ltTotal = ltIncl ? roundCurr(effectiveDays * DOMESTIC_TRANSPORT) : 0;
     var total = roundCurr(pdTotal + htTotal + ltTotal);
     grandTotal = formatNum(total);
     calcRows = [
@@ -2765,7 +2777,7 @@ async function exportDocx() {
   // ====== ADVANCE PAYMENT REQUEST ======
   var _adv2 = getAdvanceAmount();
   var advanceAmt2 = _adv2.amount;
-  if (advanceAmt2 > 0) {
+  if (requestAdvanceChecked && advanceAmt2 > 0) {
     var advCurr2 = _adv2.currency;
     var advMethod = document.querySelector('input[name="advanceMethod"]:checked');
     var isCash = advMethod && advMethod.value === 'kasa';
@@ -2938,6 +2950,8 @@ function getAdvanceAmount() {
   var numB = parseInt(document.getElementById('mealBreakfast').value) || 0;
   var numL = parseInt(document.getElementById('mealLunch').value) || 0;
   var numD = parseInt(document.getElementById('mealDinner').value) || 0;
+
+  var DOMESTIC_RATE = 45, DOMESTIC_HOTEL = 900, DOMESTIC_TRANSPORT = 9;
 
   if (isDomestic) {
     var pdGross = effectiveDays * DOMESTIC_RATE;
