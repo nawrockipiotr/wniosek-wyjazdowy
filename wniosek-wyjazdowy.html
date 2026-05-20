@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wniosek Wyjazdowy WZ UW</title>
+<title>Wniosek wyjazdowy CSRI</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
 <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
@@ -799,7 +799,7 @@ textarea {
       <i data-lucide="moon" style="width:18px;height:18px;"></i> <span data-i18n="darkLabel">Ciemny</span>
     </button>
   </div>
-  <h1 class="hero-title"><span data-i18n="heroTitle">Wniosek Wyjazdowy</span> <span class="version-tag">v1.0</span></h1>
+  <h1 class="hero-title"><span data-i18n="heroTitle">Wniosek wyjazdowy</span> <span class="version-tag">v1.0</span></h1>
   <p class="hero-lead" data-i18n="heroLead">Narzędzie do wypełniania wniosków wyjazdowych i automatycznego obliczania diet przysługujących pracownikom, doktorantom i studentom Wydziału Zarządzania UW.</p>
 
   <details>
@@ -815,7 +815,7 @@ textarea {
     </div>
   </details>
 
-  <div class="author-line"><span data-i18n="authorLine">Wniosek Wyjazdowy CSRI · autor: Piotr Nawrocki</span></div>
+  <div class="author-line"><span data-i18n="authorLine">Wniosek wyjazdowy CSRI · autor: Piotr Nawrocki</span></div>
 </div>
 <div class="hero-bar"></div>
 
@@ -1298,7 +1298,7 @@ textarea {
 const TRANSLATIONS = {
   pl: {
     darkLabel: "Ciemny",
-    heroTitle: "Wniosek Wyjazdowy",
+    heroTitle: "Wniosek wyjazdowy",
     heroLead: "Narzędzie do wypełniania wniosków wyjazdowych i automatycznego obliczania diet przysługujących pracownikom, doktorantom i studentom Wydziału Zarządzania UW.",
     howToUse: "Jak korzystać z narzędzia",
     howtoHide: "(kliknij, by ukryć)",
@@ -1308,7 +1308,7 @@ const TRANSLATIONS = {
     step4: "Jeśli posiłki są zapewnione, zaznacz odpowiednie opcje w kalkulatorze.",
     step5: "Eksportuj wniosek do DOCX lub wydrukuj jako PDF.",
     orgBadge: "Centrum Innowacji Odpowiedzialnych Społecznie (CSRI)",
-    authorLine: "Wniosek Wyjazdowy CSRI · autor: Piotr Nawrocki",
+    authorLine: "Wniosek wyjazdowy CSRI · autor: Piotr Nawrocki",
     author: "by Piotr Nawrocki",
     sec1Title: "1. Dane osobowe",
     fullName: "Imię i nazwisko *",
@@ -3061,8 +3061,8 @@ function checkRatesFreshness() {
   var monthsDiff = (now.getFullYear() - lastUpdate.getFullYear()) * 12 + (now.getMonth() - lastUpdate.getMonth());
   if (monthsDiff > RATES_WARN_MONTHS) {
     var msg = currentLang === 'pl'
-      ? 'Uwaga: stawki diet zostały ostatnio zaktualizowane ' + RATES_LAST_UPDATED + '. Sprawdź, czy nie weszło nowe rozporządzenie.'
-      : 'Note: per diem rates were last updated ' + RATES_LAST_UPDATED + '. Check if a new regulation has been published.';
+      ? 'Stawki diet w kalkulatorze odpowiadają rozporządzeniu z ' + RATES_LAST_UPDATED + '. Warto sprawdzić, czy od tego czasu nie pojawiło się nowe.'
+      : 'Per diem rates in this calculator are based on the regulation effective ' + RATES_LAST_UPDATED + '. You may want to verify whether a newer regulation has been issued.';
     var infoBox = document.getElementById('ratesWarningBox');
     if (infoBox) {
       infoBox.textContent = msg;
