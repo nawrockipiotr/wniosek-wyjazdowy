@@ -789,7 +789,7 @@ textarea {
 <div class="hero">
   <div class="hero-top">
     <div class="org-badge-row">
-      <div class="org-badge">Wydział Zarządzania, Uniwersytet Warszawski</div>
+      <div class="org-badge" data-i18n="orgBadge">Centrum Innowacji Odpowiedzialnych Społecznie (CSRI)</div>
       <div class="lang-toggle">
         <button class="lang-btn active" data-lang="pl" onclick="setLang('pl')">PL</button>
         <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
@@ -815,7 +815,7 @@ textarea {
     </div>
   </details>
 
-  <div class="author-line">Wniosek Wyjazdowy WZ UW · autor: Piotr Nawrocki</div>
+  <div class="author-line"><span data-i18n="authorLine">Wniosek Wyjazdowy CSRI · autor: Piotr Nawrocki</span></div>
 </div>
 <div class="hero-bar"></div>
 
@@ -856,7 +856,7 @@ textarea {
   <div class="form-row">
     <div class="form-group full">
       <label data-i18n="unitName">Nazwa jednostki UW</label>
-      <input type="text" id="unitName" data-save="unitName" value="Wydział Zarządzania UW, ul. Szturmowa 1/3, 02-678 Warszawa">
+      <input type="text" id="unitName" data-save="unitName" value="Centrum Innowacji Odpowiedzialnych Społecznie (CSRI), ul. Szturmowa 1/3, 02-678 Warszawa">
     </div>
   </div>
 
@@ -1265,6 +1265,8 @@ textarea {
   </details>
 </div>
 
+<div id="ratesWarningBox" style="display:none;background:var(--yellow-dim);border:1px solid var(--yellow);color:var(--yellow);border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:0.85rem;font-weight:600;"></div>
+
 <!-- ACTION BUTTONS -->
 <div class="form-section no-print" style="background:var(--surface2);">
   <div class="btn-group" style="justify-content:center;">
@@ -1303,6 +1305,8 @@ const TRANSLATIONS = {
     step3: "Wprowadź trasę i daty — kalkulator diet obliczy się automatycznie po wybraniu kraju.",
     step4: "Jeśli posiłki są zapewnione, zaznacz odpowiednie opcje w kalkulatorze.",
     step5: "Eksportuj wniosek do DOCX lub wydrukuj jako PDF.",
+    orgBadge: "Centrum Innowacji Odpowiedzialnych Społecznie (CSRI)",
+    authorLine: "Wniosek Wyjazdowy CSRI · autor: Piotr Nawrocki",
     author: "by Piotr Nawrocki",
     sec1Title: "1. Dane osobowe",
     fullName: "Imię i nazwisko *",
@@ -1435,6 +1439,8 @@ const TRANSLATIONS = {
     step3: "Enter route and dates — the per diem calculator will update automatically after selecting a country.",
     step4: "If meals are provided, check the appropriate options in the calculator.",
     step5: "Export the form to DOCX or print as PDF.",
+    orgBadge: "Centre for Socially Responsible Innovation (CSRI)",
+    authorLine: "Travel Request CSRI · by Piotr Nawrocki",
     author: "by Piotr Nawrocki",
     sec1Title: "1. Personal Data",
     fullName: "Full name *",
@@ -2268,7 +2274,7 @@ function resetCustomRates() {
 // ============================================================
 function clearForm() {
   document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="date"], input[type="number"], textarea').forEach(function(el) {
-    if (el.id === 'unitName') el.value = "Wydział Zarządzania UW, ul. Szturmowa 1/3, 02-678 Warszawa";
+    if (el.id === 'unitName') el.value = "Centrum Innowacji Odpowiedzialnych Społecznie (CSRI), ul. Szturmowa 1/3, 02-678 Warszawa";
     else if (el.id === 'departureFrom') el.value = "Warszawa, Polska";
     else el.value = '';
   });
@@ -3039,6 +3045,44 @@ function updateAdvanceSum() {
   }
 }
 
+// Rates freshness warning
+var RATES_LAST_UPDATED = '2024-01-01'; // Dz.U. 2023 poz. 2190 effective date
+var RATES_WARN_MONTHS = 12;
+
+function checkRatesFreshness() {
+  var lastUpdate = new Date(RATES_LAST_UPDATED);
+  var now = new Date();
+  var monthsDiff = (now.getFullYear() - lastUpdate.getFullYear()) * 12 + (now.getMonth() - lastUpdate.getMonth());
+  if (monthsDiff > RATES_WARN_MONTHS) {
+    var msg = currentLang === 'pl'
+      ? 'Uwaga: stawki diet zostały ostatnio zaktualizowane ' + RATES_LAST_UPDATED + '. Sprawdź, czy nie weszło nowe rozporządzenie.'
+      : 'Note: per diem rates were last updated ' + RATES_LAST_UPDATED + '. Check if a new regulation has been published.';
+    var infoBox = document.getElementById('ratesWarningBox');
+    if (infoBox) {
+      infoBox.textContent = msg;
+      infoBox.style.display = 'block';
+    }
+  }
+}
+
+// External rates JSON loader
+function loadExternalRates(url) {
+  fetch(url)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data._meta && data._meta.lastUpdated) RATES_LAST_UPDATED = data._meta.lastUpdated;
+      Object.keys(data).forEach(function(k) {
+        if (k === '_meta') return;
+        if (data[k].currency && data[k].perDiem !== undefined && data[k].hotel !== undefined) {
+          RATES[k] = Object.assign({}, RATES[k] || {}, data[k]);
+        }
+      });
+      recalculate();
+      showToast(TRANSLATIONS[currentLang].ratesLoaded);
+    })
+    .catch(function(err) { console.warn('Could not load external rates:', err); });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   // Set default date
   document.getElementById('submissionDate').value = new Date().toISOString().split('T')[0];
@@ -3057,6 +3101,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Init icons
   lucide.createIcons();
+
+  // Check rates freshness
+  checkRatesFreshness();
 });
 </script>
 </body>
