@@ -856,7 +856,7 @@ textarea {
   <div class="form-row">
     <div class="form-group full">
       <label data-i18n="unitName">Nazwa jednostki UW</label>
-      <input type="text" id="unitName" data-save="unitName" value="Centrum Innowacji Odpowiedzialnych Społecznie (CSRI), ul. Szturmowa 1/3, 02-678 Warszawa">
+      <input type="text" id="unitName" data-save="unitName" value="Wydział Zarządzania UW, ul. Szturmowa 1/3, 02-678 Warszawa">
     </div>
   </div>
 
@@ -2280,7 +2280,7 @@ function resetCustomRates() {
 // ============================================================
 function clearForm() {
   document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="date"], input[type="number"], textarea').forEach(function(el) {
-    if (el.id === 'unitName') el.value = "Centrum Innowacji Odpowiedzialnych Społecznie (CSRI), ul. Szturmowa 1/3, 02-678 Warszawa";
+    if (el.id === 'unitName') el.value = "Wydział Zarządzania UW, ul. Szturmowa 1/3, 02-678 Warszawa";
     else if (el.id === 'departureFrom') el.value = "Warszawa, Polska";
     else el.value = '';
   });
