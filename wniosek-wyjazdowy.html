@@ -1176,7 +1176,9 @@ textarea {
 
     <div class="info-badge" style="margin-top:16px;">
       <i data-lucide="scale" style="width:14px;height:14px;"></i>
-      <span data-i18n="regulationSource">Podstawa prawna: Rozporządzenie MRiPS z 25.10.2022 (Dz.U. 2023 poz. 2190 (zagraniczne) / Dz.U. 2022 poz. 2302 (krajowe))</span>
+      <span data-i18n="regulationLabel">Podstawa prawna:</span>
+        <a href="https://isap.sejm.gov.pl/isap.nsf/DocDetails.xsp?id=WDU20230002190" target="_blank" style="color:inherit;text-decoration:underline;">Dz.U. 2023 poz. 2190</a> <span data-i18n="regulationForeign">(zagraniczne)</span> /
+        <a href="https://isap.sejm.gov.pl/isap.nsf/DocDetails.xsp?id=WDU20220002302" target="_blank" style="color:inherit;text-decoration:underline;">Dz.U. 2022 poz. 2302</a> <span data-i18n="regulationDomestic">(krajowe)</span>
     </div>
   </div>
 </div>
@@ -1402,7 +1404,9 @@ const TRANSLATIONS = {
     colRate: "Stawka",
     colAmount: "Kwota",
     colCurrency: "Waluta",
-    regulationSource: "Podstawa prawna: Rozporządzenie MRiPS z 25.10.2022 (Dz.U. 2023 poz. 2190)",
+    regulationLabel: "Podstawa prawna:",
+    regulationForeign: "(zagraniczne)",
+    regulationDomestic: "(krajowe)",
     customRatesTitle: "Upload własnych stawek (zaawansowane)",
     customRatesDesc: "Wgraj plik CSV lub JSON z własnymi stawkami diet. Format CSV: kraj,waluta,dieta,hotel. Format JSON: obiekt z kluczami = nazwa kraju.",
     resetRates: "Przywróć domyślne stawki",
@@ -1531,7 +1535,9 @@ const TRANSLATIONS = {
     colRate: "Rate",
     colAmount: "Amount",
     colCurrency: "Currency",
-    regulationSource: "Legal basis: Regulation of MRiPS of 25.10.2022 (Dz.U. 2023 item 2190)",
+    regulationLabel: "Legal basis:",
+    regulationForeign: "(foreign)",
+    regulationDomestic: "(domestic)",
     customRatesTitle: "Upload custom rates (advanced)",
     customRatesDesc: "Upload a CSV or JSON file with custom per diem rates. CSV format: country,currency,per_diem,hotel. JSON format: object keyed by country name.",
     resetRates: "Reset to default rates",
