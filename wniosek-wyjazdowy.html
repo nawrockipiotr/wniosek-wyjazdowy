@@ -1,0 +1,3049 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wniosek Wyjazdowy WZ UW</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: transparent;
+  --surface: #ffffff;
+  --surface2: #edf0f5;
+  --border: #c9cdd4;
+  --text: #1f1f1f;
+  --text-dim: #5f6368;
+  --accent: #1E3050;
+  --accent-dim: #e0e5ed;
+  --accent-teal: #3B5088;
+  --accent-teal-dim: #e3e8f2;
+  --green: #16a34a;
+  --green-dim: #16a34a12;
+  --yellow: #ca8a04;
+  --yellow-dim: #ca8a0415;
+  --red: #dc2626;
+  --red-dim: #dc262615;
+  --radius: 14px;
+}
+
+.dark-mode {
+  --bg: #1a1a2e;
+  --surface: #16213e;
+  --surface2: #0f3460;
+  --border: #2a4a7f;
+  --text: #e0e0e0;
+  --text-dim: #a0a0b0;
+  --accent: #4a7fc1;
+  --accent-dim: #1a2a4a;
+  --accent-teal: #5b8ad8;
+  --accent-teal-dim: #1a2a4a;
+  --green: #22c55e;
+  --green-dim: #22c55e20;
+  --yellow: #eab308;
+  --yellow-dim: #eab30820;
+  --red: #ef4444;
+  --red-dim: #ef444420;
+}
+
+body {
+  font-family: 'Titillium Web', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  padding: 0;
+}
+
+.dark-mode body, .dark-mode { background: var(--bg); }
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem;
+}
+
+/* Hero */
+.hero {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 0;
+  border-bottom: none;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.hero-bar {
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-teal), var(--accent));
+  border-radius: 0 0 var(--radius) var(--radius);
+  margin-bottom: 28px;
+}
+
+.hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.org-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.org-badge {
+  display: inline-block;
+  background: var(--accent-teal-dim);
+  border: 1px solid var(--accent-teal);
+  color: var(--accent-teal);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+.version-tag {
+  display: inline;
+  background: var(--accent-teal-dim);
+  color: var(--accent-teal);
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  vertical-align: middle;
+}
+
+
+
+.lang-toggle {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.lang-btn {
+  padding: 5px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'Titillium Web', sans-serif;
+  border: none;
+  background: var(--surface);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.lang-btn.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+.dark-toggle {
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-dim);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: 'Titillium Web', sans-serif;
+  transition: all 0.2s;
+}
+
+.dark-toggle:hover { background: var(--surface2); }
+
+.hero-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.01em;
+}
+
+.hero-lead {
+  font-size: 0.88rem;
+  color: var(--text-dim);
+  line-height: 1.7;
+  font-weight: 300;
+  margin-bottom: 0.75rem;
+  max-width: 720px;
+}
+
+.hero details {
+  background: var(--surface2);
+  border: none;
+  border-left: 3px solid var(--accent);
+  border-radius: 14px;
+  padding: 0;
+  margin-bottom: 8px;
+}
+
+.hero details summary {
+  padding: 12px 16px;
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+  color: var(--accent);
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero details summary::-webkit-details-marker { display: none; }
+
+.hero details summary::before {
+  content: '';
+  display: inline-block;
+  width: 0; height: 0;
+  border-left: 5px solid var(--accent);
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  transition: transform 0.2s;
+}
+
+.hero details[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.hero details summary .howto-hide-hint {
+  font-weight: 400;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+}
+
+.hero details .details-content {
+  padding: 0 16px 14px;
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+
+.hero details .details-content ol {
+  padding-left: 20px;
+  margin: 6px 0;
+}
+
+.author-line {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  opacity: 0.7;
+  border-top: 1px solid var(--border);
+  padding-top: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+/* Sections */
+.form-section {
+  background: var(--surface);
+  border: none;
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.03);
+}
+
+.form-section h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.form-section h2 .section-icon {
+  width: 32px;
+  height: 32px;
+  background: var(--accent-dim);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.form-group {
+  flex: 1;
+  min-width: 200px;
+}
+
+.form-group.full {
+  flex-basis: 100%;
+  min-width: 100%;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+
+.form-group label .label-hint {
+  font-weight: 400;
+  color: var(--text-dim);
+  font-size: 12px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+input[type="number"],
+input[type="file"],
+textarea,
+select {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.9rem;
+  font-family: 'Titillium Web', sans-serif;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface2);
+  color: var(--text);
+  transition: border-color 0.2s;
+  outline: none;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--accent-teal);
+  background: var(--surface);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Provider tabs / radio buttons */
+.provider-tabs {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  flex-wrap: wrap;
+}
+
+.provider-tabs label {
+  flex: 1;
+  min-width: 100px;
+  padding: 10px 16px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border-right: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-dim);
+  transition: all 0.2s;
+  margin-bottom: 0;
+}
+
+.provider-tabs label:last-child { border-right: none; }
+
+.provider-tabs input[type="radio"] { display: none; }
+
+.provider-tabs input[type="radio"]:checked + label {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* Checkboxes styled */
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.checkbox-item input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+/* Calculation table */
+.calc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin-top: 16px;
+}
+
+.calc-table th {
+  background: var(--accent);
+  color: #fff;
+  padding: 10px 14px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.calc-table th:first-child { border-radius: 10px 0 0 0; }
+.calc-table th:last-child { border-radius: 0 10px 0 0; }
+
+.calc-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.calc-table tr:nth-child(even) td {
+  background: var(--surface2);
+}
+
+.calc-table tr.total-row td {
+  font-weight: 700;
+  font-size: 15px;
+  background: var(--accent-dim);
+  color: var(--accent);
+  border-top: 2px solid var(--accent);
+}
+
+.calc-table tr.total-row td:first-child { border-radius: 0 0 0 10px; }
+.calc-table tr.total-row td:last-child { border-radius: 0 0 10px 0; }
+
+.info-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--accent-teal-dim);
+  color: var(--accent-teal);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 6px;
+  margin-top: 12px;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 22px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'Titillium Web', sans-serif;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+
+.btn-secondary {
+  background: var(--surface2);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover { background: var(--accent-dim); }
+
+.btn-danger {
+  background: var(--red-dim);
+  color: var(--red);
+  border: 1px solid var(--red);
+}
+
+.btn-danger:hover { opacity: 0.85; }
+
+.btn-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+/* Country search wrapper */
+.country-search-wrapper {
+  position: relative;
+}
+
+.country-search-wrapper input {
+  padding-right: 36px;
+}
+
+.country-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: 220px;
+  overflow-y: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  z-index: 100;
+  display: none;
+}
+
+.country-dropdown.open { display: block; }
+
+.country-option {
+  padding: 9px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s;
+  display: flex;
+  justify-content: space-between;
+}
+
+.country-option:hover, .country-option.highlighted {
+  background: var(--accent-dim);
+}
+
+.country-option .rate-hint {
+  color: var(--text-dim);
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Collapsible advanced */
+.advanced-section {
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  margin-top: 16px;
+}
+
+.advanced-section summary {
+  padding: 12px 16px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--accent-teal);
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.advanced-section summary::-webkit-details-marker { display: none; }
+
+.advanced-section summary::before {
+  content: '';
+  display: inline-block;
+  width: 0; height: 0;
+  border-left: 5px solid var(--accent-teal);
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  transition: transform 0.2s;
+}
+
+.advanced-section[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.advanced-content {
+  padding: 0 16px 16px;
+}
+
+/* Meals grid */
+.meals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.meal-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+}
+
+.meal-card label {
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.meal-card .reduction {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 4px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .hero { padding: 20px; }
+  .form-section { padding: 20px; }
+  .form-group { min-width: 100%; }
+  .hero-title { font-size: 24px; }
+  .provider-tabs { flex-direction: column; }
+  .provider-tabs label { border-right: none; border-bottom: 1px solid var(--border); }
+  .provider-tabs label:last-child { border-bottom: none; }
+  .btn-group { flex-direction: column; }
+  .btn { width: 100%; justify-content: center; }
+}
+
+/* Print */
+@media print {
+  body { padding: 0; }
+  .hero-controls, .btn-group, .no-print { display: none !important; }
+  .form-section, .hero { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
+}
+
+/* Scrollbar */
+.country-dropdown::-webkit-scrollbar { width: 6px; }
+.country-dropdown::-webkit-scrollbar-track { background: var(--surface2); border-radius: 3px; }
+.country-dropdown::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--green);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  z-index: 9999;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: all 0.3s;
+  pointer-events: none;
+}
+
+.toast.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.styled-select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.95rem;
+  font-family: 'Titillium Web', sans-serif;
+  cursor: pointer;
+  appearance: auto;
+}
+.styled-select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+
+
+/* Yes/No toggle pair */
+.yesno-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.yesno-label-text {
+  font-size: 0.9rem;
+  color: var(--text);
+  line-height: 1.4;
+  flex: 1;
+}
+.yesno-label-text .field-hint {
+  font-weight: 400;
+  font-size: 0.82rem;
+  color: var(--text-dim);
+}
+.yesno-pair {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.yesno-pair input { display: none; }
+.yesno-pair label {
+  padding: 4px 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: 'Titillium Web', sans-serif;
+  cursor: pointer;
+  background: var(--surface);
+  color: var(--text-dim);
+  transition: all 0.2s;
+  user-select: none;
+}
+.yesno-pair input:checked + label {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* Toggle switch */
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  min-height: 32px;
+}
+.toggle-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--border);
+  border-radius: 24px;
+  transition: 0.25s;
+}
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: 0.25s;
+}
+.toggle-switch input:checked + .toggle-slider {
+  background: var(--accent);
+}
+.toggle-switch input:checked + .toggle-slider::before {
+  transform: translateX(20px);
+}
+.toggle-switch input:focus + .toggle-slider {
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+.toggle-label {
+  font-size: 0.9rem;
+  color: var(--text);
+  cursor: pointer;
+  line-height: 1.4;
+}
+.toggle-label .field-hint {
+  font-weight: 400;
+  font-size: 0.82rem;
+  color: var(--text-dim);
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-top">
+    <div class="org-badge-row">
+      <div class="org-badge">Wydział Zarządzania, Uniwersytet Warszawski</div>
+      <div class="lang-toggle">
+        <button class="lang-btn active" data-lang="pl" onclick="setLang('pl')">PL</button>
+        <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+      </div>
+    </div>
+    <button class="dark-toggle" onclick="toggleDark()" title="Dark mode">
+      <i data-lucide="moon" style="width:18px;height:18px;"></i> <span data-i18n="darkLabel">Ciemny</span>
+    </button>
+  </div>
+  <h1 class="hero-title"><span data-i18n="heroTitle">Wniosek Wyjazdowy</span> <span class="version-tag">v1.0</span></h1>
+  <p class="hero-lead" data-i18n="heroLead">Narzędzie do wypełniania wniosków wyjazdowych i automatycznego obliczania diet przysługujących pracownikom, doktorantom i studentom Wydziału Zarządzania UW.</p>
+
+  <details>
+    <summary><span data-i18n="howToUse">Jak korzystać z narzędzia</span> <span class="howto-hide-hint" data-i18n="howtoHide">(kliknij, by ukryć)</span></summary>
+    <div class="details-content">
+      <ol>
+        <li data-i18n="step1">Wypełnij dane osobowe w sekcji 1.</li>
+        <li data-i18n="step2">Podaj szczegóły wyjazdu: cel, instytucję, środek transportu.</li>
+        <li data-i18n="step3">Wprowadź trasę i daty — kalkulator diet obliczy się automatycznie po wybraniu kraju.</li>
+        <li data-i18n="step4">Jeśli posiłki są zapewnione, zaznacz odpowiednie opcje w kalkulatorze.</li>
+        <li data-i18n="step5">Eksportuj wniosek do DOCX lub wydrukuj jako PDF.</li>
+      </ol>
+    </div>
+  </details>
+
+  <div class="author-line">Wniosek Wyjazdowy WZ UW · autor: Piotr Nawrocki</div>
+</div>
+<div class="hero-bar"></div>
+
+<!-- SECTION 1: PERSONAL DATA -->
+<div class="form-section">
+  <h2>
+    <span class="section-icon"><i data-lucide="user" style="width:18px;height:18px;"></i></span>
+    <span data-i18n="sec1Title">1. Dane osobowe</span>
+  </h2>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label data-i18n="fullName">Imię i nazwisko</label>
+      <input type="text" id="fullName" required data-save="fullName">
+    </div>
+    <div class="form-group">
+      <label data-i18n="email">Email</label>
+      <input type="email" id="email" required data-save="email" pattern="[^\s@]+@[^\s@]+\.[^\s@]+" title="np. jan@uw.edu.pl">
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group full">
+      <label data-i18n="statusLabel">Status</label>
+      <div class="provider-tabs" id="statusTabs">
+        <input type="radio" name="status" id="statusPracownik" value="pracownik" checked>
+        <label for="statusPracownik" data-i18n="statusEmployee">Pracownik</label>
+        <input type="radio" name="status" id="statusDoktorant" value="doktorant">
+        <label for="statusDoktorant" data-i18n="statusPhd">Doktorant</label>
+        <input type="radio" name="status" id="statusStudent" value="student">
+        <label for="statusStudent" data-i18n="statusStudent">Student</label>
+        <input type="radio" name="status" id="statusInna" value="inna">
+        <label for="statusInna" data-i18n="statusOther">Inna osoba</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group full">
+      <label data-i18n="unitName">Nazwa jednostki UW</label>
+      <input type="text" id="unitName" data-save="unitName" value="Wydział Zarządzania UW, ul. Szturmowa 1/3, 02-678 Warszawa">
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label data-i18n="workPhone">Telefon służbowy</label>
+      <input type="tel" id="workPhone" data-save="workPhone">
+    </div>
+    <div class="form-group">
+      <label data-i18n="privatePhone">Telefon prywatny</label>
+      <input type="tel" id="privatePhone" data-save="privatePhone">
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label data-i18n="submissionDate">Data złożenia wniosku</label>
+      <input type="date" id="submissionDate" data-save="submissionDate">
+    </div>
+  </div>
+</div>
+
+<!-- TRIP TYPE TOGGLE -->
+<div class="form-section">
+  <h2>
+    <span class="section-icon"><i data-lucide="globe" style="width:18px;height:18px;"></i></span>
+    <span data-i18n="tripTypeTitle">Rodzaj podróży</span>
+  </h2>
+  <div class="provider-tabs" id="tripTypeTabs" style="max-width:400px;">
+    <input type="radio" name="tripType" id="tripTypeForeign" value="foreign" checked>
+    <label for="tripTypeForeign" data-i18n="tripForeign">Zagraniczna</label>
+    <input type="radio" name="tripType" id="tripTypeDomestic" value="domestic">
+    <label for="tripTypeDomestic" data-i18n="tripDomestic">Krajowa</label>
+  </div>
+  <div class="info-box" id="domesticInfoBox" style="display:none; margin-top:12px;">
+    <div style="font-size:0.85rem; color:var(--text-dim); line-height:1.6;">
+      <span data-i18n="domesticInfo">Stawki krajowe wg Dz.U. 2022 poz. 2302: dieta 45 zł, limit noclegowy 900 zł (20×dieta), ryczałt za dojazdy 20% diety (9 zł).</span>
+      <br>
+      <a href="https://bob.uw.edu.pl/przydatne-informacje/podroze-krajowe-zagraniczne-przyjmowanie-gosci-na-uw/podroze-krajowe/" target="_blank" style="color:var(--accent-teal); font-weight:600; font-size:0.82rem;">
+        <span data-i18n="domesticBobLink">→ Strona BOB UW: Podróże krajowe</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 2: TRIP DETAILS -->
+<div class="form-section">
+  <h2>
+    <span class="section-icon"><i data-lucide="briefcase" style="width:18px;height:18px;"></i></span>
+    <span data-i18n="sec2Title">2. Szczegóły wyjazdu</span>
+  </h2>
+
+  <div class="form-row">
+    <div class="form-group full">
+      <label data-i18n="hostInstitution">Instytucja przyjmująca</label>
+      <input type="text" id="hostInstitution" required data-save="hostInstitution">
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group full">
+      <label data-i18n="purposeOfTravel">Cel wyjazdu</label>
+      <textarea id="purposeOfTravel" required data-save="purposeOfTravel" rows="3"></textarea>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group full">
+      <label data-i18n="transport">Środek transportu</label>
+      <div class="checkbox-group" id="transportGroup">
+        <label class="checkbox-item">
+          <input type="checkbox" name="transport" value="samolot" data-save="trPlane">
+          <span data-i18n="trPlane">Samolot</span>
+        </label>
+        <label class="checkbox-item">
+          <input type="checkbox" name="transport" value="pociag" data-save="trTrain">
+          <span data-i18n="trTrain">Pociąg</span>
+        </label>
+        <label class="checkbox-item">
+          <input type="checkbox" name="transport" value="autobus" data-save="trBus">
+          <span data-i18n="trBus">Autobus</span>
+        </label>
+        <label class="checkbox-item">
+          <input type="checkbox" name="transport" value="prom" data-save="trFerry">
+          <span data-i18n="trFerry">Prom</span>
+        </label>
+        <label class="checkbox-item">
+          <input type="checkbox" name="transport" value="samochod" data-save="trCar">
+          <span data-i18n="trCar">Samochód</span>
+        </label>
+      </div>
+      <p style="font-size:12px;color:var(--text-dim);margin-top:4px;" data-i18n="carNote">* W przypadku samochodu wymagana jest osobna umowa na korzystanie z pojazdu prywatnego.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 3: ROUTE AND DATES -->
+<div class="form-section">
+  <h2>
+    <span class="section-icon"><i data-lucide="route" style="width:18px;height:18px;"></i></span>
+    <span data-i18n="sec3Title">3. Trasa i daty</span>
+  </h2>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label data-i18n="departureFrom">Wyjazd z</label>
+      <input type="text" id="departureFrom" data-save="departureFrom" value="Warszawa, Polska">
+    </div>
+    <div class="form-group">
+      <label data-i18n="via">Przez <span class="label-hint" data-i18n="optional">(opcjonalnie)</span></label>
+      <input type="text" id="via" data-save="via">
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label data-i18n="destinationCity">Miejsce docelowe</label>
+      <input type="text" id="destinationCity" required data-save="destinationCity">
+    </div>
+    <div class="form-group">
+      <label data-i18n="destinationCountry">Kraj docelowy</label>
+      <div class="country-search-wrapper">
+        <input type="text" id="countrySearch" autocomplete="off" data-i18n-placeholder="searchCountry" placeholder="Wpisz nazwę kraju...">
+        <div class="country-dropdown" id="countryDropdown"></div>
+      </div>
+      <input type="hidden" id="selectedCountry" data-save="selectedCountry">
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label data-i18n="departureDate">Data wyjazdu</label>
+      <input type="date" id="departureDate" required data-save="departureDate">
+    </div>
+    <div class="form-group">
+      <label data-i18n="returnDate">Data powrotu</label>
+      <input type="date" id="returnDate" required data-save="returnDate">
+    </div>
+  </div>
+
+  <div class="form-row" style="grid-template-columns: 2fr 1fr 2fr;">
+    <div class="form-group">
+      <label data-i18n="returnFrom">Powrót z <span class="label-hint" data-i18n="autoFilled">(auto)</span></label>
+      <input type="text" id="returnFrom" data-save="returnFrom">
+    </div>
+    <div class="form-group">
+      <label data-i18n="returnVia">Przez</label>
+      <input type="text" id="returnVia" data-save="returnVia" placeholder="—">
+    </div>
+    <div class="form-group">
+      <label data-i18n="returnTo">Do <span class="label-hint" data-i18n="autoFilled">(auto)</span></label>
+      <input type="text" id="returnTo" data-save="returnTo">
+    </div>
+  </div>
+
+  <div id="rateInfoBox" style="display:none;">
+    <div class="info-badge">
+      <i data-lucide="info" style="width:14px;height:14px;"></i>
+      <span id="rateInfoText"></span>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 4: FUNDING SOURCE -->
+<div class="form-section">
+  <h2>
+    <span class="section-icon"><i data-lucide="wallet" style="width:18px;height:18px;"></i></span>
+    <span data-i18n="sec4Title">4. Źródło finansowania</span>
+  </h2>
+
+  <div class="form-row">
+    <div class="form-group full">
+      <label data-i18n="projectNumber">Nr finansowo-księgowy projektu</label>
+      <input type="text" id="projectNumber" required data-save="projectNumber">
+    </div>
+  </div>
+
+  <details class="optional-section" id="costsDetails">
+    <summary data-i18n="optionalCostsTitle">Koszty dodatkowe <span class="optional-badge" data-i18n="optionalBadge">(opcjonalne)</span></summary>
+    <p class="field-hint" style="margin:8px 0 12px;" data-i18n="optionalCostsHint">Wypełnij, jeśli znasz koszty biletów, wizy lub chcesz wnioskować o zaliczkę. Możesz uzupełnić później — te pola nie są wymagane do złożenia wniosku.</p>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label data-i18n="ticketCost">Bilety (kwota)</label>
+        <input type="number" id="ticketCost" data-save="ticketCost" step="0.01" min="0" placeholder="0.00">
+        <span class="field-hint" data-i18n="ticketHint">Koszt biletów lotniczych/kolejowych (jeśli znany)</span>
+      </div>
+      <div class="form-group">
+        <label data-i18n="ticketCurrency">Waluta biletów</label>
+        <input type="text" id="ticketCurrency" data-save="ticketCurrency" placeholder="PLN">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label data-i18n="visaCost">Wiza (kwota)</label>
+        <input type="number" id="visaCost" data-save="visaCost" step="0.01" min="0" placeholder="0.00">
+        <span class="field-hint" data-i18n="visaHint">Opłata wizowa (jeśli dotyczy)</span>
+      </div>
+      <div class="form-group">
+        <label data-i18n="visaCurrency">Waluta wizy</label>
+        <input type="text" id="visaCurrency" data-save="visaCurrency" placeholder="PLN">
+      </div>
+    </div>
+
+  </details>
+
+  <div class="form-row">
+    <div class="form-group full">
+      <label class="checkbox-item" style="margin-bottom:8px;text-transform:none;letter-spacing:normal;font-size:0.9rem;">
+        <input type="checkbox" id="multipleFunding" data-save="multipleFunding">
+        <span data-i18n="multipleFunding">Wyjazd finansowany z kilku źródeł</span>
+      </label>
+      <div id="extraFundingFields" style="display:none;">
+        <div class="form-row">
+          <div class="form-group">
+            <label data-i18n="additionalSource">Dodatkowe źródło finansowania</label>
+            <input type="text" id="additionalSource" data-save="additionalSource">
+          </div>
+          <div class="form-group">
+            <label data-i18n="additionalAmount">Kwota z dodatkowego źródła</label>
+            <input type="text" id="additionalAmount" data-save="additionalAmount">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 5: PER DIEM CALCULATOR -->
+<div class="form-section">
+  <h2>
+    <span class="section-icon"><i data-lucide="calculator" style="width:18px;height:18px;"></i></span>
+    <span data-i18n="sec5Title">5. Kalkulator diet</span>
+  </h2>
+
+  <div id="calcPlaceholder">
+    <p style="color:var(--text-dim);font-size:14px;" data-i18n="calcPlaceholder">Wybierz kraj docelowy oraz daty wyjazdu i powrotu, aby automatycznie obliczyć należne diety.</p>
+  </div>
+
+  <div id="calcResults" style="display:none;">
+    <div style="margin-bottom:6px;">
+      <div class="yesno-row">
+        <div class="yesno-label-text">
+          <span data-i18n="mealsProvided">Mam zapewnione posiłki przez organizatora</span> <span class="field-hint" data-i18n="mealsProvidedHint">(pomniejsza dietę)</span>
+        </div>
+        <div class="yesno-pair">
+          <input type="radio" name="mealsYN" id="mealsNo" value="no" checked>
+          <label for="mealsNo" data-i18n="no">Nie</label>
+          <input type="radio" name="mealsYN" id="mealsYes" value="yes">
+          <label for="mealsYes" data-i18n="yes">Tak</label>
+        </div>
+      </div>
+      <input type="checkbox" id="mealsProvided" data-save="mealsProvided" style="display:none;">
+      <div id="mealsDetails" style="display:none;" class="meals-grid">
+        <div class="meal-card">
+          <label class="meal-num-label" data-i18n="breakfast">Śniadanie</label>
+          <div class="reduction">-15%</div>
+          <input type="number" id="mealBreakfast" data-save="mealBreakfast" min="0" value="0" class="meal-num-input">
+          <span class="meal-num-hint" data-i18n="mealsCount">szt.</span>
+        </div>
+        <div class="meal-card">
+          <label class="meal-num-label" data-i18n="lunch">Obiad</label>
+          <div class="reduction">-30%</div>
+          <input type="number" id="mealLunch" data-save="mealLunch" min="0" value="0" class="meal-num-input">
+          <span class="meal-num-hint" data-i18n="mealsCount">szt.</span>
+        </div>
+        <div class="meal-card">
+          <label class="meal-num-label" data-i18n="dinner">Kolacja</label>
+          <div class="reduction">-30%</div>
+          <input type="number" id="mealDinner" data-save="mealDinner" min="0" value="0" class="meal-num-input">
+          <span class="meal-num-hint" data-i18n="mealsCount">szt.</span>
+        </div>
+      </div>
+    </div>
+    <div style="margin-bottom:6px;">
+      <div class="yesno-row">
+        <div class="yesno-label-text">
+          <span data-i18n="hotelProvided">Mam zapewniony nocleg we własnym zakresie</span> <span class="field-hint" data-i18n="hotelProvidedHint">(nie nalicza ryczałtu hotelowego)</span>
+        </div>
+        <div class="yesno-pair">
+          <input type="radio" name="hotelYN" id="hotelNo" value="no" checked>
+          <label for="hotelNo" data-i18n="no">Nie</label>
+          <input type="radio" name="hotelYN" id="hotelYes" value="yes">
+          <label for="hotelYes" data-i18n="yes">Tak</label>
+        </div>
+      </div>
+      <input type="checkbox" id="hotelProvided" data-save="hotelProvided" style="display:none;">
+    </div>
+    <div style="margin-bottom:16px;">
+      <div class="yesno-row">
+        <div class="yesno-label-text">
+          <span data-i18n="localTransportIncluded">Chcę ryczałt na komunikację miejscową</span> <span class="field-hint" data-i18n="localTransportHint">(10% diety/dzień — zagraniczne, 20% — krajowe)</span>
+        </div>
+        <div class="yesno-pair">
+          <input type="radio" name="ltYN" id="ltNo" value="no">
+          <label for="ltNo" data-i18n="no">Nie</label>
+          <input type="radio" name="ltYN" id="ltYes" value="yes" checked>
+          <label for="ltYes" data-i18n="yes">Tak</label>
+        </div>
+      </div>
+      <input type="checkbox" id="localTransportIncluded" data-save="localTransportIncluded" style="display:none;" checked>
+    </div>
+
+    <table class="calc-table" id="calcTable">
+      <thead>
+        <tr>
+          <th data-i18n="colItem">Pozycja</th>
+          <th data-i18n="colCount">Liczba</th>
+          <th data-i18n="colRate">Stawka</th>
+          <th data-i18n="colAmount">Kwota</th>
+          <th data-i18n="colCurrency">Waluta</th>
+        </tr>
+      </thead>
+      <tbody id="calcBody"></tbody>
+    </table>
+
+    <div class="info-badge" style="margin-top:16px;">
+      <i data-lucide="scale" style="width:14px;height:14px;"></i>
+      <span data-i18n="regulationSource">Podstawa prawna: Rozporządzenie MRiPS z 25.10.2022 (Dz.U. 2023 poz. 2190 (zagraniczne) / Dz.U. 2022 poz. 2302 (krajowe))</span>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 6: ZALICZKA -->
+<div class="form-section">
+  <h2>
+    <span class="section-icon"><i data-lucide="banknote" style="width:18px;height:18px;"></i></span>
+    <span data-i18n="sec6Title">6. Zaliczka</span>
+  </h2>
+  <div style="margin-bottom:12px;">
+    <label class="checkbox-item" style="text-transform:none;letter-spacing:normal;font-size:0.9rem;">
+      <input type="checkbox" id="requestAdvance" data-save="requestAdvance">
+      <span data-i18n="requestAdvance" style="font-weight:600;">Wnioskuję o wypłatę zaliczki</span> <span class="field-hint" style="font-weight:400;font-size:0.82rem;" data-i18n="advanceHintInline">(opcjonalne — wypełnij jeśli potrzebujesz środków przed wyjazdem)</span>
+    </label>
+  </div>
+
+  <div id="advanceDetailsBlock" style="display:none;">
+    <div class="info-badge" style="margin-bottom:12px;padding:10px 14px;font-size:0.92rem;">
+      <i data-lucide="calculator" style="width:14px;height:14px;"></i>
+      <span data-i18n="advanceSumLabel">Szacowana kwota zaliczki:</span>
+      <strong id="advanceSumDisplay" style="margin-left:6px;">—</strong>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group" style="max-width:280px;">
+        <label data-i18n="advanceCurrencyLabel">Waluta wypłaty zaliczki</label>
+        <select id="advanceCurrency" data-save="advanceCurrency" class="styled-select">
+          <option value="PLN">PLN</option>
+          <option value="EUR">EUR</option>
+        </select>
+        <span class="field-hint" data-i18n="advanceCurrHint">Wybierz walutę, w której chcesz otrzymać zaliczkę</span>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group full">
+        <label data-i18n="advanceMethod">Sposób wypłaty zaliczki</label>
+        <div class="provider-tabs" id="advanceMethodTabs" style="max-width:500px;">
+          <input type="radio" name="advanceMethod" id="advMethodCash" value="kasa" data-save="advanceMethod">
+          <label for="advMethodCash" data-i18n="advCash">a) w kasie głównej UW</label>
+          <input type="radio" name="advanceMethod" id="advMethodBank" value="konto" checked data-save="advanceMethod">
+          <label for="advMethodBank" data-i18n="advBank">b) na konto</label>
+        </div>
+      </div>
+    </div>
+
+    <div id="bankDetailsBlock">
+      <div class="form-row">
+        <div class="form-group">
+          <label data-i18n="bankName">Nazwa banku</label>
+          <input type="text" id="bankName" data-save="bankName" placeholder="np. mBank">
+        </div>
+        <div class="form-group">
+          <label data-i18n="bankSwift">SWIFT/BIC banku</label>
+          <input type="text" id="bankSwift" data-save="bankSwift" placeholder="np. BREXPLPW" maxlength="11" style="text-transform:uppercase;">
+          <span class="field-hint" data-i18n="swiftHint">Opcjonalne — tylko przy zagranicznym koncie bankowym</span>
+        </div>
+        <div class="form-group">
+          <label data-i18n="bankOwner">Właściciel konta</label>
+          <input type="text" id="bankOwner" data-save="bankOwner">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group full">
+          <label data-i18n="bankAccount">Numer konta</label>
+          <input type="text" id="bankAccount" data-save="bankAccount" placeholder="PL00 0000 0000 0000 0000 0000 0000">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 7: CUSTOM RATES UPLOAD -->
+<div class="form-section no-print">
+  <details class="advanced-section" style="border:none;margin:0;">
+    <summary data-i18n="customRatesTitle">Upload własnych stawek (zaawansowane)</summary>
+    <div class="advanced-content">
+      <p style="font-size:13px;color:var(--text-dim);margin-bottom:12px;" data-i18n="customRatesDesc">Wgraj plik CSV lub JSON z własnymi stawkami diet. Format CSV: kraj,waluta,dieta,hotel. Format JSON: obiekt z kluczami = nazwa kraju.</p>
+      <input type="file" id="customRatesFile" accept=".csv,.json" style="margin-bottom:12px;">
+      <div id="customRatesStatus"></div>
+      <button class="btn btn-secondary" onclick="resetCustomRates()" style="margin-top:8px;">
+        <i data-lucide="rotate-ccw" style="width:14px;height:14px;"></i>
+        <span data-i18n="resetRates">Przywróć domyślne stawki</span>
+      </button>
+    </div>
+  </details>
+</div>
+
+<!-- ACTION BUTTONS -->
+<div class="form-section no-print" style="background:var(--surface2);">
+  <div class="btn-group" style="justify-content:center;">
+    <button class="btn btn-primary" onclick="exportDocx().catch(function(e){ console.error(e); alert('Export error: ' + e.message); })">
+      <i data-lucide="file-text" style="width:16px;height:16px;"></i>
+      <span data-i18n="exportDocx">Eksportuj DOCX</span>
+    </button>
+    <button class="btn btn-secondary" onclick="window.print()">
+      <i data-lucide="printer" style="width:16px;height:16px;"></i>
+      <span data-i18n="printPdf">Drukuj / PDF</span>
+    </button>
+    <button class="btn btn-danger" onclick="clearForm()">
+      <i data-lucide="trash-2" style="width:16px;height:16px;"></i>
+      <span data-i18n="clearForm">Wyczyść formularz</span>
+    </button>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// I18N
+// ============================================================
+const TRANSLATIONS = {
+  pl: {
+    darkLabel: "Ciemny",
+    heroTitle: "Wniosek Wyjazdowy",
+    heroLead: "Narzędzie do wypełniania wniosków wyjazdowych i automatycznego obliczania diet przysługujących pracownikom, doktorantom i studentom Wydziału Zarządzania UW.",
+    howToUse: "Jak korzystać z narzędzia",
+    howtoHide: "(kliknij, by ukryć)",
+    step1: "Wypełnij dane osobowe w sekcji 1.",
+    step2: "Podaj szczegóły wyjazdu: cel, instytucję, środek transportu.",
+    step3: "Wprowadź trasę i daty — kalkulator diet obliczy się automatycznie po wybraniu kraju.",
+    step4: "Jeśli posiłki są zapewnione, zaznacz odpowiednie opcje w kalkulatorze.",
+    step5: "Eksportuj wniosek do DOCX lub wydrukuj jako PDF.",
+    author: "by Piotr Nawrocki",
+    sec1Title: "1. Dane osobowe",
+    fullName: "Imię i nazwisko *",
+    email: "Email *",
+    statusLabel: "Status",
+    statusEmployee: "Pracownik",
+    statusPhd: "Doktorant",
+    statusStudent: "Student",
+    statusOther: "Inna osoba",
+    unitName: "Nazwa jednostki UW",
+    workPhone: "Telefon służbowy",
+    privatePhone: "Telefon prywatny",
+    submissionDate: "Data złożenia wniosku",
+    tripTypeTitle: "Rodzaj podróży",
+    tripForeign: "Zagraniczna",
+    tripDomestic: "Krajowa",
+    domesticInfo: "Stawki krajowe wg Dz.U. 2022 poz. 2302: dieta 45 zł, limit noclegowy 900 zł (20×dieta), ryczałt za dojazdy 20% diety (9 zł).",
+    domesticBobLink: "→ Strona BOB UW: Podróże krajowe",
+    domesticCity: "Miejscowość docelowa",
+    sec2Title: "2. Szczegóły wyjazdu",
+    hostInstitution: "Instytucja przyjmująca *",
+    purposeOfTravel: "Cel wyjazdu *",
+    transport: "Środek transportu",
+    trPlane: "Samolot",
+    trTrain: "Pociąg",
+    trBus: "Autobus",
+    trFerry: "Prom",
+    trCar: "Samochód",
+    carNote: "* W przypadku samochodu wymagana jest osobna umowa na korzystanie z pojazdu prywatnego.",
+    sec3Title: "3. Trasa i daty",
+    departureFrom: "Wyjazd z",
+    via: "Przez",
+    optional: "(opcjonalnie)",
+    destinationCity: "Miejsce docelowe *",
+    destinationCountry: "Kraj docelowy",
+    searchCountry: "Wpisz nazwę kraju...",
+    departureDate: "Data wyjazdu *",
+    returnDate: "Data powrotu *",
+    returnFrom: "Powrót z",
+    returnVia: "Przez",
+    returnTo: "Do",
+    autoFilled: "(auto)",
+    sec4Title: "4. Źródło finansowania",
+    projectNumber: "Nr finansowo-księgowy projektu *",
+    ticketCost: "Bilety (kwota)",
+    ticketCurrency: "Waluta biletów",
+    visaCost: "Wiza (kwota)",
+    visaCurrency: "Waluta wizy",
+    advanceCurrency: "Waluta zaliczki",
+    multipleFunding: "Wyjazd finansowany z kilku źródeł",
+    additionalSource: "Dodatkowe źródło finansowania",
+    additionalAmount: "Kwota z dodatkowego źródła",
+    sec5Title: "5. Kalkulator diet",
+    calcPlaceholder: "Wybierz kraj docelowy oraz daty wyjazdu i powrotu, aby automatycznie obliczyć należne diety.",
+    mealsProvided: "Mam zapewnione posiłki przez organizatora",
+    breakfast: "Śniadanie",
+    lunch: "Obiad",
+    dinner: "Kolacja",
+    mealsCount: "szt.",
+    
+    deductionsLabel: "Uwzględnij w kalkulacji:",
+    mealsProvidedHint: "(pomniejsza dietę)",
+    yes: "Tak",
+    no: "Nie",
+    hotelProvidedHint: "(nie nalicza ryczałtu hotelowego)",
+    localTransportHint: "(10% diety/dzień — zagraniczne, 20% — krajowe)",
+    rowMealReduction: "Potrącenie za posiłki",
+    optionalCostsTitle: "Koszty dodatkowe",
+    optionalBadge: "(opcjonalne)",
+    optionalCostsHint: "Wypełnij, jeśli znasz koszty biletów lub wizy. Możesz uzupełnić później.",
+    ticketHint: "Koszt biletów lotniczych/kolejowych (jeśli znany)",
+    visaHint: "Opłata wizowa (jeśli dotyczy)",
+    advanceHint: "Kwota zaliczki do wypłaty przed wyjazdem",
+    sec6Title: "6. Zaliczka",
+    requestAdvance: "Wnioskuję o wypłatę zaliczki",
+    advanceHintInline: "(opcjonalne — wypełnij jeśli potrzebujesz środków przed wyjazdem)",
+    advanceCurrencyLabel: "Waluta wypłaty zaliczki",
+    advanceCurrHint: "Wybierz walutę, w której chcesz otrzymać zaliczkę",
+    advanceSumLabel: "Szacowana kwota zaliczki:",
+    advanceEditHint: "Wpisz kwotę lub zostaw wyliczoną automatycznie",
+    advanceSectionHint: "Sekcja opcjonalna.",
+    advanceMethod: "Sposób wypłaty zaliczki",
+    advCash: "a) w kasie głównej UW",
+    advBank: "b) na konto",
+    bankName: "Nazwa banku",
+    bankSwift: "SWIFT/BIC banku",
+    swiftHint: "Opcjonalne — tylko przy zagranicznym koncie bankowym",
+    bankOwner: "Właściciel konta",
+    bankAccount: "Numer konta",
+    hotelProvided: "Mam zapewniony nocleg we własnym zakresie",
+    colItem: "Pozycja",
+    colCount: "Liczba",
+    colRate: "Stawka",
+    colAmount: "Kwota",
+    colCurrency: "Waluta",
+    regulationSource: "Podstawa prawna: Rozporządzenie MRiPS z 25.10.2022 (Dz.U. 2023 poz. 2190)",
+    customRatesTitle: "Upload własnych stawek (zaawansowane)",
+    customRatesDesc: "Wgraj plik CSV lub JSON z własnymi stawkami diet. Format CSV: kraj,waluta,dieta,hotel. Format JSON: obiekt z kluczami = nazwa kraju.",
+    resetRates: "Przywróć domyślne stawki",
+    exportDocx: "Eksportuj DOCX",
+    printPdf: "Drukuj / PDF",
+    clearForm: "Wyczyść formularz",
+    rowTickets: "Bilety",
+    rowVisa: "Wiza",
+    rowPerDiem: "Dieta pobytowa",
+    rowTravelAllowance: "Dieta dojazdowa (ryczałt)",
+    rowHotel: "Ryczałt hotelowy",
+    hotelProvidedShort: "nocleg zapewniony we własnym zakresie",
+    ltNotRequested: "nie wnioskowano",
+    rowLocalTransport: "Ryczałt na komunikację miejską",
+    rowTotal: "ŁĄCZNIE",
+    days: "dni",
+    nights: "nocy",
+    flat: "ryczałt",
+    formCleared: "Formularz wyczyszczony",
+    docxExported: "Plik DOCX wygenerowany",
+    ratesLoaded: "Stawki wczytane pomyślnie",
+    ratesReset: "Przywrócono domyślne stawki",
+    rateInfo: "Stawki dla: {country} — dieta: {rate} {currency}/dzień, hotel: {hotel} {currency}/noc",
+    partialDayNote: "Do 8h = 1/3 diety, 8–12h = 1/2 diety, powyżej 12h = pełna dieta",
+  },
+  en: {
+    darkLabel: "Dark",
+    heroTitle: "Travel Request Form",
+    heroLead: "A tool for filling out travel request forms and auto-calculating per diem allowances for employees, PhD students, and students of the Faculty of Management, University of Warsaw.",
+    howToUse: "How to use this tool",
+    howtoHide: "(click to hide)",
+    step1: "Fill in your personal data in Section 1.",
+    step2: "Provide trip details: purpose, host institution, means of transport.",
+    step3: "Enter route and dates — the per diem calculator will update automatically after selecting a country.",
+    step4: "If meals are provided, check the appropriate options in the calculator.",
+    step5: "Export the form to DOCX or print as PDF.",
+    author: "by Piotr Nawrocki",
+    sec1Title: "1. Personal Data",
+    fullName: "Full name *",
+    email: "Email *",
+    statusLabel: "Status",
+    statusEmployee: "Employee",
+    statusPhd: "PhD Student",
+    statusStudent: "Student",
+    statusOther: "Other",
+    unitName: "UW Unit name",
+    workPhone: "Work phone",
+    privatePhone: "Private phone",
+    submissionDate: "Date of submission",
+    tripTypeTitle: "Trip Type",
+    tripForeign: "International",
+    tripDomestic: "Domestic",
+    domesticInfo: "Domestic rates per Dz.U. 2022 pos. 2302: per diem 45 PLN, hotel limit 900 PLN (20×per diem), transport lump sum 20% of per diem (9 PLN).",
+    domesticBobLink: "→ BOB UW: Domestic Travel",
+    domesticCity: "Destination city",
+    sec2Title: "2. Trip Details",
+    hostInstitution: "Host institution *",
+    purposeOfTravel: "Purpose of travel *",
+    transport: "Means of transport",
+    trPlane: "Plane",
+    trTrain: "Train",
+    trBus: "Bus",
+    trFerry: "Ferry",
+    trCar: "Car",
+    carNote: "* A separate agreement is required for using a private vehicle.",
+    sec3Title: "3. Route and Dates",
+    departureFrom: "Departure from",
+    via: "Via",
+    optional: "(optional)",
+    destinationCity: "Destination city *",
+    destinationCountry: "Destination country",
+    searchCountry: "Type country name...",
+    departureDate: "Departure date *",
+    returnDate: "Return date *",
+    returnFrom: "Return from",
+    returnVia: "Via",
+    returnTo: "Return to",
+    autoFilled: "(auto)",
+    sec4Title: "4. Funding Source",
+    projectNumber: "Financial project number",
+    multipleFunding: "Trip funded from multiple sources",
+    additionalSource: "Additional funding source",
+    additionalAmount: "Amount from additional source",
+    sec5Title: "5. Per Diem Calculator",
+    calcPlaceholder: "Select a destination country and travel dates to auto-calculate per diem allowances.",
+    mealsProvided: "Meals provided by the organizer",
+    breakfast: "Breakfast",
+    lunch: "Lunch",
+    dinner: "Dinner",
+    mealsCount: "pcs",
+    mealsOptionalNote: "optional — can be completed after the trip",
+    deductionsLabel: "Include in calculation:",
+    mealsProvidedHint: "(reduces per diem)",
+    yes: "Yes",
+    no: "No",
+    hotelProvidedHint: "(no hotel allowance charged)",
+    localTransportHint: "(10% of daily rate — foreign, 20% — domestic)",
+    rowMealReduction: "Meal deductions",
+    optionalCostsTitle: "Additional costs",
+    optionalBadge: "(optional)",
+    optionalCostsHint: "Fill in if you know the ticket/visa costs. You can complete these later.",
+    ticketHint: "Flight/train ticket cost (if known)",
+    visaHint: "Visa fee (if applicable)",
+    advanceHint: "Advance payment before departure",
+    sec6Title: "6. Advance payment",
+    requestAdvance: "I request an advance payment",
+    advanceHintInline: "(optional — fill in if you need funds before departure)",
+    advanceCurrencyLabel: "Advance payment currency",
+    advanceCurrHint: "Choose the currency for your advance payment",
+    advanceSumLabel: "Estimated advance amount:",
+    advanceEditHint: "Enter amount or leave auto-calculated",
+    advanceSectionHint: "Optional section.",
+    advanceMethod: "Advance payment method",
+    advCash: "a) at UW main cashier",
+    advBank: "b) to bank account",
+    bankName: "Bank name",
+    bankSwift: "Bank SWIFT/BIC",
+    swiftHint: "Optional — only for foreign bank accounts",
+    bankOwner: "Account holder",
+    bankAccount: "Account number",
+    hotelProvided: "I have my own accommodation",
+    colItem: "Item",
+    colCount: "Count",
+    colRate: "Rate",
+    colAmount: "Amount",
+    colCurrency: "Currency",
+    regulationSource: "Legal basis: Regulation of MRiPS of 25.10.2022 (Dz.U. 2023 item 2190)",
+    customRatesTitle: "Upload custom rates (advanced)",
+    customRatesDesc: "Upload a CSV or JSON file with custom per diem rates. CSV format: country,currency,per_diem,hotel. JSON format: object keyed by country name.",
+    resetRates: "Reset to default rates",
+    exportDocx: "Export DOCX",
+    printPdf: "Print / PDF",
+    clearForm: "Clear form",
+    rowPerDiem: "Per diem allowance",
+    rowTravelAllowance: "Travel allowance (lump sum)",
+    rowHotel: "Hotel allowance",
+    hotelProvidedShort: "accommodation self-arranged",
+    ltNotRequested: "not requested",
+    rowLocalTransport: "Local transport lump sum",
+    rowTotal: "TOTAL",
+    days: "days",
+    nights: "nights",
+    flat: "lump sum",
+    formCleared: "Form cleared",
+    docxExported: "DOCX file generated",
+    ratesLoaded: "Rates loaded successfully",
+    ratesReset: "Default rates restored",
+    rateInfo: "Rates for: {country} — per diem: {rate} {currency}/day, hotel: {hotel} {currency}/night",
+    partialDayNote: "Up to 8h = 1/3 per diem, 8–12h = 1/2, over 12h = full",
+  }
+};
+
+let currentLang = 'pl';
+
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(function(b) { b.classList.toggle('active', b.dataset.lang === lang); });
+  document.querySelectorAll('[data-i18n]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n');
+    if (TRANSLATIONS[lang][key]) el.textContent = TRANSLATIONS[lang][key];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n-placeholder');
+    if (TRANSLATIONS[lang][key]) el.placeholder = TRANSLATIONS[lang][key];
+  });
+  // Update country search display if a country is selected
+  var selCountry = document.getElementById('selectedCountry').value;
+  if (selCountry && RATES[selCountry]) {
+    var r = RATES[selCountry];
+    countrySearchInput.value = lang === 'en' ? (r.en || selCountry) : selCountry;
+  }
+  recalculate();
+  sessionStorage.setItem('ww_lang', lang);
+}
+
+// ============================================================
+// DARK MODE
+// ============================================================
+function toggleDark() {
+  document.documentElement.classList.toggle('dark-mode');
+  var isDark = document.documentElement.classList.contains('dark-mode');
+  sessionStorage.setItem('ww_dark', isDark ? '1' : '0');
+}
+
+// ============================================================
+// PER DIEM RATES
+// ============================================================
+var RATES_DEFAULT = {
+  "Afganistan": { en: "Afghanistan", currency: "EUR", perDiem: 47, hotel: 140 },
+  "Albania": { en: "Albania", currency: "EUR", perDiem: 41, hotel: 120 },
+  "Algieria": { en: "Algeria", currency: "EUR", perDiem: 50, hotel: 200 },
+  "Andora": { en: "Andorra", currency: "EUR", perDiem: 50, hotel: 200 },
+  "Angola": { en: "Angola", currency: "USD", perDiem: 61, hotel: 180 },
+  "Arabia Saudyjska": { en: "Saudi Arabia", currency: "EUR", perDiem: 50, hotel: 200 },
+  "Argentyna": { en: "Argentina", currency: "USD", perDiem: 50, hotel: 150 },
+  "Armenia": { en: "Armenia", currency: "EUR", perDiem: 42, hotel: 145 },
+  "Australia": { en: "Australia", currency: "AUD", perDiem: 95, hotel: 270 },
+  "Austria": { en: "Austria", currency: "EUR", perDiem: 57, hotel: 150 },
+  "Azerbejdżan": { en: "Azerbaijan", currency: "EUR", perDiem: 43, hotel: 150 },
+  "Bangladesz": { en: "Bangladesh", currency: "USD", perDiem: 50, hotel: 120 },
+  "Belgia": { en: "Belgium", currency: "EUR", perDiem: 55, hotel: 200 },
+  "Białoruś": { en: "Belarus", currency: "EUR", perDiem: 42, hotel: 130 },
+  "Bośnia i Hercegowina": { en: "Bosnia and Herzegovina", currency: "EUR", perDiem: 41, hotel: 100 },
+  "Brazylia": { en: "Brazil", currency: "EUR", perDiem: 43, hotel: 120 },
+  "Bułgaria": { en: "Bulgaria", currency: "EUR", perDiem: 40, hotel: 120 },
+  "Chile": { en: "Chile", currency: "USD", perDiem: 60, hotel: 120 },
+  "Chiny": { en: "China", currency: "EUR", perDiem: 55, hotel: 170 },
+  "Chorwacja": { en: "Croatia", currency: "EUR", perDiem: 42, hotel: 125 },
+  "Cypr": { en: "Cyprus", currency: "EUR", perDiem: 43, hotel: 160 },
+  "Czarnogóra": { en: "Montenegro", currency: "EUR", perDiem: 40, hotel: 110 },
+  "Czechy": { en: "Czech Republic", currency: "EUR", perDiem: 41, hotel: 120 },
+  "Dania": { en: "Denmark", currency: "DKK", perDiem: 446, hotel: 1430 },
+  "Demokratyczna Republika Konga": { en: "DR Congo", currency: "USD", perDiem: 66, hotel: 220 },
+  "Egipt": { en: "Egypt", currency: "USD", perDiem: 55, hotel: 150 },
+  "Ekwador": { en: "Ecuador", currency: "USD", perDiem: 44, hotel: 110 },
+  "Estonia": { en: "Estonia", currency: "EUR", perDiem: 45, hotel: 110 },
+  "Etiopia": { en: "Ethiopia", currency: "USD", perDiem: 55, hotel: 300 },
+  "Finlandia": { en: "Finland", currency: "EUR", perDiem: 53, hotel: 180 },
+  "Francja": { en: "France", currency: "EUR", perDiem: 55, hotel: 200 },
+  "Grecja": { en: "Greece", currency: "EUR", perDiem: 50, hotel: 160 },
+  "Gruzja": { en: "Georgia", currency: "EUR", perDiem: 48, hotel: 160 },
+  "Hiszpania": { en: "Spain", currency: "EUR", perDiem: 50, hotel: 200 },
+  "Holandia": { en: "Netherlands", currency: "EUR", perDiem: 50, hotel: 150 },
+  "Indie": { en: "India", currency: "EUR", perDiem: 42, hotel: 210 },
+  "Indonezja": { en: "Indonesia", currency: "EUR", perDiem: 41, hotel: 110 },
+  "Irak": { en: "Iraq", currency: "USD", perDiem: 60, hotel: 120 },
+  "Iran": { en: "Iran", currency: "EUR", perDiem: 41, hotel: 95 },
+  "Irlandia": { en: "Ireland", currency: "EUR", perDiem: 52, hotel: 160 },
+  "Islandia": { en: "Iceland", currency: "EUR", perDiem: 56, hotel: 160 },
+  "Izrael": { en: "Israel", currency: "EUR", perDiem: 70, hotel: 200 },
+  "Japonia": { en: "Japan", currency: "JPY", perDiem: 7532, hotel: 22000 },
+  "Jemen": { en: "Yemen", currency: "USD", perDiem: 48, hotel: 160 },
+  "Jordania": { en: "Jordan", currency: "EUR", perDiem: 50, hotel: 130 },
+  "Kambodża": { en: "Cambodia", currency: "USD", perDiem: 45, hotel: 100 },
+  "Kanada": { en: "Canada", currency: "CAD", perDiem: 71, hotel: 190 },
+  "Katar": { en: "Qatar", currency: "EUR", perDiem: 41, hotel: 200 },
+  "Kazachstan": { en: "Kazakhstan", currency: "EUR", perDiem: 45, hotel: 155 },
+  "Kenia": { en: "Kenya", currency: "EUR", perDiem: 41, hotel: 150 },
+  "Kirgistan": { en: "Kyrgyzstan", currency: "USD", perDiem: 41, hotel: 150 },
+  "Kolumbia": { en: "Colombia", currency: "USD", perDiem: 49, hotel: 120 },
+  "Kongo": { en: "Congo", currency: "USD", perDiem: 66, hotel: 220 },
+  "Korea Południowa": { en: "South Korea", currency: "EUR", perDiem: 46, hotel: 170 },
+  "Korea Północna": { en: "North Korea", currency: "EUR", perDiem: 48, hotel: 170 },
+  "Kostaryka": { en: "Costa Rica", currency: "USD", perDiem: 50, hotel: 140 },
+  "Kuba": { en: "Cuba", currency: "EUR", perDiem: 50, hotel: 140 },
+  "Kuwejt": { en: "Kuwait", currency: "EUR", perDiem: 39, hotel: 200 },
+  "Laos": { en: "Laos", currency: "USD", perDiem: 54, hotel: 100 },
+  "Liban": { en: "Lebanon", currency: "USD", perDiem: 57, hotel: 150 },
+  "Libia": { en: "Libya", currency: "EUR", perDiem: 52, hotel: 100 },
+  "Liechtenstein": { en: "Liechtenstein", currency: "CHF", perDiem: 88, hotel: 220 },
+  "Litwa": { en: "Lithuania", currency: "EUR", perDiem: 45, hotel: 150 },
+  "Luksemburg": { en: "Luxembourg", currency: "EUR", perDiem: 55, hotel: 200 },
+  "Łotwa": { en: "Latvia", currency: "EUR", perDiem: 57, hotel: 132 },
+  "Macedonia": { en: "North Macedonia", currency: "EUR", perDiem: 43, hotel: 138 },
+  "Malezja": { en: "Malaysia", currency: "EUR", perDiem: 41, hotel: 140 },
+  "Malta": { en: "Malta", currency: "EUR", perDiem: 43, hotel: 180 },
+  "Maroko": { en: "Morocco", currency: "EUR", perDiem: 41, hotel: 130 },
+  "Meksyk": { en: "Mexico", currency: "USD", perDiem: 58, hotel: 154 },
+  "Mołdawia": { en: "Moldova", currency: "EUR", perDiem: 45, hotel: 94 },
+  "Monako": { en: "Monaco", currency: "EUR", perDiem: 55, hotel: 200 },
+  "Mongolia": { en: "Mongolia", currency: "EUR", perDiem: 45, hotel: 154 },
+  "Niemcy": { en: "Germany", currency: "EUR", perDiem: 49, hotel: 170 },
+  "Nigeria": { en: "Nigeria", currency: "EUR", perDiem: 46, hotel: 240 },
+  "Norwegia": { en: "Norway", currency: "NOK", perDiem: 496, hotel: 1650 },
+  "Nowa Zelandia": { en: "New Zealand", currency: "USD", perDiem: 58, hotel: 180 },
+  "Oman": { en: "Oman", currency: "EUR", perDiem: 40, hotel: 240 },
+  "Pakistan": { en: "Pakistan", currency: "EUR", perDiem: 38, hotel: 200 },
+  "Palestyna": { en: "Palestine", currency: "EUR", perDiem: 70, hotel: 200 },
+  "Panama": { en: "Panama", currency: "USD", perDiem: 52, hotel: 140 },
+  "Peru": { en: "Peru", currency: "USD", perDiem: 50, hotel: 150 },
+  "Południowa Afryka": { en: "South Africa", currency: "USD", perDiem: 52, hotel: 275 },
+  "Portugalia": { en: "Portugal", currency: "EUR", perDiem: 49, hotel: 150 },
+  "Rosja": { en: "Russia", currency: "EUR", perDiem: 48, hotel: 200 },
+  "Rumunia": { en: "Romania", currency: "EUR", perDiem: 42, hotel: 110 },
+  "San Marino": { en: "San Marino", currency: "EUR", perDiem: 53, hotel: 192 },
+  "Senegal": { en: "Senegal", currency: "EUR", perDiem: 44, hotel: 120 },
+  "Serbia": { en: "Serbia", currency: "EUR", perDiem: 40, hotel: 110 },
+  "Singapur": { en: "Singapore", currency: "USD", perDiem: 56, hotel: 230 },
+  "Słowacja": { en: "Slovakia", currency: "EUR", perDiem: 47, hotel: 132 },
+  "Słowenia": { en: "Slovenia", currency: "EUR", perDiem: 45, hotel: 143 },
+  "USA": { en: "USA", currency: "USD", perDiem: 59, hotel: 200 },
+  "Syria": { en: "Syria", currency: "USD", perDiem: 50, hotel: 150 },
+  "Szwajcaria": { en: "Switzerland", currency: "CHF", perDiem: 88, hotel: 220 },
+  "Szwecja": { en: "Sweden", currency: "SEK", perDiem: 510, hotel: 2000 },
+  "Tadżykistan": { en: "Tajikistan", currency: "EUR", perDiem: 41, hotel: 140 },
+  "Tajlandia": { en: "Thailand", currency: "USD", perDiem: 42, hotel: 110 },
+  "Tanzania": { en: "Tanzania", currency: "USD", perDiem: 53, hotel: 150 },
+  "Tunezja": { en: "Tunisia", currency: "EUR", perDiem: 37, hotel: 100 },
+  "Turcja": { en: "Turkey", currency: "USD", perDiem: 53, hotel: 185 },
+  "Turkmenistan": { en: "Turkmenistan", currency: "EUR", perDiem: 47, hotel: 90 },
+  "Ukraina": { en: "Ukraine", currency: "EUR", perDiem: 41, hotel: 180 },
+  "Urugwaj": { en: "Uruguay", currency: "USD", perDiem: 50, hotel: 80 },
+  "Uzbekistan": { en: "Uzbekistan", currency: "EUR", perDiem: 41, hotel: 140 },
+  "Watykan": { en: "Vatican", currency: "EUR", perDiem: 53, hotel: 192 },
+  "Wenezuela": { en: "Venezuela", currency: "USD", perDiem: 60, hotel: 220 },
+  "Węgry": { en: "Hungary", currency: "EUR", perDiem: 44, hotel: 143 },
+  "Wielka Brytania": { en: "United Kingdom", currency: "GBP", perDiem: 45, hotel: 220 },
+  "Wietnam": { en: "Vietnam", currency: "USD", perDiem: 53, hotel: 160 },
+  "Włochy": { en: "Italy", currency: "EUR", perDiem: 53, hotel: 192 },
+  "Wybrzeże Kości Słoniowej": { en: "Ivory Coast", currency: "EUR", perDiem: 33, hotel: 100 },
+  "Zimbabwe": { en: "Zimbabwe", currency: "EUR", perDiem: 39, hotel: 90 },
+  "Zjednoczone Emiraty Arabskie": { en: "UAE", currency: "EUR", perDiem: 43, hotel: 220 },
+  "Gibraltar": { en: "Gibraltar", currency: "GBP", perDiem: 45, hotel: 220 },
+  "Hongkong": { en: "Hong Kong", currency: "USD", perDiem: 55, hotel: 250 },
+  "Tajwan": { en: "Taiwan", currency: "EUR", perDiem: 40, hotel: 142 },
+  "Inne państwa": { en: "Other countries", currency: "EUR", perDiem: 41, hotel: 140 }
+};
+
+var RATES = JSON.parse(JSON.stringify(RATES_DEFAULT));
+
+// ============================================================
+// COUNTRY DROPDOWN
+// ============================================================
+var countrySearchInput = document.getElementById('countrySearch');
+var countryDropdown = document.getElementById('countryDropdown');
+var dropdownOpen = false;
+var highlightedIndex = -1;
+
+function getCountryNames() {
+  return Object.keys(RATES).map(function(plName) {
+    var r = RATES[plName];
+    return {
+      pl: plName,
+      en: r.en || plName,
+      display: currentLang === 'en' ? (r.en || plName) : plName,
+      currency: r.currency,
+      perDiem: r.perDiem,
+      hotel: r.hotel
+    };
+  }).sort(function(a, b) { return a.display.localeCompare(b.display, currentLang); });
+}
+
+function renderDropdown(filter) {
+  filter = filter || '';
+  var countries = getCountryNames();
+  var q = filter.toLowerCase();
+  var filtered = q ? countries.filter(function(c) { return c.pl.toLowerCase().includes(q) || c.en.toLowerCase().includes(q); }) : countries;
+
+  countryDropdown.innerHTML = '';
+  highlightedIndex = -1;
+
+  filtered.forEach(function(c, i) {
+    var div = document.createElement('div');
+    div.className = 'country-option';
+    div.innerHTML = '<span>' + c.display + '</span><span class="rate-hint">' + c.perDiem + ' ' + c.currency + '</span>';
+    div.addEventListener('click', function() { selectCountry(c.pl); });
+    div.addEventListener('mouseenter', function() { highlightedIndex = i; updateHighlight(); });
+    countryDropdown.appendChild(div);
+  });
+
+  if (filtered.length > 0) {
+    countryDropdown.classList.add('open');
+    dropdownOpen = true;
+  } else {
+    countryDropdown.classList.remove('open');
+    dropdownOpen = false;
+  }
+}
+
+function updateHighlight() {
+  var items = countryDropdown.querySelectorAll('.country-option');
+  items.forEach(function(it, i) { it.classList.toggle('highlighted', i === highlightedIndex); });
+  if (highlightedIndex >= 0 && items[highlightedIndex]) {
+    items[highlightedIndex].scrollIntoView({ block: 'nearest' });
+  }
+}
+
+function selectCountry(plName) {
+  var rate = RATES[plName];
+  if (!rate) return;
+
+  document.getElementById('selectedCountry').value = plName;
+  countrySearchInput.value = currentLang === 'en' ? (rate.en || plName) : plName;
+  countryDropdown.classList.remove('open');
+  dropdownOpen = false;
+
+  // Auto-fill return from
+  var destCity = document.getElementById('destinationCity').value;
+  var displayName = currentLang === 'en' ? (rate.en || plName) : plName;
+  document.getElementById('returnFrom').value = destCity ? (destCity + ', ' + displayName) : displayName;
+  document.getElementById('returnTo').value = document.getElementById('departureFrom').value;
+
+  // Show rate info
+  var infoBox = document.getElementById('rateInfoBox');
+  var infoText = document.getElementById('rateInfoText');
+  var t = TRANSLATIONS[currentLang];
+  infoText.textContent = t.rateInfo
+    .replace('{country}', displayName)
+    .replace('{rate}', rate.perDiem)
+    .split('{currency}').join(rate.currency)
+    .replace('{hotel}', rate.hotel);
+  infoBox.style.display = 'block';
+
+  recalculate();
+  saveFormData();
+  lucide.createIcons();
+}
+
+countrySearchInput.addEventListener('focus', function() { renderDropdown(countrySearchInput.value); });
+countrySearchInput.addEventListener('input', function() { renderDropdown(countrySearchInput.value); });
+
+countrySearchInput.addEventListener('keydown', function(e) {
+  if (!dropdownOpen) return;
+  var items = countryDropdown.querySelectorAll('.country-option');
+  if (e.key === 'ArrowDown') { e.preventDefault(); highlightedIndex = Math.min(highlightedIndex + 1, items.length - 1); updateHighlight(); }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); highlightedIndex = Math.max(highlightedIndex - 1, 0); updateHighlight(); }
+  else if (e.key === 'Enter' && highlightedIndex >= 0) { e.preventDefault(); items[highlightedIndex].click(); }
+  else if (e.key === 'Escape') { countryDropdown.classList.remove('open'); dropdownOpen = false; }
+});
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.country-search-wrapper')) {
+    countryDropdown.classList.remove('open');
+    dropdownOpen = false;
+  }
+});
+
+// ============================================================
+// CALCULATION
+// ============================================================
+function recalculate() {
+  var tripType = document.querySelector('input[name="tripType"]:checked').value;
+  var ticketCost = parseFloat(document.getElementById('ticketCost').value) || 0;
+  var ticketCurr = document.getElementById('ticketCurrency').value || 'PLN';
+  var visaCost = parseFloat(document.getElementById('visaCost').value) || 0;
+  var visaCurr = document.getElementById('visaCurrency').value || 'PLN';
+  var _adv = getAdvanceAmount();
+  var advanceAmt = _adv.amount;
+  var advanceCurr = _adv.currency;
+  var depDate = document.getElementById('departureDate').value;
+  var retDate = document.getElementById('returnDate').value;
+
+  if (tripType === 'domestic') {
+    if (!depDate || !retDate) {
+      document.getElementById('calcPlaceholder').style.display = 'block';
+      document.getElementById('calcResults').style.display = 'none';
+      return;
+    }
+    recalculateDomestic(depDate, retDate);
+    return;
+  }
+
+  var country = document.getElementById('selectedCountry').value;
+  if (!country || !depDate || !retDate) {
+    document.getElementById('calcPlaceholder').style.display = 'block';
+    document.getElementById('calcResults').style.display = 'none';
+    return;
+  }
+
+  var rate = RATES[country];
+  if (!rate) return;
+
+  var dep = new Date(depDate);
+  var ret = new Date(retDate);
+  if (ret <= dep) return;
+
+  var diffMs = ret.getTime() - dep.getTime();
+  var totalHours = diffMs / (1000 * 60 * 60);
+  var fullDays = Math.floor(totalHours / 24);
+  var remainingHours = totalHours - (fullDays * 24);
+
+  // Date-only inputs: both departure and return count as travel days
+  var effectiveDays = fullDays + 1;
+  var nights = fullDays;
+
+  // Meal reductions (per-meal count)
+  var mealReductionTotal = 0;
+  var mealsProvided = document.getElementById('mealsProvided').checked;
+  if (mealsProvided) {
+    var numBreakfasts = parseInt(document.getElementById('mealBreakfast').value) || 0;
+    var numLunches = parseInt(document.getElementById('mealLunch').value) || 0;
+    var numDinners = parseInt(document.getElementById('mealDinner').value) || 0;
+    mealReductionTotal = roundCurr(numBreakfasts * 0.15 * rate.perDiem + numLunches * 0.30 * rate.perDiem + numDinners * 0.30 * rate.perDiem);
+  }
+
+  var perDiemGross = roundCurr(effectiveDays * rate.perDiem);
+  var adjustedPerDiem = rate.perDiem; // for display; actual total adjusted below
+  var hotelProvided = document.getElementById('hotelProvided').checked;
+
+  var perDiemTotal = roundCurr(perDiemGross - mealReductionTotal);
+  var travelAllowance = roundCurr(rate.perDiem); // 1 x full rate
+  var hotelTotal = hotelProvided ? 0 : roundCurr(nights * rate.hotel);
+  var ltIncluded = document.getElementById('localTransportIncluded').checked;
+  var localTransport = ltIncluded ? roundCurr(effectiveDays * rate.perDiem * 0.10) : 0;
+  var grandTotal = roundCurr(perDiemTotal + travelAllowance + hotelTotal + localTransport);
+
+  var t = TRANSLATIONS[currentLang];
+  var curr = rate.currency;
+
+  var displayDays = '' + effectiveDays;
+
+  // Get ticket/visa/advance values
+  var ticketCost = parseFloat(document.getElementById('ticketCost').value) || 0;
+  var ticketCurr = document.getElementById('ticketCurrency').value || 'PLN';
+  var visaCost = parseFloat(document.getElementById('visaCost').value) || 0;
+  var visaCurr = document.getElementById('visaCurrency').value || 'PLN';
+  var _adv = getAdvanceAmount();
+  var advanceAmt = _adv.amount;
+  var advanceCurr = _adv.currency;
+
+  var tbody = document.getElementById('calcBody');
+  var ticketRow = ticketCost > 0 ? '<tr><td>' + t.rowTickets + '</td><td></td><td></td><td><strong>' + formatNum(ticketCost) + ' ' + ticketCurr + '</strong></td><td>' + ticketCurr + '</td></tr>' : '';
+  var visaRow = visaCost > 0 ? '<tr><td>' + t.rowVisa + '</td><td></td><td></td><td><strong>' + formatNum(visaCost) + ' ' + visaCurr + '</strong></td><td>' + visaCurr + '</td></tr>' : '';
+
+  tbody.innerHTML =
+    ticketRow + visaRow +
+    '<tr>' +
+      '<td>' + t.rowPerDiem + '</td>' +
+      '<td>' + displayDays + ' ' + t.days + '</td>' +
+      '<td>' + formatNum(rate.perDiem) + ' ' + curr + '</td>' +
+      '<td><strong>' + formatNum(perDiemGross) + ' ' + curr + '</strong></td>' +
+      '<td>' + curr + '</td>' +
+    '</tr>' +
+    (mealReductionTotal > 0 ? '<tr style="color:var(--accent);">' +
+      '<td>' + t.rowMealReduction + '</td>' +
+      '<td></td>' +
+      '<td></td>' +
+      '<td><strong>-' + formatNum(mealReductionTotal) + ' ' + curr + '</strong></td>' +
+      '<td>' + curr + '</td>' +
+    '</tr>' : '') +
+    '<tr>' +
+      '<td>' + t.rowTravelAllowance + '</td>' +
+      '<td>1 (' + t.flat + ')</td>' +
+      '<td>' + formatNum(rate.perDiem) + ' ' + curr + '</td>' +
+      '<td><strong>' + formatNum(travelAllowance) + ' ' + curr + '</strong></td>' +
+      '<td>' + curr + '</td>' +
+    '</tr>' +
+    '<tr>' +
+      '<td>' + t.rowHotel + (hotelProvided ? ' <em style="font-size:0.85em;color:var(--text-dim)">(' + t.hotelProvidedShort + ')</em>' : '') + '</td>' +
+      '<td>' + (hotelProvided ? '—' : nights + ' ' + t.nights) + '</td>' +
+      '<td>' + (hotelProvided ? '—' : formatNum(rate.hotel) + ' ' + curr) + '</td>' +
+      '<td><strong>' + (hotelProvided ? '—' : formatNum(hotelTotal) + ' ' + curr) + '</strong></td>' +
+      '<td>' + curr + '</td>' +
+    '</tr>' +
+    '<tr>' +
+      '<td>' + t.rowLocalTransport + (!ltIncluded ? ' <em style="font-size:0.85em;color:var(--text-dim)">(' + t.ltNotRequested + ')</em>' : '') + '</td>' +
+      '<td>' + (ltIncluded ? displayDays + ' ' + t.days : '—') + '</td>' +
+      '<td>' + (ltIncluded ? formatNum(roundCurr(rate.perDiem * 0.10)) + ' ' + curr : '—') + '</td>' +
+      '<td><strong>' + (ltIncluded ? formatNum(localTransport) + ' ' + curr : '—') + '</strong></td>' +
+      '<td>' + curr + '</td>' +
+    '</tr>' +
+    '<tr class="total-row">' +
+      '<td>' + t.rowTotal + '</td>' +
+      '<td></td>' +
+      '<td></td>' +
+      '<td><strong>' + formatNum(grandTotal) + ' ' + curr + '</strong></td>' +
+      '<td>' + curr + '</td>' +
+    '</tr>';
+
+  document.getElementById('calcPlaceholder').style.display = 'none';
+  document.getElementById('calcResults').style.display = 'block';
+  updateAdvanceSum();
+  updateMealMax();
+}
+
+function roundCurr(v) { return Math.round(v * 100) / 100; }
+function formatNum(n) {
+  var s = n.toFixed(2);
+  // Remove trailing zeros after decimal but keep at least integer
+  s = s.replace(/\.00$/, '').replace(/(\.\d)0$/, '$1');
+  return s || '0';
+}
+
+
+// DOMESTIC TRAVEL CALCULATION
+function recalculateDomestic(depDate, retDate) {
+  var dep = new Date(depDate);
+  var ret = new Date(retDate);
+  if (ret <= dep) return;
+
+  var DOMESTIC_RATE = 45; // PLN
+  var DOMESTIC_HOTEL = 900; // PLN (20 x 45)
+  var DOMESTIC_TRANSPORT = 9; // PLN (20% of 45)
+
+  var diffMs = ret.getTime() - dep.getTime();
+  var totalHours = diffMs / (1000 * 60 * 60);
+  var fullDays = Math.floor(totalHours / 24);
+  var remainingHours = totalHours - (fullDays * 24);
+
+  // Date-only inputs: both departure and return count as travel days
+  var effectiveDays = fullDays + 1;
+  var nights = fullDays;
+
+  // Meal reductions (per-meal count)
+  var mealReductionTotal = 0;
+  var mealsProvided = document.getElementById('mealsProvided').checked;
+  if (mealsProvided) {
+    var numBreakfasts = parseInt(document.getElementById('mealBreakfast').value) || 0;
+    var numLunches = parseInt(document.getElementById('mealLunch').value) || 0;
+    var numDinners = parseInt(document.getElementById('mealDinner').value) || 0;
+    mealReductionTotal = roundCurr(numBreakfasts * 0.15 * DOMESTIC_RATE + numLunches * 0.30 * DOMESTIC_RATE + numDinners * 0.30 * DOMESTIC_RATE);
+  }
+
+  var perDiemGross = roundCurr(effectiveDays * DOMESTIC_RATE);
+  var adjustedPerDiem = DOMESTIC_RATE; // for display
+  var hotelProvided = document.getElementById('hotelProvided').checked;
+
+  var perDiemTotal = roundCurr(perDiemGross - mealReductionTotal);
+  var hotelTotal = hotelProvided ? 0 : roundCurr(nights * DOMESTIC_HOTEL);
+  var ltIncluded = document.getElementById('localTransportIncluded').checked;
+  var localTransport = ltIncluded ? roundCurr(effectiveDays * DOMESTIC_TRANSPORT) : 0;
+  var grandTotal = roundCurr(perDiemTotal + hotelTotal + localTransport);
+
+  var t = TRANSLATIONS[currentLang];
+  var curr = 'PLN';
+
+  var displayDays = '' + effectiveDays;
+
+  var ticketCost = parseFloat(document.getElementById('ticketCost').value) || 0;
+  var ticketCurr = document.getElementById('ticketCurrency').value || 'PLN';
+  var visaCost = parseFloat(document.getElementById('visaCost').value) || 0;
+  var visaCurr = document.getElementById('visaCurrency').value || 'PLN';
+
+  var tbody = document.getElementById('calcBody');
+  var ticketRow = ticketCost > 0 ? '<tr><td>' + t.rowTickets + '</td><td></td><td></td><td><strong>' + formatNum(ticketCost) + ' ' + ticketCurr + '</strong></td><td>' + ticketCurr + '</td></tr>' : '';
+  var visaRow = visaCost > 0 ? '<tr><td>' + t.rowVisa + '</td><td></td><td></td><td><strong>' + formatNum(visaCost) + ' ' + visaCurr + '</strong></td><td>' + visaCurr + '</td></tr>' : '';
+
+  tbody.innerHTML =
+    ticketRow + visaRow +
+    '<tr>' +
+      '<td>' + t.rowPerDiem + '</td>' +
+      '<td>' + displayDays + ' ' + t.days + '</td>' +
+      '<td>' + formatNum(DOMESTIC_RATE) + ' ' + curr + '</td>' +
+      '<td><strong>' + formatNum(perDiemGross) + ' ' + curr + '</strong></td>' +
+      '<td>' + curr + '</td>' +
+    '</tr>' +
+    (mealReductionTotal > 0 ? '<tr style="color:var(--accent);">' +
+      '<td>' + t.rowMealReduction + '</td>' +
+      '<td></td>' +
+      '<td></td>' +
+      '<td><strong>-' + formatNum(mealReductionTotal) + ' ' + curr + '</strong></td>' +
+      '<td>' + curr + '</td>' +
+    '</tr>' : '') +
+    '<tr>' +
+      '<td>' + t.rowHotel + ' (max)' + (hotelProvided ? ' <em style="font-size:0.85em;color:var(--text-dim)">(' + t.hotelProvidedShort + ')</em>' : '') + '</td>' +
+      '<td>' + (hotelProvided ? '—' : nights + ' ' + t.nights) + '</td>' +
+      '<td>' + (hotelProvided ? '—' : formatNum(DOMESTIC_HOTEL) + ' ' + curr) + '</td>' +
+      '<td><strong>' + (hotelProvided ? '—' : formatNum(hotelTotal) + ' ' + curr) + '</strong></td>' +
+      '<td>' + curr + '</td>' +
+    '</tr>' +
+    '<tr>' +
+      '<td>' + t.rowLocalTransport + ' (20%)' + (!ltIncluded ? ' <em style="font-size:0.85em;color:var(--text-dim)">(' + t.ltNotRequested + ')</em>' : '') + '</td>' +
+      '<td>' + (ltIncluded ? displayDays + ' ' + t.days : '—') + '</td>' +
+      '<td>' + (ltIncluded ? formatNum(DOMESTIC_TRANSPORT) + ' ' + curr : '—') + '</td>' +
+      '<td><strong>' + (ltIncluded ? formatNum(localTransport) + ' ' + curr : '—') + '</strong></td>' +
+      '<td>' + curr + '</td>' +
+    '</tr>' +
+    '<tr class="total-row">' +
+      '<td>' + t.rowTotal + '</td>' +
+      '<td></td>' +
+      '<td></td>' +
+      '<td><strong>' + formatNum(grandTotal) + ' ' + curr + '</strong></td>' +
+      '<td>' + curr + '</td>' +
+    '</tr>';
+
+  document.getElementById('calcPlaceholder').style.display = 'none';
+  document.getElementById('calcResults').style.display = 'block';
+  updateAdvanceSum();
+  updateMealMax();
+}
+
+// Recalc triggers
+['departureDate', 'returnDate', 'mealsProvided', 'mealBreakfast', 'mealLunch', 'mealDinner', 'hotelProvided', 'localTransportIncluded', 'ticketCost', 'ticketCurrency', 'visaCost', 'visaCurrency', 'requestAdvance', 'advanceCurrency', 'bankName', 'bankSwift', 'bankOwner', 'bankAccount'].forEach(function(id) {
+  document.getElementById(id).addEventListener('change', function() { recalculate(); saveFormData(); });
+});
+
+document.getElementById('requestAdvance').addEventListener('change', function() {
+  document.getElementById('advanceDetailsBlock').style.display = this.checked ? 'block' : 'none';
+  if (this.checked) updateAdvanceSum();
+});
+
+// Sync yes/no radios with hidden checkboxes
+document.querySelectorAll('input[name="mealsYN"]').forEach(function(r) {
+  r.addEventListener('change', function() {
+    document.getElementById('mealsProvided').checked = (document.querySelector('input[name="mealsYN"]:checked').value === 'yes');
+    document.getElementById('mealsProvided').dispatchEvent(new Event('change'));
+  });
+});
+document.querySelectorAll('input[name="hotelYN"]').forEach(function(r) {
+  r.addEventListener('change', function() {
+    document.getElementById('hotelProvided').checked = (document.querySelector('input[name="hotelYN"]:checked').value === 'yes');
+    document.getElementById('hotelProvided').dispatchEvent(new Event('change'));
+  });
+});
+document.querySelectorAll('input[name="ltYN"]').forEach(function(r) {
+  r.addEventListener('change', function() {
+    document.getElementById('localTransportIncluded').checked = (document.querySelector('input[name="ltYN"]:checked').value === 'yes');
+    document.getElementById('localTransportIncluded').dispatchEvent(new Event('change'));
+  });
+});
+
+// advancePayment field removed - currency dropdown handles changes
+document.getElementById('advanceCurrency').addEventListener('change', function() { this.dataset.userChanged = '1'; updateAdvanceSum(); });
+document.querySelectorAll('input[name="advanceMethod"]').forEach(function(r) {
+  r.addEventListener('change', function() {
+    document.getElementById('bankDetailsBlock').style.display = this.value === 'konto' ? 'block' : 'none';
+  });
+});
+
+document.getElementById('mealsProvided').addEventListener('change', function() {
+  document.getElementById('mealsDetails').style.display = this.checked ? 'grid' : 'none';
+});
+
+document.getElementById('multipleFunding').addEventListener('change', function() {
+  document.getElementById('extraFundingFields').style.display = this.checked ? 'block' : 'none';
+});
+
+
+// Trip type toggle
+document.querySelectorAll('input[name="tripType"]').forEach(function(radio) {
+  radio.addEventListener('change', function() {
+    var isDomestic = this.value === 'domestic';
+    document.getElementById('domesticInfoBox').style.display = isDomestic ? 'block' : 'none';
+    // Hide/show country selector and foreign-specific fields
+    var countryWrapper = document.querySelector('.country-search-wrapper');
+    if (countryWrapper) countryWrapper.parentElement.style.display = isDomestic ? 'none' : '';
+    var rateInfoBox = document.getElementById('rateInfoBox');
+    if (rateInfoBox) rateInfoBox.style.display = 'none';
+    // Hide travel allowance row in domestic mode (handled in recalculate)
+    recalculate();
+    saveFormData();
+  });
+});
+
+// Auto-fill return fields when destination changes
+document.getElementById('destinationCity').addEventListener('input', function() {
+  var country = document.getElementById('selectedCountry').value;
+  if (country) {
+    var rate = RATES[country];
+    var displayName = currentLang === 'en' ? (rate.en || country) : country;
+    document.getElementById('returnFrom').value = this.value ? (this.value + ', ' + displayName) : displayName;
+  }
+  saveFormData();
+});
+
+document.getElementById('departureFrom').addEventListener('input', function() {
+  document.getElementById('returnTo').value = this.value;
+  saveFormData();
+});
+
+// ============================================================
+// SAVE / RESTORE FORM DATA
+// ============================================================
+function saveFormData() {
+  var data = {};
+  document.querySelectorAll('[data-save]').forEach(function(el) {
+    var key = el.dataset.save;
+    if (el.type === 'checkbox') data[key] = el.checked;
+    else if (el.type === 'radio') { if (el.checked) data[key] = el.value; }
+    else data[key] = el.value;
+  });
+  data._countrySearch = countrySearchInput.value;
+  data._lang = currentLang;
+  sessionStorage.setItem('ww_formData', JSON.stringify(data));
+}
+
+function restoreFormData() {
+  var raw = sessionStorage.getItem('ww_formData');
+  if (!raw) return;
+  // Clear stale data from older versions
+  try {
+    var _tmp = JSON.parse(raw);
+    if ('advancePayment' in _tmp) { sessionStorage.removeItem('ww_formData'); return; }
+  } catch(e) { sessionStorage.removeItem('ww_formData'); return; }
+  try {
+    var data = JSON.parse(raw);
+    document.querySelectorAll('[data-save]').forEach(function(el) {
+      var key = el.dataset.save;
+      if (!(key in data)) return;
+      if (el.type === 'checkbox') el.checked = data[key];
+      else if (el.type === 'radio') el.checked = (el.value === data[key]);
+      else el.value = data[key];
+    });
+    if (data._countrySearch) countrySearchInput.value = data._countrySearch;
+    if (data._lang) setLang(data._lang);
+
+    // Trigger dependent UI
+    document.getElementById('mealsDetails').style.display = document.getElementById('mealsProvided').checked ? 'grid' : 'none';
+    // Sync yes/no radios from restored checkboxes
+    document.getElementById('mealsYes').checked = document.getElementById('mealsProvided').checked;
+    document.getElementById('mealsNo').checked = !document.getElementById('mealsProvided').checked;
+    document.getElementById('hotelYes').checked = document.getElementById('hotelProvided').checked;
+    document.getElementById('hotelNo').checked = !document.getElementById('hotelProvided').checked;
+    document.getElementById('ltYes').checked = document.getElementById('localTransportIncluded').checked;
+    document.getElementById('ltNo').checked = !document.getElementById('localTransportIncluded').checked;
+    document.getElementById('advanceDetailsBlock').style.display = document.getElementById('requestAdvance').checked ? 'block' : 'none';
+    var advMethodR = document.querySelector('input[name="advanceMethod"]:checked');
+    document.getElementById('bankDetailsBlock').style.display = (advMethodR && advMethodR.value === 'konto') ? 'block' : 'none';
+    setTimeout(function() { updateAdvanceSum(); updateMealMax(); }, 100);
+    var advMethod = document.querySelector('input[name="advanceMethod"]:checked');
+    document.getElementById('bankDetailsBlock').style.display = (advMethod && advMethod.value === 'konto') ? 'block' : 'none';
+    document.getElementById('extraFundingFields').style.display = document.getElementById('multipleFunding').checked ? 'block' : 'none';
+
+    if (data.selectedCountry) {
+      var rate = RATES[data.selectedCountry];
+      if (rate) {
+        document.getElementById('rateInfoBox').style.display = 'block';
+        var t = TRANSLATIONS[currentLang];
+        var displayName = currentLang === 'en' ? (rate.en || data.selectedCountry) : data.selectedCountry;
+        document.getElementById('rateInfoText').textContent = t.rateInfo
+          .replace('{country}', displayName)
+          .replace('{rate}', rate.perDiem)
+          .split('{currency}').join(rate.currency)
+          .replace('{hotel}', rate.hotel);
+      }
+    }
+
+    recalculate();
+  } catch(e) { /* ignore */ }
+}
+
+// Auto-save on all input changes
+document.addEventListener('input', saveFormData);
+document.addEventListener('change', saveFormData);
+
+// ============================================================
+// CUSTOM RATES UPLOAD
+// ============================================================
+document.getElementById('customRatesFile').addEventListener('change', function(e) {
+  var file = e.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      var text = ev.target.result;
+      if (file.name.endsWith('.json')) {
+        var obj = JSON.parse(text);
+        Object.keys(obj).forEach(function(k) {
+          if (obj[k].currency && obj[k].perDiem !== undefined && obj[k].hotel !== undefined) {
+            RATES[k] = Object.assign({}, RATES[k] || {}, obj[k]);
+          }
+        });
+      } else {
+        // CSV: country,currency,perDiem,hotel
+        var lines = text.trim().split('\n');
+        lines.forEach(function(line, i) {
+          if (i === 0 && line.toLowerCase().includes('country')) return; // skip header
+          var parts = line.split(',').map(function(s) { return s.trim(); });
+          if (parts.length >= 4) {
+            var country = parts[0], currency = parts[1], perDiem = parseFloat(parts[2]), hotel = parseFloat(parts[3]);
+            RATES[country] = Object.assign({}, RATES[country] || { en: country }, { currency: currency, perDiem: perDiem, hotel: hotel });
+          }
+        });
+      }
+      document.getElementById('customRatesStatus').innerHTML = '<span style="color:var(--green);font-size:13px;font-weight:600;">&#10003; ' + TRANSLATIONS[currentLang].ratesLoaded + '</span>';
+      recalculate();
+      showToast(TRANSLATIONS[currentLang].ratesLoaded);
+    } catch(err) {
+      document.getElementById('customRatesStatus').innerHTML = '<span style="color:var(--red);font-size:13px;">Error: ' + err.message + '</span>';
+    }
+  };
+  reader.readAsText(file);
+});
+
+function resetCustomRates() {
+  RATES = JSON.parse(JSON.stringify(RATES_DEFAULT));
+  document.getElementById('customRatesStatus').innerHTML = '';
+  document.getElementById('customRatesFile').value = '';
+  recalculate();
+  showToast(TRANSLATIONS[currentLang].ratesReset);
+}
+
+// ============================================================
+// CLEAR FORM
+// ============================================================
+function clearForm() {
+  document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="date"], input[type="number"], textarea').forEach(function(el) {
+    if (el.id === 'unitName') el.value = "Wydział Zarządzania UW, ul. Szturmowa 1/3, 02-678 Warszawa";
+    else if (el.id === 'departureFrom') el.value = "Warszawa, Polska";
+    else el.value = '';
+  });
+  document.querySelectorAll('input[type="checkbox"]').forEach(function(el) { el.checked = false; });
+  document.getElementById('statusPracownik').checked = true;
+  document.getElementById('selectedCountry').value = '';
+  countrySearchInput.value = '';
+  document.getElementById('returnFrom').value = '';
+  document.getElementById('returnTo').value = '';
+  document.getElementById('rateInfoBox').style.display = 'none';
+  document.getElementById('mealsDetails').style.display = 'none';
+  document.getElementById('advanceDetailsBlock').style.display = 'none';
+  document.getElementById('requestAdvance').checked = false;
+  // Reset currency selection
+  document.getElementById('advanceCurrency').removeAttribute('data-user-changed');
+  var countryOpt = document.getElementById('advanceCurrency').querySelector('option[data-country-currency]');
+  if (countryOpt) countryOpt.remove();
+  document.getElementById('bankDetailsBlock').style.display = 'block';
+  document.querySelectorAll('input[name="advanceMethod"]').forEach(function(r) { r.checked = r.value === 'konto'; });
+  document.getElementById('extraFundingFields').style.display = 'none';
+  document.getElementById('submissionDate').value = new Date().toISOString().split('T')[0];
+
+  document.getElementById('calcPlaceholder').style.display = 'block';
+  document.getElementById('calcResults').style.display = 'none';
+
+  sessionStorage.removeItem('ww_formData');
+  showToast(TRANSLATIONS[currentLang].formCleared);
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('visible');
+  setTimeout(function() { t.classList.remove('visible'); }, 2500);
+}
+
+// ============================================================
+// DOCX EXPORT
+// ============================================================
+async function exportDocx() {
+  // Validate required fields
+  var requiredIds = ['fullName', 'email', 'projectNumber', 'departureDate', 'returnDate', 'destinationCity', 'purposeOfTravel', 'hostInstitution'];
+  var t = TRANSLATIONS[currentLang];
+  var missing = [];
+  var firstMissingEl = null;
+  requiredIds.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (!el.value.trim()) {
+      missing.push(id);
+      el.classList.add('field-error');
+      if (!firstMissingEl) firstMissingEl = el;
+    } else {
+      el.classList.remove('field-error');
+    }
+  });
+  // Email format check
+  var emailEl = document.getElementById('email');
+  if (emailEl && emailEl.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim())) {
+    missing.push('email_format');
+    emailEl.classList.add('field-error');
+    if (!firstMissingEl) firstMissingEl = emailEl;
+  }
+  // For foreign trips, country is also required
+  var isForeign = document.getElementById('tripTypeForeign').checked;
+  if (isForeign && !document.getElementById('selectedCountry').value) {
+    missing.push('selectedCountry');
+    document.getElementById('countrySearch').classList.add('field-error');
+    if (!firstMissingEl) firstMissingEl = document.getElementById('countrySearch');
+  } else {
+    document.getElementById('countrySearch').classList.remove('field-error');
+  }
+  if (missing.length > 0) {
+    var hasEmailFormat = missing.indexOf('email_format') >= 0;
+    var msg;
+    if (hasEmailFormat && missing.length === 1) {
+      msg = currentLang === 'pl'
+        ? 'Podaj poprawny adres email.'
+        : 'Please enter a valid email address.';
+    } else {
+      msg = currentLang === 'pl'
+        ? 'Wypełnij wymagane pola oznaczone gwiazdką (*) przed eksportem.'
+        : 'Please fill in required fields marked with (*) before exporting.';
+    }
+    alert(msg);
+    if (firstMissingEl) {
+      firstMissingEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      firstMissingEl.focus();
+    }
+    return;
+  }
+  if (typeof docx === 'undefined') {
+    alert(currentLang === 'pl'
+      ? 'Błąd: biblioteka docx nie jest załadowana. Sprawdź połączenie z internetem i odśwież stronę.'
+      : 'Error: docx library not loaded. Check your internet connection and reload the page.');
+    return;
+  }
+  var D = docx;
+  var Document = D.Document, Packer = D.Packer, Paragraph = D.Paragraph, TextRun = D.TextRun;
+  var Table = D.Table, TableRow = D.TableRow, TableCell = D.TableCell;
+  var WidthType = D.WidthType, AlignmentType = D.AlignmentType, BorderStyle = D.BorderStyle;
+  var VerticalAlign = D.VerticalAlign, HeightRule = D.HeightRule;
+
+  // Gather form data
+  var fullName = document.getElementById('fullName').value || '_______________';
+  var status = document.querySelector('input[name="status"]:checked');
+  status = status ? status.value : '';
+  var unitName = document.getElementById('unitName').value || '';
+  var email = document.getElementById('email').value || '';
+  var workPhone = document.getElementById('workPhone').value || '';
+  var privatePhone = document.getElementById('privatePhone').value || '';
+  var submissionDate = document.getElementById('submissionDate').value || '';
+  var hostInstitution = document.getElementById('hostInstitution').value || '';
+  var purpose = document.getElementById('purposeOfTravel').value || '';
+  var transport = [];
+  document.querySelectorAll('input[name="transport"]:checked').forEach(function(cb) { transport.push(cb.value); });
+  var departureFrom = document.getElementById('departureFrom').value || '';
+  var via = document.getElementById('via').value || '';
+  var destinationCity = document.getElementById('destinationCity').value || '';
+  var country = document.getElementById('selectedCountry').value || '';
+  var depDate = document.getElementById('departureDate').value || '';
+  var retDate = document.getElementById('returnDate').value || '';
+  var returnFrom = document.getElementById('returnFrom').value || '';
+  var returnTo = document.getElementById('returnTo').value || '';
+  var returnVia = document.getElementById('returnVia') ? document.getElementById('returnVia').value || '' : '';
+  var projectNumber = document.getElementById('projectNumber').value || '';
+  var tripType = document.querySelector('input[name="tripType"]:checked').value;
+
+  // Format date DD.MM.YYYY
+  function fmtDate(d) {
+    if (!d) return '';
+    var p = d.split('-');
+    return p.length === 3 ? p[2] + '.' + p[1] + '.' + p[0] : d;
+  }
+
+  // Checkbox symbol
+  function chk(val, expected) { return val === expected ? '☒' : '☐'; }
+  function chkTransport(t) { return transport.indexOf(t) >= 0 ? '☒' : '☐'; }
+
+  // Calculate cost rows
+  var calcRows = [];
+  var grandTotal = '';
+  var curr = '';
+  var _adv = getAdvanceAmount();
+  var advanceAmt = _adv.amount;
+  var advanceCurr = _adv.currency;
+
+  if (tripType === 'domestic' && depDate && retDate) {
+    curr = 'PLN';
+    var DOMESTIC_RATE = 45, DOMESTIC_HOTEL = 900, DOMESTIC_TRANSPORT = 9;
+    var dep = new Date(depDate), ret = new Date(retDate);
+    var diffMs = ret.getTime() - dep.getTime();
+    var totalHours = diffMs / (1000*60*60);
+    var fullDaysCalc = Math.floor(totalHours / 24);
+    var remainingHours = totalHours - (fullDaysCalc * 24);
+    var effectiveDays = fullDaysCalc + 1;
+    var nights = fullDaysCalc;
+    var mealReductionTotal = 0;
+    if (document.getElementById('mealsProvided').checked) {
+      var numBreakfasts = parseInt(document.getElementById('mealBreakfast').value) || 0;
+      var numLunches = parseInt(document.getElementById('mealLunch').value) || 0;
+      var numDinners = parseInt(document.getElementById('mealDinner').value) || 0;
+      mealReductionTotal = roundCurr(numBreakfasts * 0.15 * DOMESTIC_RATE + numLunches * 0.30 * DOMESTIC_RATE + numDinners * 0.30 * DOMESTIC_RATE);
+    }
+    var adjPD = DOMESTIC_RATE;
+    var hotelProv = document.getElementById('hotelProvided').checked;
+    var pdTotal = roundCurr(effectiveDays * DOMESTIC_RATE - mealReductionTotal);
+    var htTotal = hotelProv ? 0 : roundCurr(nights * DOMESTIC_HOTEL);
+    var ltTotal = roundCurr(effectiveDays * DOMESTIC_TRANSPORT);
+    var total = roundCurr(pdTotal + htTotal + ltTotal);
+    grandTotal = formatNum(total);
+    calcRows = [
+      { label: 'Diety pobytowe', count: formatNum(effectiveDays), rate: formatNum(adjPD), amount: formatNum(pdTotal) },
+      { label: 'Diety hotelowe', count: '' + nights, rate: formatNum(DOMESTIC_HOTEL), amount: formatNum(htTotal) },
+      { label: 'Inne koszty:\nRyczałt za dojazdy lokalne', count: formatNum(effectiveDays), rate: formatNum(DOMESTIC_TRANSPORT), amount: formatNum(ltTotal) }
+    ];
+  } else if (country && depDate && retDate && RATES[country]) {
+    var rate = RATES[country];
+    curr = rate.currency;
+    var dep = new Date(depDate), ret = new Date(retDate);
+    var diffMs = ret.getTime() - dep.getTime();
+    var totalHours = diffMs / (1000*60*60);
+    var fullDaysCalc = Math.floor(totalHours / 24);
+    var remainingHours = totalHours - (fullDaysCalc * 24);
+    var effectiveDays = fullDaysCalc + 1;
+    var nights = fullDaysCalc;
+    var mealReductionTotal = 0;
+    if (document.getElementById('mealsProvided').checked) {
+      var numBreakfasts = parseInt(document.getElementById('mealBreakfast').value) || 0;
+      var numLunches = parseInt(document.getElementById('mealLunch').value) || 0;
+      var numDinners = parseInt(document.getElementById('mealDinner').value) || 0;
+      mealReductionTotal = roundCurr(numBreakfasts * 0.15 * rate.perDiem + numLunches * 0.30 * rate.perDiem + numDinners * 0.30 * rate.perDiem);
+    }
+    var adjPD = rate.perDiem;
+    var hotelProv = document.getElementById('hotelProvided').checked;
+    var pdTotal = roundCurr(effectiveDays * rate.perDiem - mealReductionTotal);
+    var travelAllowance = roundCurr(rate.perDiem);
+    var htTotal = hotelProv ? 0 : roundCurr(nights * rate.hotel);
+    var ltIncl = document.getElementById('localTransportIncluded').checked;
+    var ltTotal = ltIncl ? roundCurr(effectiveDays * rate.perDiem * 0.10) : 0;
+    var total = roundCurr(pdTotal + travelAllowance + htTotal + ltTotal);
+    grandTotal = formatNum(total);
+    calcRows = [
+      { label: 'Dieta dojazdowa', count: '1', rate: formatNum(rate.perDiem), amount: formatNum(travelAllowance) },
+      { label: 'Diety pobytowe', count: formatNum(effectiveDays), rate: formatNum(adjPD), amount: formatNum(pdTotal) },
+      { label: 'Diety hotelowe', count: '' + nights, rate: formatNum(rate.hotel), amount: formatNum(htTotal) },
+      { label: 'Inne koszty:\nRyczałt za komunikację miejską', count: formatNum(effectiveDays), rate: formatNum(roundCurr(rate.perDiem * 0.10)), amount: formatNum(ltTotal) }
+    ];
+  }
+
+  // Destination display
+  var destDisplay = destinationCity;
+  if (country && tripType !== 'domestic') {
+    var rateLookup = RATES[country];
+    destDisplay = destinationCity ? (destinationCity + ', ' + (currentLang === 'en' && rateLookup ? rateLookup.en : country)) : country;
+  }
+
+  // ---------- BORDERS ----------
+  var b = {
+    top: { style: BorderStyle.SINGLE, size: 1 },
+    bottom: { style: BorderStyle.SINGLE, size: 1 },
+    left: { style: BorderStyle.SINGLE, size: 1 },
+    right: { style: BorderStyle.SINGLE, size: 1 }
+  };
+  var bNone = {
+    top: { style: BorderStyle.NONE, size: 0 },
+    bottom: { style: BorderStyle.NONE, size: 0 },
+    left: { style: BorderStyle.NONE, size: 0 },
+    right: { style: BorderStyle.NONE, size: 0 }
+  };
+  var bBottom = {
+    top: { style: BorderStyle.NONE, size: 0 },
+    bottom: { style: BorderStyle.SINGLE, size: 1 },
+    left: { style: BorderStyle.NONE, size: 0 },
+    right: { style: BorderStyle.NONE, size: 0 }
+  };
+
+  var fontSize = 18;
+  var fontName = "Calibri";
+
+  function txt(text, opts) {
+    var o = Object.assign({ font: fontName, size: fontSize }, opts || {});
+    o.text = text;
+    return new TextRun(o);
+  }
+
+  function para(runs, opts) {
+    var o = Object.assign({ spacing: { after: 0 } }, opts || {});
+    o.children = Array.isArray(runs) ? runs : [runs];
+    return new Paragraph(o);
+  }
+
+  function cell(content, opts) {
+    var o = Object.assign({ borders: b, verticalAlign: VerticalAlign.CENTER }, opts || {});
+    if (typeof content === 'string') {
+      // Handle multiline
+      var lines = content.split('\n');
+      o.children = lines.map(function(line) { return para([txt(line)]); });
+    } else if (Array.isArray(content)) {
+      o.children = content;
+    } else {
+      o.children = [content];
+    }
+    return new TableCell(o);
+  }
+
+  function labelCell(text, opts) {
+    return cell([para([txt(text, { size: 16, italics: true })], { spacing: { after: 0 } })], opts);
+  }
+
+  function valueCell(text, opts) {
+    return cell([para([txt(text, { bold: false })])], opts);
+  }
+
+  // ---------- BUILD DOCUMENT ----------
+  var children = [];
+
+  // Title
+  children.push(para([txt("Załącznik nr 1", { size: 18, italics: true })], { alignment: AlignmentType.RIGHT, spacing: { after: 100 } }));
+  children.push(para([txt("WNIOSEK WYJAZDOWY", { bold: true, size: 28 })], { alignment: AlignmentType.CENTER, spacing: { after: 40 } }));
+  children.push(para([txt("Po czytelnym wypełnieniu formularza należy przekazać go do Kwestury.", { size: 16, italics: true })], { alignment: AlignmentType.CENTER, spacing: { after: 200 } }));
+
+  // ====== MAIN TABLE (8 columns) ======
+  var colW = [1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200]; // ~equal
+
+  // Row: Name + Date
+  var mainRows = [];
+
+  // R1: Name value | empty | Date value
+  mainRows.push(new TableRow({
+    children: [
+      cell([para([txt(fullName, { bold: true, size: 22 })])], { columnSpan: 5, borders: bBottom }),
+      cell([para([txt('')])], { borders: bNone }),
+      cell([para([txt(fmtDate(submissionDate), { size: 20 })])], { columnSpan: 2, borders: bBottom })
+    ]
+  }));
+
+  // R2: Name label | Date label
+  mainRows.push(new TableRow({
+    children: [
+      cell([para([txt("Imię i nazwisko", { size: 16, italics: true })], { alignment: AlignmentType.CENTER })], { columnSpan: 5, borders: bNone }),
+      cell([para([txt('')])], { borders: bNone }),
+      cell([para([txt("Data złożenia wniosku", { size: 16, italics: true })], { alignment: AlignmentType.CENTER })], { columnSpan: 2, borders: bNone })
+    ]
+  }));
+
+  // R3: Status line
+  var statusLine = 'PRACOWNIK ' + chk(status, 'pracownik') + '     DOKTORANT ' + chk(status, 'doktorant') + '     STUDENT ' + chk(status, 'student') + '     INNA OSOBA ' + chk(status, 'inna');
+  mainRows.push(new TableRow({
+    children: [
+      cell([para([txt(statusLine, { size: 18 })])], { columnSpan: 8, borders: b })
+    ]
+  }));
+
+  // R4: Unit name + tel. sluzbowy
+  mainRows.push(new TableRow({
+    children: [
+      cell([para([txt(unitName || '', { size: 18 })])], { columnSpan: 4, borders: b, rowSpan: 3 }),
+      cell([para([txt("tel. służbowy:", { size: 16, italics: true })])], { columnSpan: 2, borders: bNone }),
+      cell([para([txt(workPhone, { size: 18 })])], { columnSpan: 2, borders: bBottom })
+    ]
+  }));
+
+  // R5: (unit cont.) + tel. prywatny
+  mainRows.push(new TableRow({
+    children: [
+      cell([para([txt("tel. prywatny:", { size: 16, italics: true })])], { columnSpan: 2, borders: bNone }),
+      cell([para([txt(privatePhone, { size: 18 })])], { columnSpan: 2, borders: bBottom })
+    ]
+  }));
+
+  // R6: (unit cont.) + email
+  mainRows.push(new TableRow({
+    children: [
+      cell([para([txt("e-mail:", { size: 16, italics: true })])], { columnSpan: 2, borders: bNone }),
+      cell([para([txt(email, { size: 18 })])], { columnSpan: 2, borders: bBottom })
+    ]
+  }));
+
+  // R6b: Unit label
+  mainRows.push(new TableRow({
+    children: [
+      cell([para([txt("Nazwa i adres jednostki UW", { size: 16, italics: true })], { alignment: AlignmentType.CENTER })], { columnSpan: 4, borders: bNone }),
+      cell([para([txt('')])], { columnSpan: 4, borders: bNone })
+    ]
+  }));
+
+  // R7: Transport
+  var transportLine = 'Środek podróży:   samolot ' + chkTransport('samolot') + '   pociąg ' + chkTransport('pociag') + '   autobus ' + chkTransport('autobus') + '   prom ' + chkTransport('prom') + '   samochód ' + chkTransport('samochod');
+  mainRows.push(new TableRow({
+    children: [
+      cell([para([txt(transportLine, { size: 18 })])], { columnSpan: 8, borders: b })
+    ]
+  }));
+
+  // R8: Host institution
+  mainRows.push(new TableRow({
+    children: [
+      cell([para([txt("Instytucja przyjmująca\n(pełna nazwa, państwo)", { size: 16, italics: true })])], { columnSpan: 2, borders: b }),
+      cell([para([txt(hostInstitution, { size: 18 })])], { columnSpan: 6, borders: b })
+    ]
+  }));
+
+  // R9: Purpose
+  mainRows.push(new TableRow({
+    children: [
+      cell([para([txt("Cel wyjazdu", { size: 16, italics: true })])], { columnSpan: 2, borders: b }),
+      cell([para([txt(purpose, { size: 18 })])], { columnSpan: 6, borders: b })
+    ]
+  }));
+
+  // R10: Route header
+  mainRows.push(new TableRow({
+    children: [
+      cell([para([txt("Trasa i data podróży:", { bold: true, size: 18 })])], { columnSpan: 8, borders: b })
+    ]
+  }));
+
+  // R11: Departure values
+  mainRows.push(new TableRow({
+    children: [
+      cell([para([txt(departureFrom, { size: 18 })])], { columnSpan: 2, borders: b }),
+      cell([para([txt(via || '—', { size: 18 })])], { borders: b }),
+      cell([para([txt(destDisplay, { size: 18 })])], { columnSpan: 3, borders: b }),
+      cell([para([txt(fmtDate(depDate), { size: 18 })])], { columnSpan: 2, borders: b })
+    ]
+  }));
+
+  // R12: Departure labels
+  mainRows.push(new TableRow({
+    children: [
+      cell([para([txt("Odlot, wyjazd z", { size: 14, italics: true })], { alignment: AlignmentType.CENTER })], { columnSpan: 2, borders: bNone }),
+      cell([para([txt("przez", { size: 14, italics: true })], { alignment: AlignmentType.CENTER })], { borders: bNone }),
+      cell([para([txt("do (miejscowość, państwo)", { size: 14, italics: true })], { alignment: AlignmentType.CENTER })], { columnSpan: 3, borders: bNone }),
+      cell([para([txt("dnia", { size: 14, italics: true })], { alignment: AlignmentType.CENTER })], { columnSpan: 2, borders: bNone })
+    ]
+  }));
+
+  // R13: Return values
+  mainRows.push(new TableRow({
+    children: [
+      cell([para([txt(returnFrom || destDisplay, { size: 18 })])], { columnSpan: 2, borders: b }),
+      cell([para([txt(returnVia || '—', { size: 18 })])], { borders: b }),
+      cell([para([txt(returnTo || departureFrom, { size: 18 })])], { columnSpan: 3, borders: b }),
+      cell([para([txt(fmtDate(retDate), { size: 18 })])], { columnSpan: 2, borders: b })
+    ]
+  }));
+
+  // R14: Return labels
+  mainRows.push(new TableRow({
+    children: [
+      cell([para([txt("Powrót z (miejscowość, państwo)", { size: 14, italics: true })], { alignment: AlignmentType.CENTER })], { columnSpan: 2, borders: bNone }),
+      cell([para([txt("przez", { size: 14, italics: true })], { alignment: AlignmentType.CENTER })], { borders: bNone }),
+      cell([para([txt("do (miejscowość docelowa)", { size: 14, italics: true })], { alignment: AlignmentType.CENTER })], { columnSpan: 3, borders: bNone }),
+      cell([para([txt("dnia", { size: 14, italics: true })], { alignment: AlignmentType.CENTER })], { columnSpan: 2, borders: bNone })
+    ]
+  }));
+
+  // Spacer
+  mainRows.push(new TableRow({
+    children: [
+      cell([para([txt('')])], { columnSpan: 8, borders: bNone })
+    ]
+  }));
+
+  // ====== COST TABLE HEADER ======
+  mainRows.push(new TableRow({
+    children: [
+      cell([para([txt('')])], { borders: b }),
+      cell([para([txt("Źródła finansowania wyjazdu", { bold: true, size: 16 })], { alignment: AlignmentType.CENTER })], { columnSpan: 2, borders: b }),
+      cell([para([txt("Liczba", { bold: true, size: 16 })], { alignment: AlignmentType.CENTER })], { borders: b }),
+      cell([para([txt("Stawka", { bold: true, size: 16 })], { alignment: AlignmentType.CENTER })], { borders: b }),
+      cell([para([txt("Kwota", { bold: true, size: 16 })], { alignment: AlignmentType.CENTER })], { columnSpan: 2, borders: b }),
+      cell([para([txt("Waluta", { bold: true, size: 16 })], { alignment: AlignmentType.CENTER })], { borders: b })
+    ]
+  }));
+
+  // Bilety row
+  mainRows.push(new TableRow({
+    children: [
+      cell([para([txt("Bilety", { size: 16 })])], { borders: b }),
+      cell([para([txt('')])], { columnSpan: 2, borders: b }),
+      cell([para([txt('')])], { borders: b }),
+      cell([para([txt('')])], { borders: b }),
+      cell([para([txt(ticketCost > 0 ? formatNum(ticketCost) : '', { size: 18, bold: ticketCost > 0 })], { alignment: AlignmentType.RIGHT })], { columnSpan: 2, borders: b }),
+      cell([para([txt(ticketCost > 0 ? ticketCurr : '', { size: 18 })], { alignment: AlignmentType.CENTER })], { borders: b })
+    ]
+  }));
+
+  // Wiza row
+  mainRows.push(new TableRow({
+    children: [
+      cell([para([txt("Wiza", { size: 16 })])], { borders: b }),
+      cell([para([txt('')])], { columnSpan: 2, borders: b }),
+      cell([para([txt('')])], { borders: b }),
+      cell([para([txt('')])], { borders: b }),
+      cell([para([txt(visaCost > 0 ? formatNum(visaCost) : '', { size: 18, bold: visaCost > 0 })], { alignment: AlignmentType.RIGHT })], { columnSpan: 2, borders: b }),
+      cell([para([txt(visaCost > 0 ? visaCurr : '', { size: 18 })], { alignment: AlignmentType.CENTER })], { borders: b })
+    ]
+  }));
+
+  // Cost data rows
+  calcRows.forEach(function(row) {
+    mainRows.push(new TableRow({
+      children: [
+        cell(row.label, { borders: b }),
+        cell([para([txt('')])], { columnSpan: 2, borders: b }),
+        cell([para([txt(row.count, { size: 18 })], { alignment: AlignmentType.CENTER })], { borders: b }),
+        cell([para([txt(row.rate, { size: 18 })], { alignment: AlignmentType.RIGHT })], { borders: b }),
+        cell([para([txt(row.amount, { size: 18, bold: true })], { alignment: AlignmentType.RIGHT })], { columnSpan: 2, borders: b }),
+        cell([para([txt(curr, { size: 18 })], { alignment: AlignmentType.CENTER })], { borders: b })
+      ]
+    }));
+  });
+
+  // Totals row: project number + Zaliczka + Łącznie + total
+  mainRows.push(new TableRow({
+    children: [
+      cell([para([txt('')])], { borders: b }),
+      cell([para([txt("nr projektu " + projectNumber, { size: 16 })])], { columnSpan: 2, borders: b }),
+      cell([para([txt("Zaliczka: " + (advanceAmt > 0 ? formatNum(advanceAmt) + ' ' + advanceCurr : ''), { size: 16, italics: true })], { alignment: AlignmentType.CENTER })], { borders: b }),
+      cell([para([txt("Łącznie:", { bold: true, size: 18 })], { alignment: AlignmentType.RIGHT })], { borders: b }),
+      cell([para([txt(grandTotal, { bold: true, size: 20 })], { alignment: AlignmentType.RIGHT })], { columnSpan: 2, borders: b }),
+      cell([para([txt(curr, { bold: true, size: 18 })], { alignment: AlignmentType.CENTER })], { borders: b })
+    ]
+  }));
+
+  children.push(new Table({
+    width: { size: 100, type: WidthType.PERCENTAGE },
+    rows: mainRows
+  }));
+
+  // ====== ADVANCE PAYMENT REQUEST ======
+  var _adv2 = getAdvanceAmount();
+  var advanceAmt2 = _adv2.amount;
+  if (advanceAmt2 > 0) {
+    var advCurr2 = _adv2.currency;
+    var advMethod = document.querySelector('input[name="advanceMethod"]:checked');
+    var isCash = advMethod && advMethod.value === 'kasa';
+    var bankNameVal = document.getElementById('bankName').value || '';
+    var bankSwiftVal = document.getElementById('bankSwift').value || '';
+    var bankOwnerVal = document.getElementById('bankOwner').value || '';
+    var bankAccountVal = document.getElementById('bankAccount').value || '';
+
+    children.push(para([txt('')], { spacing: { after: 100 } }));
+
+    var advRows = [];
+    // Row 1: method + currency checkboxes
+    advRows.push(new TableRow({
+      children: [
+        cell([para([
+          txt("Proszę o wypłatę zaliczki: ", { bold: true, size: 18 }),
+          txt("a) w kasie głównej UW", { size: 18 })
+        ])], { columnSpan: 3, borders: b }),
+        cell([
+          para([txt("w PLN  " + ((!isCash || advCurr2 === 'PLN') && isCash ? "☒" : "☐"), { size: 18 })]),
+          para([txt("w walucie " + advCurr2 + "  " + ((!isCash || advCurr2 !== 'PLN') && isCash ? "☒" : "☐"), { size: 18 })])
+        ], { borders: b }),
+        cell([para([txt("b) na konto", { size: 18 })], { alignment: AlignmentType.CENTER })], { borders: b }),
+        cell([para([txt(!isCash ? "X" : "", { bold: true, size: 22 })], { alignment: AlignmentType.CENTER })], { borders: b }),
+        cell([
+          para([txt("w PLN  " + (!isCash && advCurr2 === 'PLN' ? "☒" : "☐"), { size: 18 })]),
+          para([txt("w walucie " + advCurr2 + "  " + (!isCash && advCurr2 !== 'PLN' ? "☒" : "☐"), { size: 18 })])
+        ], { columnSpan: 2, borders: b })
+      ]
+    }));
+
+    // Row 2: bank details
+    if (!isCash) {
+      advRows.push(new TableRow({
+        children: [
+          cell([para([
+            txt("bank: ", { size: 16 }),
+            txt(bankNameVal + (bankSwiftVal ? ', SWIFT: ' + bankSwiftVal : ''), { size: 16, bold: true }),
+            txt(", właściciel: ", { size: 16 }),
+            txt(bankOwnerVal, { size: 16, bold: true }),
+            txt(", nr konta: ", { size: 16 }),
+            txt(bankAccountVal, { size: 16, bold: true })
+          ])], { columnSpan: 8, borders: b })
+        ]
+      }));
+    }
+
+    children.push(new Table({
+      width: { size: 100, type: WidthType.PERCENTAGE },
+      rows: advRows
+    }));
+  }
+
+  // ====== SIGNATURES ======
+  children.push(para([txt('')], { spacing: { after: 400 } }));
+
+  var sigTable = new Table({
+    width: { size: 100, type: WidthType.PERCENTAGE },
+    columnWidths: [3000, 3600, 3000],
+    rows: [
+      new TableRow({
+        children: [
+          cell([
+            para([txt("…………………………………………", { size: 18 })], { alignment: AlignmentType.CENTER, spacing: { after: 40 } }),
+            para([txt("Podpis osoby wyjeżdżającej", { size: 14, italics: true })], { alignment: AlignmentType.CENTER })
+          ], { borders: bNone, width: { size: 33, type: WidthType.PERCENTAGE } }),
+          cell([
+            para([txt("………………………………………………………", { size: 18 })], { alignment: AlignmentType.CENTER, spacing: { after: 40 } }),
+            para([txt("Podpis, pieczęć pełnomocnika", { size: 14, italics: true })], { alignment: AlignmentType.CENTER }),
+            para([txt("kwestora / kwestora", { size: 14, italics: true })], { alignment: AlignmentType.CENTER })
+          ], { borders: bNone, width: { size: 34, type: WidthType.PERCENTAGE } }),
+          cell([
+            para([txt("…………………………………………", { size: 18 })], { alignment: AlignmentType.CENTER, spacing: { after: 40 } }),
+            para([txt("Podpis, pieczęć kierownika", { size: 14, italics: true })], { alignment: AlignmentType.CENTER }),
+            para([txt("jednostki", { size: 14, italics: true })], { alignment: AlignmentType.CENTER })
+          ], { borders: bNone, width: { size: 33, type: WidthType.PERCENTAGE } })
+        ]
+      })
+    ]
+  });
+  children.push(sigTable);
+
+  // ====== DECLARATION ======
+  children.push(para([txt('')], { spacing: { after: 200 } }));
+
+  var declText = "Z otrzymanej zaliczki zobowiązuję się rozliczyć w ciągu 14 dni od powrotu do kraju. " +
+    "Jednocześnie upoważniam Uniwersytet do potrącenia kwoty nierozliczonej zaliczki " +
+    "z mojego wynagrodzenia lub innych należności lub stypendium.\n" +
+    "Oświadczam, że posiadam ubezpieczenie kosztów leczenia i następstw nieszczęśliwych " +
+    "wypadków na czas trwania wyjazdu.";
+
+  children.push(para([txt(declText, { size: 16, italics: true })], { spacing: { after: 200 } }));
+  children.push(para([txt('')], { spacing: { after: 100 } }));
+  children.push(para([txt(".........................................................", { size: 18 })], { alignment: AlignmentType.LEFT }));
+  children.push(para([txt("podpis osoby wyjeżdżającej", { size: 14, italics: true })], { alignment: AlignmentType.LEFT }));
+
+  // Build document
+  var doc = new Document({
+    sections: [{
+      properties: {
+        page: {
+          size: { width: 11906, height: 16838, orientation: docx.PageOrientation.PORTRAIT },
+          margin: { top: 1440, bottom: 1134, left: 1134, right: 1134 }
+        }
+      },
+      children: children
+    }]
+  });
+
+  var blob = await Packer.toBlob(doc);
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  var safeName = (fullName || 'wniosek').replace(/[^a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ0-9 ]/g, '').replace(/\s+/g, '_');
+  a.download = 'Wniosek_Wyjazdowy_' + safeName + '_' + (depDate || 'brak') + '.docx';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast(TRANSLATIONS[currentLang].docxExported);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+
+// ============================================================
+// UPDATE MEAL MAX based on trip duration
+// ============================================================
+function updateMealMax() {
+  var depDate = document.getElementById('departureDate').value;
+  var retDate = document.getElementById('returnDate').value;
+  var maxMeals = 90; // default fallback
+  if (depDate && retDate) {
+    var dep = new Date(depDate), ret = new Date(retDate);
+    var diffMs = ret.getTime() - dep.getTime();
+    var fullDays = Math.floor(diffMs / (1000*60*60*24));
+    maxMeals = fullDays + 1; // effectiveDays
+  }
+  ['mealBreakfast', 'mealLunch', 'mealDinner'].forEach(function(id) {
+    var el = document.getElementById(id);
+    el.max = maxMeals;
+    if (parseInt(el.value) > maxMeals) {
+      el.value = maxMeals;
+    }
+  });
+}
+
+// ============================================================
+// UPDATE ADVANCE SUM
+// ============================================================
+function getAdvanceAmount() {
+  var depDate = document.getElementById('departureDate').value;
+  var retDate = document.getElementById('returnDate').value;
+  if (!depDate || !retDate) return { amount: 0, currency: 'PLN' };
+
+  var isDomestic = document.getElementById('tripTypeDomestic').checked;
+  var dep = new Date(depDate), ret = new Date(retDate);
+  var diffMs = ret.getTime() - dep.getTime();
+  var totalHours = diffMs / (1000*60*60);
+  var fullDays = Math.floor(totalHours / 24);
+  var effectiveDays = fullDays + 1;
+  var nights = fullDays;
+
+  var sum = 0;
+  var countryCurr = 'PLN';
+
+  // Meal reduction
+  var mealsProvided = document.getElementById('mealsProvided').checked;
+  var numB = parseInt(document.getElementById('mealBreakfast').value) || 0;
+  var numL = parseInt(document.getElementById('mealLunch').value) || 0;
+  var numD = parseInt(document.getElementById('mealDinner').value) || 0;
+
+  if (isDomestic) {
+    var pdGross = effectiveDays * DOMESTIC_RATE;
+    var mealRed = mealsProvided ? roundCurr(numB * 0.15 * DOMESTIC_RATE + numL * 0.30 * DOMESTIC_RATE + numD * 0.30 * DOMESTIC_RATE) : 0;
+    var pdNet = roundCurr(pdGross - mealRed);
+    var ht = document.getElementById('hotelProvided').checked ? 0 : roundCurr(nights * DOMESTIC_HOTEL);
+    var lt = document.getElementById('localTransportIncluded').checked ? roundCurr(effectiveDays * DOMESTIC_TRANSPORT) : 0;
+    sum = roundCurr(pdNet + ht + lt);
+    countryCurr = 'PLN';
+  } else {
+    var country = document.getElementById('selectedCountry').value;
+    if (country && RATES[country]) {
+      var rate = RATES[country];
+      countryCurr = rate.currency;
+      var pdGross = roundCurr(effectiveDays * rate.perDiem);
+      var mealRed = mealsProvided ? roundCurr(numB * 0.15 * rate.perDiem + numL * 0.30 * rate.perDiem + numD * 0.30 * rate.perDiem) : 0;
+      var pdNet = roundCurr(pdGross - mealRed);
+      var ta = roundCurr(rate.perDiem);
+      var ht = document.getElementById('hotelProvided').checked ? 0 : roundCurr(nights * rate.hotel);
+      var lt = document.getElementById('localTransportIncluded').checked ? roundCurr(effectiveDays * rate.perDiem * 0.10) : 0;
+      sum = roundCurr(pdNet + ta + ht + lt);
+    }
+  }
+
+  // Add tickets & visa if same currency
+  var ticketCost = parseFloat(document.getElementById('ticketCost').value) || 0;
+  var ticketCurr = document.getElementById('ticketCurrency').value || 'PLN';
+  if (ticketCost > 0 && ticketCurr === countryCurr) sum = roundCurr(sum + ticketCost);
+  var visaCost = parseFloat(document.getElementById('visaCost').value) || 0;
+  var visaCurr = document.getElementById('visaCurrency').value || 'PLN';
+  if (visaCost > 0 && visaCurr === countryCurr) sum = roundCurr(sum + visaCost);
+
+  var selCurr = document.getElementById('advanceCurrency').value;
+  var displayCurr = (selCurr === 'AUTO') ? countryCurr : selCurr;
+  return { amount: sum, currency: displayCurr, countryCurrency: countryCurr };
+}
+
+function updateAdvanceSum() {
+  if (!document.getElementById('requestAdvance').checked) return;
+
+  var depDate = document.getElementById('departureDate').value;
+  var retDate = document.getElementById('returnDate').value;
+  if (!depDate || !retDate) {
+    document.getElementById('advanceSumDisplay').textContent = '\u2014';
+    return;
+  }
+
+  var adv = getAdvanceAmount();
+  var countryCurr = adv.countryCurrency;
+
+  // Check for extras in different currencies
+  var extras = '';
+  var ticketCost = parseFloat(document.getElementById('ticketCost').value) || 0;
+  var ticketCurr = document.getElementById('ticketCurrency').value || 'PLN';
+  var visaCost = parseFloat(document.getElementById('visaCost').value) || 0;
+  var visaCurr = document.getElementById('visaCurrency').value || 'PLN';
+  if (ticketCost > 0 && ticketCurr !== countryCurr) extras += ' + ' + formatNum(ticketCost) + ' ' + ticketCurr;
+  if (visaCost > 0 && visaCurr !== countryCurr) extras += ' + ' + formatNum(visaCost) + ' ' + visaCurr;
+
+  var display = formatNum(adv.amount) + ' ' + countryCurr + extras;
+  document.getElementById('advanceSumDisplay').textContent = display;
+
+  // Dynamically manage country currency option in dropdown
+  var sel = document.getElementById('advanceCurrency');
+  var existingCountryOpt = sel.querySelector('option[data-country-currency]');
+  if (countryCurr && countryCurr !== 'PLN' && countryCurr !== 'EUR') {
+    // Need a dedicated option for this currency (e.g. JPY, GBP, CHF)
+    if (existingCountryOpt) {
+      existingCountryOpt.value = countryCurr;
+      existingCountryOpt.textContent = countryCurr;
+    } else {
+      var opt = document.createElement('option');
+      opt.value = countryCurr;
+      opt.textContent = countryCurr;
+      opt.setAttribute('data-country-currency', '1');
+      sel.insertBefore(opt, sel.firstChild);
+    }
+    // Auto-select country currency
+    if (!sel.dataset.userChanged) sel.value = countryCurr;
+  } else {
+    // Country uses PLN or EUR — remove extra option if exists
+    if (existingCountryOpt) existingCountryOpt.remove();
+    // Auto-select country currency
+    if (!sel.dataset.userChanged) sel.value = countryCurr;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Set default date
+  document.getElementById('submissionDate').value = new Date().toISOString().split('T')[0];
+
+  // Restore saved data
+  restoreFormData();
+
+  // Restore dark mode
+  if (sessionStorage.getItem('ww_dark') === '1') {
+    document.documentElement.classList.add('dark-mode');
+  }
+
+  // Restore language
+  var savedLang = sessionStorage.getItem('ww_lang');
+  if (savedLang) setLang(savedLang);
+
+  // Init icons
+  lucide.createIcons();
+});
+</script>
+</body>
+</html>
