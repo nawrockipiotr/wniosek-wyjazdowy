@@ -956,7 +956,7 @@ textarea {
   <!-- OTHER PERSON SECTION (visible when status = "inna") -->
   <div id="otherPersonSection" style="display:none;">
     <div class="info-box" style="margin-bottom:16px;">
-      <span data-i18n="otherPersonInfo">Dla osób niebędących pracownikami UW wymagana jest umowa finansowania kosztów podróży. Pobierz wypełniony wzór poniżej, wydrukuj, podpisz i dostarcz do sekcji rozliczającej wyjazd wraz z wnioskiem wyjazdowym.</span>
+      <span data-i18n="otherPersonInfo">Dla osób niebędących pracownikami UW wymagana jest umowa finansowania kosztów podróży. Wypełnij uzupełniające dane poniżej, wydrukuj, podpisz i dostarcz do sekcji rozliczającej wyjazd wraz z wnioskiem wyjazdowym.</span>
     </div>
     <div class="form-row">
       <div class="form-group">
@@ -1133,16 +1133,16 @@ textarea {
       <label data-i18n="departureDate">Data wyjazdu <span class="req-star">*</span></label>
       <input type="date" id="departureDate" required aria-required="true" data-save="departureDate">
       <div class="domestic-only-field" style="display:none;margin-top:8px;">
-        <label data-i18n="departureTime" style="font-size:0.82rem;">Godz. wyjazdu</label>
-        <input type="time" id="departureTime" data-save="departureTime" style="width:100%;min-width:120px;font-size:1rem;padding:10px 12px;">
+        <label data-i18n="departureTime" style="font-size:0.82rem;">Godz. wyjazdu <span class="req-star">*</span></label>
+        <input type="time" id="departureTime" data-save="departureTime" required aria-required="true" style="width:100%;min-width:120px;font-size:1rem;padding:10px 12px;">
       </div>
     </div>
     <div class="form-group">
       <label data-i18n="returnDate">Data powrotu <span class="req-star">*</span></label>
       <input type="date" id="returnDate" required aria-required="true" data-save="returnDate">
       <div class="domestic-only-field" style="display:none;margin-top:8px;">
-        <label data-i18n="returnTime" style="font-size:0.82rem;">Godz. powrotu</label>
-        <input type="time" id="returnTime" data-save="returnTime" style="width:100%;min-width:120px;font-size:1rem;padding:10px 12px;">
+        <label data-i18n="returnTime" style="font-size:0.82rem;">Godz. powrotu <span class="req-star">*</span></label>
+        <input type="time" id="returnTime" data-save="returnTime" required aria-required="true" style="width:100%;min-width:120px;font-size:1rem;padding:10px 12px;">
       </div>
     </div>
   </div>
@@ -1507,7 +1507,7 @@ const TRANSLATIONS = {
     statusPhd: "Doktorant",
     statusStudent: "Student",
     statusOther: "Inna osoba",
-    otherPersonInfo: "Dla osób niebędących pracownikami UW wymagana jest umowa finansowania kosztów podróży. Pobierz wypełniony wzór poniżej, wydrukuj, podpisz i dostarcz do sekcji rozliczającej wyjazd wraz z wnioskiem wyjazdowym.",
+    otherPersonInfo: "Dla osób niebędących pracownikami UW wymagana jest umowa finansowania kosztów podróży. Wypełnij uzupełniające dane poniżej, wydrukuj, podpisz i dostarcz do sekcji rozliczającej wyjazd wraz z wnioskiem wyjazdowym.",
     otherCity: "Miejscowość",
     otherPostalCode: "Kod pocztowy",
     otherCountry: "Kraj",
@@ -1672,7 +1672,7 @@ const TRANSLATIONS = {
     statusPhd: "PhD Student",
     statusStudent: "Student",
     statusOther: "Other",
-    otherPersonInfo: "For persons who are not UW employees, a travel cost financing agreement is required. Download the pre-filled template below, print it, sign it, and deliver it to the settlement section along with the travel request form.",
+    otherPersonInfo: "For persons who are not UW employees, a travel cost financing agreement is required. Fill in the supplementary data below, print the agreement, sign it, and deliver it to the settlement section along with the travel request form.",
     otherCity: "City",
     otherPostalCode: "Postal code",
     otherCountry: "Country",
@@ -2929,6 +2929,16 @@ function validateFormFields() {
     if (!beEl.value) { missing.push('businessEndDate'); beEl.classList.add('field-error'); if (!firstMissingEl) firstMissingEl = beEl; }
     else beEl.classList.remove('field-error');
   }
+  // Domestic trip: departure/return times required
+  var isDomesticVal = document.getElementById('tripTypeDomestic').checked;
+  if (isDomesticVal) {
+    var depTimeEl = document.getElementById('departureTime');
+    var retTimeEl = document.getElementById('returnTime');
+    if (!depTimeEl.value) { missing.push('departureTime'); depTimeEl.classList.add('field-error'); if (!firstMissingEl) firstMissingEl = depTimeEl; }
+    else depTimeEl.classList.remove('field-error');
+    if (!retTimeEl.value) { missing.push('returnTime'); retTimeEl.classList.add('field-error'); if (!firstMissingEl) firstMissingEl = retTimeEl; }
+    else retTimeEl.classList.remove('field-error');
+  }
   // Hotel cost check: if receipt mode selected, cost must be > 0
   var hotelModeEl = document.querySelector('input[name="hotelMode"]:checked');
   var hotelMode = hotelModeEl ? hotelModeEl.value : 'receipt';
@@ -2950,7 +2960,7 @@ function validateFormFields() {
       pl: {
         fullName: 'Imię i nazwisko', email: 'Email', email_format: 'Email (nieprawidłowy format)',
         unitName: 'Nazwa jednostki UW', projectNumber: 'Źródło finansowania',
-        departureDate: 'Data wyjazdu', returnDate: 'Data powrotu', businessStartDate: 'Początek delegacji służbowej', businessEndDate: 'Koniec delegacji służbowej',
+        departureDate: 'Data wyjazdu', returnDate: 'Data powrotu', departureTime: 'Godzina wyjazdu', returnTime: 'Godzina powrotu', businessStartDate: 'Początek delegacji służbowej', businessEndDate: 'Koniec delegacji służbowej',
         destinationCity: 'Miejsce docelowe', purposeOfTravel: 'Cel wyjazdu',
         hostInstitution: 'Instytucja przyjmująca', selectedCountry: 'Kraj (wybierz z listy)',
         transport: 'Środek transportu', returnDate_order: 'Data powrotu musi być późniejsza niż wyjazdu',
@@ -2961,7 +2971,7 @@ function validateFormFields() {
       en: {
         fullName: 'Full name', email: 'Email', email_format: 'Email (invalid format)',
         unitName: 'Unit name', projectNumber: 'Funding source',
-        departureDate: 'Departure date', returnDate: 'Return date', businessStartDate: 'Business trip start', businessEndDate: 'Business trip end',
+        departureDate: 'Departure date', returnDate: 'Return date', departureTime: 'Departure time', returnTime: 'Return time', businessStartDate: 'Business trip start', businessEndDate: 'Business trip end',
         destinationCity: 'Destination', purposeOfTravel: 'Purpose of travel',
         hostInstitution: 'Host institution', selectedCountry: 'Country (select from list)',
         transport: 'Transport mode', returnDate_order: 'Return date must be after departure date',
