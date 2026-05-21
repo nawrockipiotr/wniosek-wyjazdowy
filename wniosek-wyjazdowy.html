@@ -1172,6 +1172,25 @@ textarea {
       </div>
       <input type="checkbox" id="hotelProvided" data-save="hotelProvided" style="display:none;">
     </div>
+    <div id="hotelCostBlock" style="margin-bottom:6px; margin-left:18px; display:block;">
+      <div class="yesno-row" style="margin-bottom:6px;">
+        <div class="yesno-label-text">
+          <span data-i18n="hotelCostType">Rozliczenie noclegu</span>
+        </div>
+        <div class="yesno-pair">
+          <input type="radio" name="hotelCostYN" id="hotelCostReceipt" value="receipt" data-save="hotelCostType" checked>
+          <label for="hotelCostReceipt" data-i18n="hotelReceipt">Rachunek / rezerwacja</label>
+          <input type="radio" name="hotelCostYN" id="hotelCostLumpsum" value="lumpsum" data-save="hotelCostType">
+          <label for="hotelCostLumpsum" data-i18n="hotelLumpsum">Ryczałt (bez rachunku)</label>
+        </div>
+      </div>
+      <div id="hotelCostInputRow" style="margin-top:4px;">
+        <label for="hotelCostPerNight" style="font-size:0.92em;" data-i18n="hotelCostPerNight">Koszt za nocleg (za dobę)</label>
+        <input type="number" id="hotelCostPerNight" data-save="hotelCostPerNight" min="0" step="0.01" style="width:120px; margin-left:8px;" placeholder="0.00">
+        <span id="hotelCostCurrency" style="margin-left:4px;">PLN</span>
+        <span id="hotelCostLimit" class="field-hint" style="margin-left:8px;"></span>
+      </div>
+    </div>
     <div style="margin-bottom:16px;">
       <div class="yesno-row">
         <div class="yesno-label-text">
@@ -1402,6 +1421,13 @@ const TRANSLATIONS = {
     yes: "Tak",
     no: "Nie",
     hotelProvidedHint: "(nie nalicza ryczałtu hotelowego)",
+    hotelCostType: "Rozliczenie noclegu",
+    hotelReceipt: "Rachunek / rezerwacja",
+    hotelLumpsum: "Ryczałt (bez rachunku)",
+    hotelCostPerNight: "Koszt za nocleg (za dobę)",
+    hotelLumpsumDomesticHint: "150% diety = 67,50 PLN/nocleg",
+    hotelLumpsumForeignHint: "25% limitu hotelowego",
+    hotelLimitHint: "max {limit} {curr}/dobę",
     localTransportHint: "(10% diety/dzień — zagraniczne, 20% — krajowe)",
     localTransportLabelForeign: "Chcę ryczałt na komunikację miejscową",
     localTransportLabelDomestic: "Chcę ryczałt za dojazdy lokalne",
@@ -1538,6 +1564,13 @@ const TRANSLATIONS = {
     yes: "Yes",
     no: "No",
     hotelProvidedHint: "(no hotel allowance charged)",
+    hotelCostType: "Hotel settlement",
+    hotelReceipt: "Receipt / reservation",
+    hotelLumpsum: "Lump sum (no receipt)",
+    hotelCostPerNight: "Hotel cost (per night)",
+    hotelLumpsumDomesticHint: "150% of per diem = 67.50 PLN/night",
+    hotelLumpsumForeignHint: "25% of hotel limit",
+    hotelLimitHint: "max {limit} {curr}/night",
     localTransportHint: "(10% of daily rate — foreign, 20% — domestic)",
     localTransportLabelForeign: "I want local transport lump sum",
     localTransportLabelDomestic: "I want local transport lump sum",
@@ -1886,7 +1919,27 @@ document.addEventListener('click', function(e) {
 // ============================================================
 // CALCULATION
 // ============================================================
+// Hotel cost calculation helper
+// Returns { ratePerNight, total, label } based on hotel settings
+function getHotelCalc(nights, maxRate, currency, isDomestic) {
+  var hotelProvided = document.getElementById('hotelProvided').checked;
+  if (hotelProvided) return { ratePerNight: 0, total: 0, label: 'provided', isProvided: true };
+
+  var isLumpsum = document.getElementById('hotelCostLumpsum').checked;
+  if (isLumpsum) {
+    // Domestic: 150% of 45 PLN = 67.50; Foreign: 25% of hotel limit
+    var lumpRate = isDomestic ? roundCurr(45 * 1.5) : roundCurr(maxRate * 0.25);
+    return { ratePerNight: lumpRate, total: roundCurr(nights * lumpRate), label: 'lumpsum', isProvided: false };
+  }
+
+  // Receipt mode: user-entered cost, capped at maxRate
+  var userCost = parseFloat(document.getElementById('hotelCostPerNight').value) || 0;
+  var capped = Math.min(userCost, maxRate);
+  return { ratePerNight: capped, total: roundCurr(nights * capped), label: 'receipt', isProvided: false };
+}
+
 function recalculate() {
+  updateHotelCostHint();
   var tripType = document.querySelector('input[name="tripType"]:checked').value;
   var depDate = document.getElementById('departureDate').value;
   var retDate = document.getElementById('returnDate').value;
@@ -1936,11 +1989,11 @@ function recalculate() {
 
   var perDiemGross = roundCurr(effectiveDays * rate.perDiem);
   var adjustedPerDiem = rate.perDiem; // for display; actual total adjusted below
-  var hotelProvided = document.getElementById('hotelProvided').checked;
+  var hotel = getHotelCalc(nights, rate.hotel, rate.currency, false);
 
   var perDiemTotal = roundCurr(perDiemGross - mealReductionTotal);
   var travelAllowance = roundCurr(rate.perDiem); // 1 x full rate
-  var hotelTotal = hotelProvided ? 0 : roundCurr(nights * rate.hotel);
+  var hotelTotal = hotel.total;
   var ltIncluded = document.getElementById('localTransportIncluded').checked;
   var localTransport = ltIncluded ? roundCurr(effectiveDays * rate.perDiem * 0.10) : 0;
   var grandTotal = roundCurr(perDiemTotal + travelAllowance + hotelTotal + localTransport);
@@ -1987,10 +2040,10 @@ function recalculate() {
       '<td>' + curr + '</td>' +
     '</tr>' +
     '<tr>' +
-      '<td>' + t.rowHotel + (hotelProvided ? ' <em style="font-size:0.85em;color:var(--text-dim)">(' + t.hotelProvidedShort + ')</em>' : '') + '</td>' +
-      '<td>' + (hotelProvided ? '—' : nights + ' ' + t.nights) + '</td>' +
-      '<td>' + (hotelProvided ? '—' : formatNum(rate.hotel) + ' ' + curr) + '</td>' +
-      '<td><strong>' + (hotelProvided ? '—' : formatNum(hotelTotal) + ' ' + curr) + '</strong></td>' +
+      '<td>' + t.rowHotel + (hotel.isProvided ? ' <em style="font-size:0.85em;color:var(--text-dim)">(' + t.hotelProvidedShort + ')</em>' : hotel.label === 'lumpsum' ? ' (' + t.hotelLumpsum + ')' : '') + '</td>' +
+      '<td>' + (hotel.isProvided ? '—' : nights + ' ' + t.nights) + '</td>' +
+      '<td>' + (hotel.isProvided ? '—' : formatNum(hotel.ratePerNight) + ' ' + curr) + '</td>' +
+      '<td><strong>' + (hotel.isProvided ? '—' : formatNum(hotelTotal) + ' ' + curr) + '</strong></td>' +
       '<td>' + curr + '</td>' +
     '</tr>' +
     '<tr>' +
@@ -2054,10 +2107,10 @@ function recalculateDomestic(depDate, retDate) {
 
   var perDiemGross = roundCurr(effectiveDays * DOMESTIC_RATE);
   var adjustedPerDiem = DOMESTIC_RATE; // for display
-  var hotelProvided = document.getElementById('hotelProvided').checked;
+  var hotel = getHotelCalc(nights, DOMESTIC_HOTEL, 'PLN', true);
 
   var perDiemTotal = roundCurr(perDiemGross - mealReductionTotal);
-  var hotelTotal = hotelProvided ? 0 : roundCurr(nights * DOMESTIC_HOTEL);
+  var hotelTotal = hotel.total;
   var ltIncluded = document.getElementById('localTransportIncluded').checked;
   var localTransport = ltIncluded ? roundCurr(effectiveDays * DOMESTIC_TRANSPORT) : 0;
   var grandTotal = roundCurr(perDiemTotal + hotelTotal + localTransport);
@@ -2092,10 +2145,10 @@ function recalculateDomestic(depDate, retDate) {
       '<td>' + curr + '</td>' +
     '</tr>' : '') +
     '<tr>' +
-      '<td>' + t.rowHotel + ' (max)' + (hotelProvided ? ' <em style="font-size:0.85em;color:var(--text-dim)">(' + t.hotelProvidedShort + ')</em>' : '') + '</td>' +
-      '<td>' + (hotelProvided ? '—' : nights + ' ' + t.nights) + '</td>' +
-      '<td>' + (hotelProvided ? '—' : formatNum(DOMESTIC_HOTEL) + ' ' + curr) + '</td>' +
-      '<td><strong>' + (hotelProvided ? '—' : formatNum(hotelTotal) + ' ' + curr) + '</strong></td>' +
+      '<td>' + t.rowHotel + (hotel.isProvided ? ' <em style="font-size:0.85em;color:var(--text-dim)">(' + t.hotelProvidedShort + ')</em>' : hotel.label === 'lumpsum' ? ' (' + t.hotelLumpsum + ')' : '') + '</td>' +
+      '<td>' + (hotel.isProvided ? '—' : nights + ' ' + t.nights) + '</td>' +
+      '<td>' + (hotel.isProvided ? '—' : formatNum(hotel.ratePerNight) + ' ' + curr) + '</td>' +
+      '<td><strong>' + (hotel.isProvided ? '—' : formatNum(hotelTotal) + ' ' + curr) + '</strong></td>' +
       '<td>' + curr + '</td>' +
     '</tr>' +
     '<tr>' +
@@ -2120,7 +2173,7 @@ function recalculateDomestic(depDate, retDate) {
 }
 
 // Recalc triggers
-['departureDate', 'returnDate', 'mealsProvided', 'mealBreakfast', 'mealLunch', 'mealDinner', 'hotelProvided', 'localTransportIncluded', 'ticketCost', 'ticketCurrency', 'visaCost', 'visaCurrency', 'requestAdvance', 'advanceCurrency', 'bankName', 'bankSwift', 'bankOwner', 'bankAccount'].forEach(function(id) {
+['departureDate', 'returnDate', 'mealsProvided', 'mealBreakfast', 'mealLunch', 'mealDinner', 'hotelProvided', 'hotelCostPerNight', 'localTransportIncluded', 'ticketCost', 'ticketCurrency', 'visaCost', 'visaCurrency', 'requestAdvance', 'advanceCurrency', 'bankName', 'bankSwift', 'bankOwner', 'bankAccount'].forEach(function(id) {
   document.getElementById(id).addEventListener('change', function() { recalculate(); saveFormData(); });
 });
 
@@ -2151,9 +2204,58 @@ document.querySelectorAll('input[name="mealsYN"]').forEach(function(r) {
 document.querySelectorAll('input[name="hotelYN"]').forEach(function(r) {
   r.addEventListener('change', function() {
     document.getElementById('hotelProvided').checked = (document.querySelector('input[name="hotelYN"]:checked').value === 'yes');
+    var isProvided = document.getElementById('hotelProvided').checked;
+    document.getElementById('hotelCostBlock').style.display = isProvided ? 'none' : 'block';
     document.getElementById('hotelProvided').dispatchEvent(new Event('change'));
   });
 });
+// Hotel cost type toggle (receipt vs lumpsum)
+document.querySelectorAll('input[name="hotelCostYN"]').forEach(function(r) {
+  r.addEventListener('change', function() {
+    var isReceipt = this.value === 'receipt';
+    document.getElementById('hotelCostInputRow').style.display = isReceipt ? '' : 'none';
+    updateHotelCostHint();
+    recalculate();
+    saveFormData();
+  });
+});
+document.getElementById('hotelCostPerNight').addEventListener('input', function() {
+  recalculate();
+  saveFormData();
+});
+
+function updateHotelCostHint() {
+  var t = TRANSLATIONS[currentLang];
+  var isDomestic = document.getElementById('tripTypeDomestic').checked;
+  var hintEl = document.getElementById('hotelCostLimit');
+  var currEl = document.getElementById('hotelCostCurrency');
+  var isReceipt = document.getElementById('hotelCostReceipt').checked;
+  var isLumpsum = document.getElementById('hotelCostLumpsum').checked;
+
+  if (isDomestic) {
+    currEl.textContent = 'PLN';
+    if (isReceipt) {
+      hintEl.textContent = t.hotelLimitHint.replace('{limit}', '900,00').replace('{curr}', 'PLN');
+    } else {
+      hintEl.textContent = t.hotelLumpsumDomesticHint || '';
+    }
+  } else {
+    var country = document.getElementById('selectedCountry').value;
+    if (country && RATES[country]) {
+      var rate = RATES[country];
+      var curr = rate.currency || 'EUR';
+      currEl.textContent = curr;
+      if (isReceipt) {
+        hintEl.textContent = t.hotelLimitHint.replace('{limit}', formatNum(rate.hotel)).replace('{curr}', curr);
+      } else {
+        hintEl.textContent = t.hotelLumpsumForeignHint + ' = ' + formatNum(roundCurr(rate.hotel * 0.25)) + ' ' + curr;
+      }
+    } else {
+      currEl.textContent = '';
+      hintEl.textContent = '';
+    }
+  }
+}
 document.querySelectorAll('input[name="ltYN"]').forEach(function(r) {
   r.addEventListener('change', function() {
     document.getElementById('localTransportIncluded').checked = (document.querySelector('input[name="ltYN"]:checked').value === 'yes');
@@ -2220,6 +2322,7 @@ document.querySelectorAll('input[name="tripType"]').forEach(function(radio) {
     document.getElementById('calcBody').innerHTML = '';
     document.getElementById('calcResults').style.display = 'none';
     document.getElementById('calcPlaceholder').style.display = 'block';
+    updateHotelCostHint();
     saveFormData();
   });
 });
@@ -2284,6 +2387,17 @@ function restoreFormData() {
     document.getElementById('mealsNo').checked = !document.getElementById('mealsProvided').checked;
     document.getElementById('hotelYes').checked = document.getElementById('hotelProvided').checked;
     document.getElementById('hotelNo').checked = !document.getElementById('hotelProvided').checked;
+    document.getElementById('hotelCostBlock').style.display = document.getElementById('hotelProvided').checked ? 'none' : 'block';
+    // Restore hotel cost type radio
+    if (data.hotelCostType === 'lumpsum') {
+      document.getElementById('hotelCostLumpsum').checked = true;
+      document.getElementById('hotelCostReceipt').checked = false;
+      document.getElementById('hotelCostInputRow').style.display = 'none';
+    } else {
+      document.getElementById('hotelCostReceipt').checked = true;
+      document.getElementById('hotelCostLumpsum').checked = false;
+      document.getElementById('hotelCostInputRow').style.display = '';
+    }
     document.getElementById('ltYes').checked = document.getElementById('localTransportIncluded').checked;
     document.getElementById('ltNo').checked = !document.getElementById('localTransportIncluded').checked;
     document.getElementById('advanceDetailsBlock').style.display = document.getElementById('requestAdvance').checked ? 'block' : 'none';
@@ -2411,6 +2525,11 @@ function clearForm() {
   document.getElementById('hotelNo').checked = true;
   document.getElementById('hotelYes').checked = false;
   document.getElementById('hotelProvided').checked = false;
+  document.getElementById('hotelCostReceipt').checked = true;
+  document.getElementById('hotelCostLumpsum').checked = false;
+  document.getElementById('hotelCostPerNight').value = '';
+  document.getElementById('hotelCostBlock').style.display = 'block';
+  document.getElementById('hotelCostInputRow').style.display = '';
   document.getElementById('ltYes').checked = true;
   document.getElementById('ltNo').checked = false;
   document.getElementById('localTransportIncluded').checked = true;
@@ -2598,16 +2717,17 @@ async function exportDocx() {
       mealReductionTotal = roundCurr(numBreakfasts * 0.15 * DOMESTIC_RATE + numLunches * 0.30 * DOMESTIC_RATE + numDinners * 0.30 * DOMESTIC_RATE);
     }
     var adjPD = DOMESTIC_RATE;
-    var hotelProv = document.getElementById('hotelProvided').checked;
+    var hotel = getHotelCalc(nights, DOMESTIC_HOTEL, 'PLN', true);
     var pdTotal = roundCurr(effectiveDays * DOMESTIC_RATE - mealReductionTotal);
-    var htTotal = hotelProv ? 0 : roundCurr(nights * DOMESTIC_HOTEL);
+    var htTotal = hotel.total;
     var ltIncl = document.getElementById('localTransportIncluded').checked;
     var ltTotal = ltIncl ? roundCurr(effectiveDays * DOMESTIC_TRANSPORT) : 0;
     var total = roundCurr(pdTotal + htTotal + ltTotal);
     grandTotal = formatNum(total);
+    var htLabel = hotel.isProvided ? 'Nocleg (zapewniony)' : hotel.label === 'lumpsum' ? 'Nocleg (ryczałt)' : 'Nocleg (wg rachunku)';
     calcRows = [
       { label: 'Diety pobytowe', count: formatInt(effectiveDays), rate: formatNum(adjPD), amount: formatNum(pdTotal) },
-      { label: 'Diety hotelowe', count: '' + nights, rate: formatNum(DOMESTIC_HOTEL), amount: formatNum(htTotal) },
+      { label: htLabel, count: hotel.isProvided ? '—' : '' + nights, rate: hotel.isProvided ? '—' : formatNum(hotel.ratePerNight), amount: formatNum(htTotal) },
       { label: 'Inne koszty:\nRyczałt za dojazdy lokalne', count: formatInt(effectiveDays), rate: formatNum(DOMESTIC_TRANSPORT), amount: formatNum(ltTotal) }
     ];
   } else if (country && depDate && retDate && RATES[country]) {
@@ -2628,18 +2748,19 @@ async function exportDocx() {
       mealReductionTotal = roundCurr(numBreakfasts * 0.15 * rate.perDiem + numLunches * 0.30 * rate.perDiem + numDinners * 0.30 * rate.perDiem);
     }
     var adjPD = rate.perDiem;
-    var hotelProv = document.getElementById('hotelProvided').checked;
+    var hotel = getHotelCalc(nights, rate.hotel, rate.currency, false);
     var pdTotal = roundCurr(effectiveDays * rate.perDiem - mealReductionTotal);
     var travelAllowance = roundCurr(rate.perDiem);
-    var htTotal = hotelProv ? 0 : roundCurr(nights * rate.hotel);
+    var htTotal = hotel.total;
     var ltIncl = document.getElementById('localTransportIncluded').checked;
     var ltTotal = ltIncl ? roundCurr(effectiveDays * rate.perDiem * 0.10) : 0;
     var total = roundCurr(pdTotal + travelAllowance + htTotal + ltTotal);
     grandTotal = formatNum(total);
+    var htLabel = hotel.isProvided ? 'Nocleg (zapewniony)' : hotel.label === 'lumpsum' ? 'Nocleg (ryczałt)' : 'Nocleg (wg rachunku)';
     calcRows = [
       { label: 'Dieta dojazdowa', count: '1', rate: formatNum(rate.perDiem), amount: formatNum(travelAllowance) },
       { label: 'Diety pobytowe', count: formatInt(effectiveDays), rate: formatNum(adjPD), amount: formatNum(pdTotal) },
-      { label: 'Diety hotelowe', count: '' + nights, rate: formatNum(rate.hotel), amount: formatNum(htTotal) },
+      { label: htLabel, count: hotel.isProvided ? '—' : '' + nights, rate: hotel.isProvided ? '—' : formatNum(hotel.ratePerNight), amount: formatNum(htTotal) },
       { label: 'Inne koszty:\nRyczałt za komunikację miejską', count: formatInt(effectiveDays), rate: formatNum(roundCurr(rate.perDiem * 0.10)), amount: formatNum(ltTotal) }
     ];
   }
@@ -3109,7 +3230,8 @@ function getAdvanceAmount() {
     var pdGross = effectiveDays * DOMESTIC_RATE;
     var mealRed = mealsProvided ? roundCurr(numB * 0.15 * DOMESTIC_RATE + numL * 0.30 * DOMESTIC_RATE + numD * 0.30 * DOMESTIC_RATE) : 0;
     var pdNet = roundCurr(pdGross - mealRed);
-    var ht = document.getElementById('hotelProvided').checked ? 0 : roundCurr(nights * DOMESTIC_HOTEL);
+    var htCalc = getHotelCalc(nights, DOMESTIC_HOTEL, 'PLN', true);
+    var ht = htCalc.total;
     var lt = document.getElementById('localTransportIncluded').checked ? roundCurr(effectiveDays * DOMESTIC_TRANSPORT) : 0;
     sum = roundCurr(pdNet + ht + lt);
     countryCurr = 'PLN';
@@ -3122,7 +3244,8 @@ function getAdvanceAmount() {
       var mealRed = mealsProvided ? roundCurr(numB * 0.15 * rate.perDiem + numL * 0.30 * rate.perDiem + numD * 0.30 * rate.perDiem) : 0;
       var pdNet = roundCurr(pdGross - mealRed);
       var ta = roundCurr(rate.perDiem);
-      var ht = document.getElementById('hotelProvided').checked ? 0 : roundCurr(nights * rate.hotel);
+      var htCalc = getHotelCalc(nights, rate.hotel, rate.currency, false);
+      var ht = htCalc.total;
       var lt = document.getElementById('localTransportIncluded').checked ? roundCurr(effectiveDays * rate.perDiem * 0.10) : 0;
       sum = roundCurr(pdNet + ta + ht + lt);
     }
@@ -3360,16 +3483,17 @@ function printForm() {
       var numD = parseInt(document.getElementById('mealDinner').value) || 0;
       mealReductionTotal = roundCurr(numB * 0.15 * DOMESTIC_RATE + numL * 0.30 * DOMESTIC_RATE + numD * 0.30 * DOMESTIC_RATE);
     }
-    var hotelProv = document.getElementById('hotelProvided').checked;
+    var hotel = getHotelCalc(nights, DOMESTIC_HOTEL, 'PLN', true);
     var pdTotal = roundCurr(effectiveDays * DOMESTIC_RATE - mealReductionTotal);
-    var htTotal = hotelProv ? 0 : roundCurr(nights * DOMESTIC_HOTEL);
+    var htTotal = hotel.total;
     var ltIncl = document.getElementById('localTransportIncluded').checked;
     var ltTotal = ltIncl ? roundCurr(effectiveDays * DOMESTIC_TRANSPORT) : 0;
     var total = roundCurr(pdTotal + htTotal + ltTotal);
     grandTotal = formatNum(total);
+    var htLabel = hotel.isProvided ? 'Nocleg (zapewniony)' : hotel.label === 'lumpsum' ? 'Nocleg (ryczałt)' : 'Nocleg (wg rachunku)';
     calcRows = [
       { label: 'Diety pobytowe', count: formatNum(effectiveDays), rate: formatNum(DOMESTIC_RATE), amount: formatNum(pdTotal) },
-      { label: 'Diety hotelowe', count: '' + nights, rate: formatNum(DOMESTIC_HOTEL), amount: formatNum(htTotal) },
+      { label: htLabel, count: hotel.isProvided ? '—' : '' + nights, rate: hotel.isProvided ? '—' : formatNum(hotel.ratePerNight), amount: formatNum(htTotal) },
       { label: 'Inne koszty:<br>Ryczałt za dojazdy lokalne', count: formatNum(effectiveDays), rate: formatNum(DOMESTIC_TRANSPORT), amount: formatNum(ltTotal) }
     ];
   } else if (country && depDate && retDate && RATES[country]) {
@@ -3388,18 +3512,19 @@ function printForm() {
       var numD = parseInt(document.getElementById('mealDinner').value) || 0;
       mealReductionTotal = roundCurr(numB * 0.15 * rate.perDiem + numL * 0.30 * rate.perDiem + numD * 0.30 * rate.perDiem);
     }
-    var hotelProv = document.getElementById('hotelProvided').checked;
+    var hotel = getHotelCalc(nights, rate.hotel, rate.currency, false);
     var pdTotal = roundCurr(effectiveDays * rate.perDiem - mealReductionTotal);
     var travelAllowance = roundCurr(rate.perDiem);
-    var htTotal = hotelProv ? 0 : roundCurr(nights * rate.hotel);
+    var htTotal = hotel.total;
     var ltIncl = document.getElementById('localTransportIncluded').checked;
     var ltTotal = ltIncl ? roundCurr(effectiveDays * rate.perDiem * 0.10) : 0;
     var total = roundCurr(pdTotal + travelAllowance + htTotal + ltTotal);
     grandTotal = formatNum(total);
+    var htLabel = hotel.isProvided ? 'Nocleg (zapewniony)' : hotel.label === 'lumpsum' ? 'Nocleg (ryczałt)' : 'Nocleg (wg rachunku)';
     calcRows = [
       { label: 'Dieta dojazdowa', count: '1', rate: formatNum(rate.perDiem), amount: formatNum(travelAllowance) },
       { label: 'Diety pobytowe', count: formatNum(effectiveDays), rate: formatNum(rate.perDiem), amount: formatNum(pdTotal) },
-      { label: 'Diety hotelowe', count: '' + nights, rate: formatNum(rate.hotel), amount: formatNum(htTotal) },
+      { label: htLabel, count: hotel.isProvided ? '—' : '' + nights, rate: hotel.isProvided ? '—' : formatNum(hotel.ratePerNight), amount: formatNum(htTotal) },
       { label: 'Inne koszty:<br>Ryczałt za komunikację miejską', count: formatNum(effectiveDays), rate: formatNum(roundCurr(rate.perDiem * 0.10)), amount: formatNum(ltTotal) }
     ];
   }
