@@ -123,8 +123,6 @@ body {
   vertical-align: middle;
 }
 
-
-
 .lang-toggle {
   display: inline-flex;
   border: 1px solid var(--border);
@@ -2136,7 +2134,12 @@ document.getElementById('departureDate').addEventListener('change', function() {
   var ret = document.getElementById('returnDate');
   if (this.value) {
     ret.min = this.value;
-    if (ret.value && ret.value < this.value) ret.value = this.value;
+    if (ret.value && ret.value <= this.value) {
+      // Bump return date to departure + 1 day
+      var d = new Date(this.value);
+      d.setDate(d.getDate() + 1);
+      ret.value = d.toISOString().split('T')[0];
+    }
   } else {
     ret.min = '';
   }
@@ -2346,12 +2349,12 @@ function restoreFormData() {
   var raw = localStorage.getItem('ww_formData');
   if (!raw) return;
   // Clear stale data from older versions
+  var data;
   try {
-    var _tmp = JSON.parse(raw);
-    if ('advancePayment' in _tmp || !_tmp._version || _tmp._version < 3) { localStorage.removeItem('ww_formData'); return; }
+    data = JSON.parse(raw);
+    if ('advancePayment' in data || !data._version || data._version < 3) { localStorage.removeItem('ww_formData'); return; }
   } catch(e) { localStorage.removeItem('ww_formData'); return; }
   try {
-    var data = JSON.parse(raw);
     document.querySelectorAll('[data-save]').forEach(function(el) {
       var key = el.dataset.save;
       if (!(key in data)) return;
@@ -2467,9 +2470,6 @@ function clearForm() {
   document.getElementById('returnFrom').value = '';
   document.getElementById('returnTo').value = '';
   document.getElementById('rateInfoBox').style.display = 'none';
-  document.getElementById('mealsDetails').style.display = 'none';
-  document.getElementById('advanceDetailsBlock').style.display = 'none';
-  document.getElementById('requestAdvance').checked = false;
   // Reset currency selection
   document.getElementById('advanceCurrency').removeAttribute('data-user-changed');
   var countryOpt = document.getElementById('advanceCurrency').querySelector('option[data-country-currency]');
