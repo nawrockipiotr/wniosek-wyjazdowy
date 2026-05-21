@@ -3986,8 +3986,14 @@ document.addEventListener('DOMContentLoaded', function() {
     var agrBtn = document.getElementById('agreementBtn');
     if (agrBtn) agrBtn.style.display = isInna ? '' : 'none';
   }
+  // Listen to both change on radio AND click on labels (iframe robustness)
   document.querySelectorAll('input[name="status"]').forEach(function(r) {
     r.addEventListener('change', function() { toggleOtherPersonSection(); saveFormData(); });
+  });
+  document.querySelectorAll('#statusTabs label').forEach(function(lbl) {
+    lbl.addEventListener('click', function() {
+      setTimeout(function() { toggleOtherPersonSection(); saveFormData(); }, 50);
+    });
   });
   toggleOtherPersonSection();
 
