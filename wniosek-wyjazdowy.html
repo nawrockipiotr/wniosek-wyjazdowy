@@ -2344,13 +2344,28 @@ function recalculate() {
       '<td>' + curr + '</td>' +
     '</tr>' +
     (c.hasPrivateDays ? '<tr style="font-size:0.82em;color:var(--text-dim);"><td colspan="5">⚠ ' + (currentLang === 'pl' ? 'Kalkulacja za okres delegacji służbowej: ' + c.businessStartDate + ' – ' + c.businessEndDate : 'Calculated for business period: ' + c.businessStartDate + ' – ' + c.businessEndDate) + '</td></tr>' : '') +
-    '<tr class="total-row">' +
-      '<td>' + t.rowTotal + '</td>' +
-      '<td></td>' +
-      '<td></td>' +
-      '<td><strong>' + formatNum(c.grandTotal) + ' ' + curr + '</strong></td>' +
-      '<td>' + curr + '</td>' +
-    '</tr>';
+    (function() {
+      // Group all costs by currency
+      var totals = {};
+      totals[curr] = c.grandTotal;
+      if (c.ticketCost > 0) {
+        totals[c.ticketCurr] = roundCurr((totals[c.ticketCurr] || 0) + c.ticketCost);
+      }
+      if (c.visaCost > 0) {
+        totals[c.visaCurr] = roundCurr((totals[c.visaCurr] || 0) + c.visaCost);
+      }
+      var keys = Object.keys(totals);
+      var rows = '';
+      for (var i = 0; i < keys.length; i++) {
+        var ck = keys[i];
+        rows += '<tr class="total-row">' +
+          '<td>' + (i === 0 ? t.rowTotal : '') + '</td>' +
+          '<td></td><td></td>' +
+          '<td><strong>' + formatNum(totals[ck]) + ' ' + ck + '</strong></td>' +
+          '<td>' + ck + '</td></tr>';
+      }
+      return rows;
+    })();
 
   document.getElementById('calcPlaceholder').style.display = 'none';
   document.getElementById('calcResults').style.display = 'block';
