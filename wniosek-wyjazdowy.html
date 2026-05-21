@@ -2620,7 +2620,7 @@ async function exportDocx() {
   }
 
   function cell(content, opts) {
-    var o = Object.assign({ borders: b, verticalAlign: VerticalAlign.CENTER, margins: { top: 1, bottom: 1, left: 10, right: 10 } }, opts || {});
+    var o = Object.assign({ borders: b, verticalAlign: VerticalAlign.CENTER, margins: { top: 20, bottom: 20, left: 40, right: 40 } }, opts || {});
     if (typeof content === 'string') {
       // Handle multiline
       var lines = content.split('\n');
@@ -2634,7 +2634,7 @@ async function exportDocx() {
   }
 
   function labelCell(text, opts) {
-    return cell([para([txt(text, { size: 12, italics: true })], { spacing: { after: 0 } })], opts);
+    return cell([para([txt(text, { size: 14, italics: true })], { spacing: { after: 0 } })], opts);
   }
 
   function valueCell(text, opts) {
@@ -2645,9 +2645,9 @@ async function exportDocx() {
   var children = [];
 
   // Title
-  children.push(para([txt("Załącznik nr 1", { size: 14, italics: true })], { alignment: AlignmentType.RIGHT, spacing: { before: 0, after: 20 } }));
+  children.push(para([txt("Załącznik nr 1", { size: 16, italics: true })], { alignment: AlignmentType.RIGHT, spacing: { before: 0, after: 20 } }));
   children.push(para([txt("WNIOSEK WYJAZDOWY", { bold: true, size: 22 })], { alignment: AlignmentType.CENTER, spacing: { after: 10 } }));
-  children.push(para([txt("Po czytelnym wypełnieniu formularza należy przekazać go do Kwestury.", { size: 12, italics: true })], { alignment: AlignmentType.CENTER, spacing: { after: 30 } }));
+  children.push(para([txt("Po czytelnym wypełnieniu formularza należy przekazać go do Kwestury.", { size: 14, italics: true })], { alignment: AlignmentType.CENTER, spacing: { after: 30 } }));
 
   // ====== MAIN TABLE (8 columns) ======
   var colW = [1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200]; // ~equal
@@ -2667,9 +2667,9 @@ async function exportDocx() {
   // R2: Name label | Date label
   mainRows.push(new TableRow({
     children: [
-      cell([para([txt("Imię i nazwisko", { size: 12, italics: true })], { alignment: AlignmentType.CENTER })], { columnSpan: 5, borders: bNone }),
+      cell([para([txt("Imię i nazwisko", { size: 14, italics: true })], { alignment: AlignmentType.CENTER })], { columnSpan: 5, borders: bNone }),
       cell([para([txt('')])], { borders: bNone }),
-      cell([para([txt("Data złożenia wniosku", { size: 12, italics: true })], { alignment: AlignmentType.CENTER })], { columnSpan: 2, borders: bNone })
+      cell([para([txt("Data złożenia wniosku", { size: 14, italics: true })], { alignment: AlignmentType.CENTER })], { columnSpan: 2, borders: bNone })
     ]
   }));
 
@@ -2685,7 +2685,7 @@ async function exportDocx() {
   mainRows.push(new TableRow({
     children: [
       cell([para([txt(unitName || '', { size: 16 })])], { columnSpan: 4, borders: b, rowSpan: 3 }),
-      cell([para([txt("tel. służbowy:", { size: 12, italics: true })])], { columnSpan: 2, borders: bNone }),
+      cell([para([txt("tel. służbowy:", { size: 14, italics: true })])], { columnSpan: 2, borders: bNone }),
       cell([para([txt(workPhone, { size: 16 })])], { columnSpan: 2, borders: bBottom })
     ]
   }));
@@ -2693,7 +2693,7 @@ async function exportDocx() {
   // R5: (unit cont.) + tel. prywatny
   mainRows.push(new TableRow({
     children: [
-      cell([para([txt("tel. prywatny:", { size: 12, italics: true })])], { columnSpan: 2, borders: bNone }),
+      cell([para([txt("tel. prywatny:", { size: 14, italics: true })])], { columnSpan: 2, borders: bNone }),
       cell([para([txt(privatePhone, { size: 16 })])], { columnSpan: 2, borders: bBottom })
     ]
   }));
@@ -2701,7 +2701,7 @@ async function exportDocx() {
   // R6: (unit cont.) + email
   mainRows.push(new TableRow({
     children: [
-      cell([para([txt("e-mail:", { size: 12, italics: true })])], { columnSpan: 2, borders: bNone }),
+      cell([para([txt("e-mail:", { size: 14, italics: true })])], { columnSpan: 2, borders: bNone }),
       cell([para([txt(email, { size: 16 })])], { columnSpan: 2, borders: bBottom })
     ]
   }));
@@ -2709,7 +2709,7 @@ async function exportDocx() {
   // R6b: Unit label
   mainRows.push(new TableRow({
     children: [
-      cell([para([txt("Nazwa i adres jednostki UW", { size: 12, italics: true })], { alignment: AlignmentType.CENTER })], { columnSpan: 4, borders: bNone }),
+      cell([para([txt("Nazwa i adres jednostki UW", { size: 14, italics: true })], { alignment: AlignmentType.CENTER })], { columnSpan: 4, borders: bNone }),
       cell([para([txt('')])], { columnSpan: 4, borders: bNone })
     ]
   }));
@@ -2725,7 +2725,7 @@ async function exportDocx() {
   // R8: Host institution
   mainRows.push(new TableRow({
     children: [
-      cell([para([txt("Instytucja przyjmująca\n(pełna nazwa, państwo)", { size: 12, italics: true })])], { columnSpan: 2, borders: b }),
+      cell([para([txt("Instytucja przyjmująca\n(pełna nazwa, państwo)", { size: 14, italics: true })])], { columnSpan: 2, borders: b }),
       cell([para([txt(hostInstitution, { size: 16 })])], { columnSpan: 6, borders: b })
     ]
   }));
@@ -2733,7 +2733,7 @@ async function exportDocx() {
   // R9: Purpose
   mainRows.push(new TableRow({
     children: [
-      cell([para([txt("Cel wyjazdu", { size: 12, italics: true })])], { columnSpan: 2, borders: b }),
+      cell([para([txt("Cel wyjazdu", { size: 14, italics: true })])], { columnSpan: 2, borders: b }),
       cell([para([txt(purpose, { size: 16 })])], { columnSpan: 6, borders: b })
     ]
   }));
@@ -2758,10 +2758,10 @@ async function exportDocx() {
   // R12: Departure labels
   mainRows.push(new TableRow({
     children: [
-      cell([para([txt("Odlot, wyjazd z", { size: 12, italics: true })], { alignment: AlignmentType.CENTER })], { columnSpan: 2, borders: bNone }),
-      cell([para([txt("przez", { size: 12, italics: true })], { alignment: AlignmentType.CENTER })], { borders: bNone }),
-      cell([para([txt("do (miejscowość, państwo)", { size: 12, italics: true })], { alignment: AlignmentType.CENTER })], { columnSpan: 3, borders: bNone }),
-      cell([para([txt("dnia", { size: 12, italics: true })], { alignment: AlignmentType.CENTER })], { columnSpan: 2, borders: bNone })
+      cell([para([txt("Odlot, wyjazd z", { size: 14, italics: true })], { alignment: AlignmentType.CENTER })], { columnSpan: 2, borders: bNone }),
+      cell([para([txt("przez", { size: 14, italics: true })], { alignment: AlignmentType.CENTER })], { borders: bNone }),
+      cell([para([txt("do (miejscowość, państwo)", { size: 14, italics: true })], { alignment: AlignmentType.CENTER })], { columnSpan: 3, borders: bNone }),
+      cell([para([txt("dnia", { size: 14, italics: true })], { alignment: AlignmentType.CENTER })], { columnSpan: 2, borders: bNone })
     ]
   }));
 
@@ -2778,10 +2778,10 @@ async function exportDocx() {
   // R14: Return labels
   mainRows.push(new TableRow({
     children: [
-      cell([para([txt("Powrót z (miejscowość, państwo)", { size: 12, italics: true })], { alignment: AlignmentType.CENTER })], { columnSpan: 2, borders: bNone }),
-      cell([para([txt("przez", { size: 12, italics: true })], { alignment: AlignmentType.CENTER })], { borders: bNone }),
-      cell([para([txt("do (miejscowość docelowa)", { size: 12, italics: true })], { alignment: AlignmentType.CENTER })], { columnSpan: 3, borders: bNone }),
-      cell([para([txt("dnia", { size: 12, italics: true })], { alignment: AlignmentType.CENTER })], { columnSpan: 2, borders: bNone })
+      cell([para([txt("Powrót z (miejscowość, państwo)", { size: 14, italics: true })], { alignment: AlignmentType.CENTER })], { columnSpan: 2, borders: bNone }),
+      cell([para([txt("przez", { size: 14, italics: true })], { alignment: AlignmentType.CENTER })], { borders: bNone }),
+      cell([para([txt("do (miejscowość docelowa)", { size: 14, italics: true })], { alignment: AlignmentType.CENTER })], { columnSpan: 3, borders: bNone }),
+      cell([para([txt("dnia", { size: 14, italics: true })], { alignment: AlignmentType.CENTER })], { columnSpan: 2, borders: bNone })
     ]
   }));
 
@@ -2924,21 +2924,21 @@ async function exportDocx() {
             para([txt('', { size: 16 })], { spacing: { after: 0 } }),
             
             para([txt("……………………………………………………………", { size: 16 })], { alignment: AlignmentType.CENTER, spacing: { after: 10 } }),
-            para([txt("Podpis osoby wyjeżdżającej", { size: 12, italics: true })], { alignment: AlignmentType.CENTER })
+            para([txt("Podpis osoby wyjeżdżającej", { size: 14, italics: true })], { alignment: AlignmentType.CENTER })
           ], { borders: bNone, width: { size: 33, type: WidthType.PERCENTAGE } }),
           cell([
             para([txt('', { size: 16 })], { spacing: { after: 0 } }),
             
             para([txt("……………………………………………………………………", { size: 16 })], { alignment: AlignmentType.CENTER, spacing: { after: 10 } }),
-            para([txt("Podpis, pieczęć pełnomocnika", { size: 12, italics: true })], { alignment: AlignmentType.CENTER }),
-            para([txt("kwestora / kwestora", { size: 12, italics: true })], { alignment: AlignmentType.CENTER })
+            para([txt("Podpis, pieczęć pełnomocnika", { size: 14, italics: true })], { alignment: AlignmentType.CENTER }),
+            para([txt("kwestora / kwestora", { size: 14, italics: true })], { alignment: AlignmentType.CENTER })
           ], { borders: bNone, width: { size: 34, type: WidthType.PERCENTAGE } }),
           cell([
             para([txt('', { size: 16 })], { spacing: { after: 0 } }),
             
             para([txt("……………………………………………………………", { size: 16 })], { alignment: AlignmentType.CENTER, spacing: { after: 10 } }),
-            para([txt("Podpis, pieczęć kierownika", { size: 12, italics: true })], { alignment: AlignmentType.CENTER }),
-            para([txt("jednostki", { size: 12, italics: true })], { alignment: AlignmentType.CENTER })
+            para([txt("Podpis, pieczęć kierownika", { size: 14, italics: true })], { alignment: AlignmentType.CENTER }),
+            para([txt("jednostki", { size: 14, italics: true })], { alignment: AlignmentType.CENTER })
           ], { borders: bNone, width: { size: 33, type: WidthType.PERCENTAGE } })
         ]
       })
@@ -2955,9 +2955,9 @@ async function exportDocx() {
     "Oświadczam, że posiadam ubezpieczenie kosztów leczenia i następstw nieszczęśliwych " +
     "wypadków na czas trwania wyjazdu.";
 
-  children.push(para([txt(declText, { size: 12, italics: true })], { spacing: { after: 10 } }));
+  children.push(para([txt(declText, { size: 14, italics: true })], { spacing: { after: 10 } }));
   children.push(para([txt("...........................................................................", { size: 16 })], { alignment: AlignmentType.LEFT }));
-  children.push(para([txt("podpis osoby wyjeżdżającej", { size: 12, italics: true })], { alignment: AlignmentType.LEFT }));
+  children.push(para([txt("podpis osoby wyjeżdżającej", { size: 14, italics: true })], { alignment: AlignmentType.LEFT }));
 
   // Build document
   var doc = new Document({
@@ -3321,8 +3321,8 @@ function printForm() {
   // Build HTML
   var h = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Wniosek Wyjazdowy</title>';
   h += '<style>';
-  h += 'body{font-family:Calibri,Arial,sans-serif;font-size:9pt;margin:0;padding:15mm;}';
-  h += 'table{border-collapse:collapse;width:100%;}';
+  h += 'body{font-family:Calibri,Arial,sans-serif;font-size:9pt;margin:0;padding:18mm 20mm;}';
+  h += 'table{border-collapse:collapse;width:100%;margin:0 1px;}';
   h += 'td,th{border:1px solid #000;padding:2px 4px;font-size:9pt;vertical-align:middle;}';
   h += '.nb{border:none;}';
   h += '.bb{border:none;border-bottom:1px solid #000;}';
@@ -3334,7 +3334,7 @@ function printForm() {
   h += '.sig-dots{text-align:center;padding-top:20px;}';
   h += '.sig-label{font-size:7pt;font-style:italic;text-align:center;}';
   h += '.decl{font-size:7pt;font-style:italic;margin-top:8px;}';
-  h += '@media print{@page{size:A4;margin:15mm;}body{padding:0;}}';
+  h += '@media print{@page{size:A4;margin:18mm 20mm;}body{padding:0;}}';
   h += '</style></head><body>';
 
   // Header
