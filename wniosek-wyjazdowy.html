@@ -1158,34 +1158,36 @@ textarea {
         </div>
       </div>
     </div>
-    <div style="margin-bottom:6px;">
-      <div class="yesno-row">
-        <div class="yesno-label-text">
-          <span data-i18n="hotelProvided">Mam zapewniony nocleg we własnym zakresie</span> <span class="field-hint" data-i18n="hotelProvidedHint">(nie nalicza ryczałtu hotelowego)</span>
-        </div>
-        <div class="yesno-pair">
-          <input type="radio" name="hotelYN" id="hotelNo" value="no" checked>
-          <label for="hotelNo" data-i18n="no">Nie</label>
-          <input type="radio" name="hotelYN" id="hotelYes" value="yes">
-          <label for="hotelYes" data-i18n="yes">Tak</label>
-        </div>
+    <div style="margin-bottom:10px;">
+      <div style="margin-bottom:6px;">
+        <span style="font-weight:600;" data-i18n="hotelSectionLabel">Nocleg</span>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:6px;">
+        <label style="display:flex; align-items:flex-start; gap:8px; cursor:pointer; padding:6px 10px; border-radius:8px; border:1.5px solid var(--border); transition:border-color 0.15s;">
+          <input type="radio" name="hotelMode" id="hotelModeReceipt" value="receipt" data-save="hotelMode" checked style="margin-top:3px;">
+          <span>
+            <span data-i18n="hotelModeReceipt" style="font-weight:500;">Znam koszt noclegu</span><br>
+            <span class="field-hint" data-i18n="hotelModeReceiptHint">Mam rezerwację (np. Booking) lub rachunek/fakturę za hotel</span>
+          </span>
+        </label>
+        <label style="display:flex; align-items:flex-start; gap:8px; cursor:pointer; padding:6px 10px; border-radius:8px; border:1.5px solid var(--border); transition:border-color 0.15s;">
+          <input type="radio" name="hotelMode" id="hotelModeLumpsum" value="lumpsum" data-save="hotelMode" style="margin-top:3px;">
+          <span>
+            <span data-i18n="hotelModeLumpsum" style="font-weight:500;">Nie mam rezerwacji — ryczałt</span><br>
+            <span class="field-hint" id="hotelLumpsumDetail" data-i18n="hotelModeLumpsumHint">Ryczałt ustawowy bez rachunku</span>
+          </span>
+        </label>
+        <label style="display:flex; align-items:flex-start; gap:8px; cursor:pointer; padding:6px 10px; border-radius:8px; border:1.5px solid var(--border); transition:border-color 0.15s;">
+          <input type="radio" name="hotelMode" id="hotelModeProvided" value="provided" data-save="hotelMode" style="margin-top:3px;">
+          <span>
+            <span data-i18n="hotelModeProvided" style="font-weight:500;">Mam zapewniony nocleg</span><br>
+            <span class="field-hint" data-i18n="hotelModeProvidedHint">Organizator zapewnia nocleg — nie wnioskuję o zwrot</span>
+          </span>
+        </label>
       </div>
       <input type="checkbox" id="hotelProvided" data-save="hotelProvided" style="display:none;">
-    </div>
-    <div id="hotelCostBlock" style="margin-bottom:6px; margin-left:18px; display:block;">
-      <div class="yesno-row" style="margin-bottom:6px;">
-        <div class="yesno-label-text">
-          <span data-i18n="hotelCostType">Rozliczenie noclegu</span>
-        </div>
-        <div class="yesno-pair">
-          <input type="radio" name="hotelCostYN" id="hotelCostReceipt" value="receipt" data-save="hotelCostType" checked>
-          <label for="hotelCostReceipt" data-i18n="hotelReceipt">Rachunek / rezerwacja</label>
-          <input type="radio" name="hotelCostYN" id="hotelCostLumpsum" value="lumpsum" data-save="hotelCostType">
-          <label for="hotelCostLumpsum" data-i18n="hotelLumpsum">Ryczałt (bez rachunku)</label>
-        </div>
-      </div>
-      <div id="hotelCostInputRow" style="margin-top:4px;">
-        <label for="hotelCostPerNight" style="font-size:0.92em;" data-i18n="hotelCostPerNight">Koszt za nocleg (za dobę)</label>
+      <div id="hotelCostInputRow" style="margin-top:8px; margin-left:28px;">
+        <label for="hotelCostPerNight" style="font-size:0.92em;" data-i18n="hotelCostPerNight">Kwota za dobę hotelową</label>
         <input type="number" id="hotelCostPerNight" data-save="hotelCostPerNight" min="0" step="0.01" style="width:120px; margin-left:8px;" placeholder="0.00">
         <span id="hotelCostCurrency" style="margin-left:4px;">PLN</span>
         <span id="hotelCostLimit" class="field-hint" style="margin-left:8px;"></span>
@@ -1421,10 +1423,14 @@ const TRANSLATIONS = {
     yes: "Tak",
     no: "Nie",
     hotelProvidedHint: "(nie nalicza ryczałtu hotelowego)",
-    hotelCostType: "Rozliczenie noclegu",
-    hotelReceipt: "Rachunek / rezerwacja",
-    hotelLumpsum: "Ryczałt (bez rachunku)",
-    hotelCostPerNight: "Koszt za nocleg (za dobę)",
+    hotelSectionLabel: "Nocleg",
+    hotelModeReceipt: "Znam koszt noclegu",
+    hotelModeReceiptHint: "Mam rezerwację (np. Booking) lub rachunek/fakturę za hotel",
+    hotelModeLumpsum: "Nie mam rezerwacji — ryczałt",
+    hotelModeLumpsumHint: "Ryczałt ustawowy bez rachunku",
+    hotelModeProvided: "Mam zapewniony nocleg",
+    hotelModeProvidedHint: "Organizator zapewnia nocleg — nie wnioskuję o zwrot",
+    hotelCostPerNight: "Kwota za dobę hotelową",
     hotelLumpsumDomesticHint: "150% diety = 67,50 PLN/nocleg",
     hotelLumpsumForeignHint: "25% limitu hotelowego",
     hotelLimitHint: "max {limit} {curr}/dobę",
@@ -1564,10 +1570,14 @@ const TRANSLATIONS = {
     yes: "Yes",
     no: "No",
     hotelProvidedHint: "(no hotel allowance charged)",
-    hotelCostType: "Hotel settlement",
-    hotelReceipt: "Receipt / reservation",
-    hotelLumpsum: "Lump sum (no receipt)",
-    hotelCostPerNight: "Hotel cost (per night)",
+    hotelSectionLabel: "Accommodation",
+    hotelModeReceipt: "I know the hotel cost",
+    hotelModeReceiptHint: "I have a reservation (e.g. Booking) or receipt/invoice",
+    hotelModeLumpsum: "No reservation — lump sum",
+    hotelModeLumpsumHint: "Statutory lump sum without receipt",
+    hotelModeProvided: "Accommodation is provided",
+    hotelModeProvidedHint: "Organizer provides accommodation — no reimbursement needed",
+    hotelCostPerNight: "Cost per hotel night",
     hotelLumpsumDomesticHint: "150% of per diem = 67.50 PLN/night",
     hotelLumpsumForeignHint: "25% of hotel limit",
     hotelLimitHint: "max {limit} {curr}/night",
@@ -1922,11 +1932,10 @@ document.addEventListener('click', function(e) {
 // Hotel cost calculation helper
 // Returns { ratePerNight, total, label } based on hotel settings
 function getHotelCalc(nights, maxRate, currency, isDomestic) {
-  var hotelProvided = document.getElementById('hotelProvided').checked;
-  if (hotelProvided) return { ratePerNight: 0, total: 0, label: 'provided', isProvided: true };
+  var mode = getHotelMode();
+  if (mode === 'provided') return { ratePerNight: 0, total: 0, label: 'provided', isProvided: true };
 
-  var isLumpsum = document.getElementById('hotelCostLumpsum').checked;
-  if (isLumpsum) {
+  if (mode === 'lumpsum') {
     // Domestic: 150% of 45 PLN = 67.50; Foreign: 25% of hotel limit
     var lumpRate = isDomestic ? roundCurr(45 * 1.5) : roundCurr(maxRate * 0.25);
     return { ratePerNight: lumpRate, total: roundCurr(nights * lumpRate), label: 'lumpsum', isProvided: false };
@@ -2201,19 +2210,12 @@ document.querySelectorAll('input[name="mealsYN"]').forEach(function(r) {
     document.getElementById('mealsProvided').dispatchEvent(new Event('change'));
   });
 });
-document.querySelectorAll('input[name="hotelYN"]').forEach(function(r) {
+// Hotel mode unified handler (receipt / lumpsum / provided)
+document.querySelectorAll('input[name="hotelMode"]').forEach(function(r) {
   r.addEventListener('change', function() {
-    document.getElementById('hotelProvided').checked = (document.querySelector('input[name="hotelYN"]:checked').value === 'yes');
-    var isProvided = document.getElementById('hotelProvided').checked;
-    document.getElementById('hotelCostBlock').style.display = isProvided ? 'none' : 'block';
-    document.getElementById('hotelProvided').dispatchEvent(new Event('change'));
-  });
-});
-// Hotel cost type toggle (receipt vs lumpsum)
-document.querySelectorAll('input[name="hotelCostYN"]').forEach(function(r) {
-  r.addEventListener('change', function() {
-    var isReceipt = this.value === 'receipt';
-    document.getElementById('hotelCostInputRow').style.display = isReceipt ? '' : 'none';
+    var mode = this.value;
+    document.getElementById('hotelProvided').checked = (mode === 'provided');
+    document.getElementById('hotelCostInputRow').style.display = (mode === 'receipt') ? '' : 'none';
     updateHotelCostHint();
     recalculate();
     saveFormData();
@@ -2224,35 +2226,43 @@ document.getElementById('hotelCostPerNight').addEventListener('input', function(
   saveFormData();
 });
 
+function getHotelMode() {
+  var el = document.querySelector('input[name="hotelMode"]:checked');
+  return el ? el.value : 'receipt';
+}
+
 function updateHotelCostHint() {
   var t = TRANSLATIONS[currentLang];
   var isDomestic = document.getElementById('tripTypeDomestic').checked;
   var hintEl = document.getElementById('hotelCostLimit');
   var currEl = document.getElementById('hotelCostCurrency');
-  var isReceipt = document.getElementById('hotelCostReceipt').checked;
-  var isLumpsum = document.getElementById('hotelCostLumpsum').checked;
+  var detailEl = document.getElementById('hotelLumpsumDetail');
+  var mode = getHotelMode();
 
   if (isDomestic) {
     currEl.textContent = 'PLN';
-    if (isReceipt) {
+    if (mode === 'receipt') {
       hintEl.textContent = t.hotelLimitHint.replace('{limit}', '900,00').replace('{curr}', 'PLN');
     } else {
-      hintEl.textContent = t.hotelLumpsumDomesticHint || '';
+      hintEl.textContent = '';
     }
+    if (detailEl) detailEl.textContent = '150% diety = 67,50 PLN/nocleg';
   } else {
     var country = document.getElementById('selectedCountry').value;
     if (country && RATES[country]) {
       var rate = RATES[country];
       var curr = rate.currency || 'EUR';
       currEl.textContent = curr;
-      if (isReceipt) {
+      if (mode === 'receipt') {
         hintEl.textContent = t.hotelLimitHint.replace('{limit}', formatNum(rate.hotel)).replace('{curr}', curr);
       } else {
-        hintEl.textContent = t.hotelLumpsumForeignHint + ' = ' + formatNum(roundCurr(rate.hotel * 0.25)) + ' ' + curr;
+        hintEl.textContent = '';
       }
+      if (detailEl) detailEl.textContent = '25% limitu = ' + formatNum(roundCurr(rate.hotel * 0.25)) + ' ' + curr + '/nocleg';
     } else {
       currEl.textContent = '';
       hintEl.textContent = '';
+      if (detailEl) detailEl.textContent = t.hotelModeLumpsumHint || '';
     }
   }
 }
@@ -2391,19 +2401,13 @@ function restoreFormData() {
     // Sync yes/no radios from restored checkboxes
     document.getElementById('mealsYes').checked = document.getElementById('mealsProvided').checked;
     document.getElementById('mealsNo').checked = !document.getElementById('mealsProvided').checked;
-    document.getElementById('hotelYes').checked = document.getElementById('hotelProvided').checked;
-    document.getElementById('hotelNo').checked = !document.getElementById('hotelProvided').checked;
-    document.getElementById('hotelCostBlock').style.display = document.getElementById('hotelProvided').checked ? 'none' : 'block';
-    // Restore hotel cost type radio
-    if (data.hotelCostType === 'lumpsum') {
-      document.getElementById('hotelCostLumpsum').checked = true;
-      document.getElementById('hotelCostReceipt').checked = false;
-      document.getElementById('hotelCostInputRow').style.display = 'none';
-    } else {
-      document.getElementById('hotelCostReceipt').checked = true;
-      document.getElementById('hotelCostLumpsum').checked = false;
-      document.getElementById('hotelCostInputRow').style.display = '';
-    }
+    // Restore hotel mode radio
+    var restoredMode = data.hotelMode || 'receipt';
+    document.getElementById('hotelModeReceipt').checked = (restoredMode === 'receipt');
+    document.getElementById('hotelModeLumpsum').checked = (restoredMode === 'lumpsum');
+    document.getElementById('hotelModeProvided').checked = (restoredMode === 'provided');
+    document.getElementById('hotelProvided').checked = (restoredMode === 'provided');
+    document.getElementById('hotelCostInputRow').style.display = (restoredMode === 'receipt') ? '' : 'none';
     document.getElementById('ltYes').checked = document.getElementById('localTransportIncluded').checked;
     document.getElementById('ltNo').checked = !document.getElementById('localTransportIncluded').checked;
     document.getElementById('advanceDetailsBlock').style.display = document.getElementById('requestAdvance').checked ? 'block' : 'none';
@@ -2505,8 +2509,9 @@ function clearForm() {
   // Reset yes/no radios to defaults: meals=No, hotel=No, localTransport=Yes
   document.getElementById('mealsNo').checked = true;
   document.getElementById('mealsYes').checked = false;
-  document.getElementById('hotelNo').checked = true;
-  document.getElementById('hotelYes').checked = false;
+  document.getElementById('hotelModeReceipt').checked = true;
+  document.getElementById('hotelModeLumpsum').checked = false;
+  document.getElementById('hotelModeProvided').checked = false;
   document.getElementById('ltYes').checked = true;
   document.getElementById('ltNo').checked = false;
   document.getElementById('localTransportIncluded').checked = true;
@@ -2528,13 +2533,11 @@ function clearForm() {
   document.getElementById('mealsYes').checked = false;
   document.getElementById('mealsProvided').checked = false;
   document.getElementById('mealsDetails').style.display = 'none';
-  document.getElementById('hotelNo').checked = true;
-  document.getElementById('hotelYes').checked = false;
+  document.getElementById('hotelModeReceipt').checked = true;
+  document.getElementById('hotelModeLumpsum').checked = false;
+  document.getElementById('hotelModeProvided').checked = false;
   document.getElementById('hotelProvided').checked = false;
-  document.getElementById('hotelCostReceipt').checked = true;
-  document.getElementById('hotelCostLumpsum').checked = false;
   document.getElementById('hotelCostPerNight').value = '';
-  document.getElementById('hotelCostBlock').style.display = 'block';
   document.getElementById('hotelCostInputRow').style.display = '';
   document.getElementById('ltYes').checked = true;
   document.getElementById('ltNo').checked = false;
@@ -3370,9 +3373,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('mealsYes').checked = true;
     document.getElementById('mealsDetails').style.display = 'grid';
   }
-  if (document.getElementById('hotelProvided').checked) {
-    document.getElementById('hotelYes').checked = true;
-  }
+  // hotelMode radios are data-save, auto-restored
   if (!document.getElementById('localTransportIncluded').checked) {
     document.getElementById('ltNo').checked = true;
     document.getElementById('ltYes').checked = false;
