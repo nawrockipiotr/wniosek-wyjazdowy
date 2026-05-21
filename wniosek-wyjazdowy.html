@@ -2639,6 +2639,22 @@ function validateFormFields() {
     var tg = document.getElementById('transportGroup');
     if (tg) tg.classList.remove('field-error');
   }
+  // Hotel cost check: if receipt mode selected, cost must be > 0
+  var hotelModeEl = document.querySelector('input[name="hotelMode"]:checked');
+  var hotelMode = hotelModeEl ? hotelModeEl.value : 'receipt';
+  var hotelCostEl = document.getElementById('hotelCostPerNight');
+  if (hotelMode === 'receipt' && hotelCostEl) {
+    var hotelCost = parseFloat(hotelCostEl.value) || 0;
+    // Only validate if calc is active (dates + country/domestic filled)
+    var calcActive = document.getElementById('calcResults').style.display !== 'none';
+    if (calcActive && hotelCost === 0) {
+      missing.push('hotelCostPerNight');
+      hotelCostEl.classList.add('field-error');
+      if (!firstMissingEl) firstMissingEl = hotelCostEl;
+    } else {
+      hotelCostEl.classList.remove('field-error');
+    }
+  }
   if (missing.length > 0) {
     var fieldNames = {
       pl: {
@@ -2648,6 +2664,7 @@ function validateFormFields() {
         destinationCity: 'Miejsce docelowe', purposeOfTravel: 'Cel wyjazdu',
         hostInstitution: 'Instytucja przyjmująca', selectedCountry: 'Kraj (wybierz z listy)',
         transport: 'Środek transportu', returnDate_order: 'Data powrotu musi być późniejsza niż wyjazdu',
+        hotelCostPerNight: 'Kwota za dobę noclegu (tryb "wg rachunku")',
         bankName: 'Nazwa banku',
         bankOwner: 'Właściciel konta', bankAccount: 'Numer konta'
       },
@@ -2658,6 +2675,7 @@ function validateFormFields() {
         destinationCity: 'Destination', purposeOfTravel: 'Purpose of travel',
         hostInstitution: 'Host institution', selectedCountry: 'Country (select from list)',
         transport: 'Transport mode', returnDate_order: 'Return date must be after departure date',
+        hotelCostPerNight: 'Hotel cost per night (receipt mode)',
         bankName: 'Bank name',
         bankOwner: 'Account owner', bankAccount: 'Account number'
       }
