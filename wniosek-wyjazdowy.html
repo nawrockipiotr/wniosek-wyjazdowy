@@ -2101,6 +2101,18 @@ function recalculateDomestic(depDate, retDate) {
   document.getElementById(id).addEventListener('change', function() { recalculate(); saveFormData(); });
 });
 
+
+// Constrain returnDate >= departureDate
+document.getElementById('departureDate').addEventListener('change', function() {
+  var ret = document.getElementById('returnDate');
+  if (this.value) {
+    ret.min = this.value;
+    if (ret.value && ret.value < this.value) ret.value = this.value;
+  } else {
+    ret.min = '';
+  }
+});
+
 document.getElementById('requestAdvance').addEventListener('change', function() {
   document.getElementById('advanceDetailsBlock').style.display = this.checked ? 'block' : 'none';
   if (this.checked) updateAdvanceSum();
