@@ -2250,12 +2250,15 @@ function updateHotelCostHint() {
   var detailEl = document.getElementById('hotelLumpsumDetail');
   var mode = getHotelMode();
 
+  var costInput = document.getElementById('hotelCostPerNight');
   if (isDomestic) {
     currEl.textContent = 'PLN';
     if (mode === 'receipt') {
       hintEl.textContent = t.hotelLimitHint.replace('{limit}', '900,00').replace('{curr}', 'PLN');
+      costInput.max = 900;
     } else {
       hintEl.textContent = '';
+      costInput.removeAttribute('max');
     }
     if (detailEl) detailEl.textContent = '150% diety = 67,50 PLN/nocleg';
   } else {
@@ -2266,8 +2269,10 @@ function updateHotelCostHint() {
       currEl.textContent = curr;
       if (mode === 'receipt') {
         hintEl.textContent = t.hotelLimitHint.replace('{limit}', formatNum(rate.hotel)).replace('{curr}', curr);
+        costInput.max = rate.hotel;
       } else {
         hintEl.textContent = '';
+        costInput.removeAttribute('max');
       }
       if (detailEl) detailEl.textContent = '25% limitu = ' + formatNum(roundCurr(rate.hotel * 0.25)) + ' ' + curr + '/nocleg';
     } else {
@@ -2277,15 +2282,38 @@ function updateHotelCostHint() {
     }
   }
 }
-// Show warning if receipt mode but no cost
+// Show warning if receipt mode: no cost or exceeds limit
 function updateHotelCostWarn() {
   var warnEl = document.getElementById('hotelCostWarn');
   if (!warnEl) return;
   var mode = getHotelMode();
-  var cost = parseFloat(document.getElementById('hotelCostPerNight').value) || 0;
-  if (mode === 'receipt' && cost === 0 && document.getElementById('calcResults').style.display !== 'none') {
+  var costEl = document.getElementById('hotelCostPerNight');
+  var cost = parseFloat(costEl.value) || 0;
+  var calcActive = document.getElementById('calcResults').style.display !== 'none';
+  if (mode !== 'receipt' || !calcActive) { warnEl.style.display = 'none'; return; }
+  // Get current limit
+  var isDomestic = document.getElementById('tripTypeDomestic').checked;
+  var limit = 0;
+  if (isDomestic) {
+    limit = 900;
+  } else {
+    var country = document.getElementById('selectedCountry').value;
+    if (country && RATES[country]) limit = RATES[country].hotel;
+  }
+  if (cost === 0) {
     warnEl.textContent = currentLang === 'pl' ? '← wpisz kwotę' : '← enter amount';
+    warnEl.style.color = '';
     warnEl.style.display = '';
+  } else if (limit > 0 && cost > limit) {
+    warnEl.textContent = currentLang === 'pl'
+      ? '⚠ przekracza limit — rozliczenie do ' + formatNum(limit)
+      : '⚠ exceeds limit — reimbursed up to ' + formatNum(limit);
+    warnEl.style.color = 'var(--red)';
+    warnEl.style.display = '';
+    // Cap the input value to the limit
+    costEl.value = limit;
+    recalculate();
+    saveFormData();
   } else {
     warnEl.style.display = 'none';
   }
