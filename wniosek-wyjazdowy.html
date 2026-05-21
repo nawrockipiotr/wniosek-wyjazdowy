@@ -1094,13 +1094,18 @@ textarea {
 
   <!-- PRIVATE DAYS -->
   <div class="form-row" style="grid-template-columns: 1fr;">
-    <div class="form-group" style="flex-direction:row; align-items:center; gap:10px;">
-      <label class="toggle-switch" style="margin:0;">
-        <input type="checkbox" id="hasPrivateDays" data-save="hasPrivateDays">
-        <span class="toggle-slider"></span>
-      </label>
-      <span data-i18n="hasPrivateDays" style="font-size:0.93rem;">Pobyt obejmuje dni prywatne (na własny koszt)</span>
+    <div class="form-group" style="flex-direction:row; align-items:center; justify-content:space-between;">
+      <div>
+        <span data-i18n="hasPrivateDays" style="font-size:0.93rem;">Pobyt obejmuje dni prywatne (na własny koszt)</span>
+      </div>
+      <div class="yesno-pair">
+        <input type="radio" name="privateDaysYN" id="privateDaysNo" value="no" checked>
+        <label for="privateDaysNo" data-i18n="no">Nie</label>
+        <input type="radio" name="privateDaysYN" id="privateDaysYes" value="yes">
+        <label for="privateDaysYes" data-i18n="yes">Tak</label>
+      </div>
     </div>
+    <input type="checkbox" id="hasPrivateDays" data-save="hasPrivateDays" style="display:none;">
   </div>
   <div id="privateDaysRow" class="form-row" style="display:none;">
     <div class="form-group">
@@ -2325,6 +2330,13 @@ document.querySelectorAll('input[name="mealsYN"]').forEach(function(r) {
     document.getElementById('mealsProvided').dispatchEvent(new Event('change'));
   });
 });
+// Sync private days yes/no with hidden checkbox
+document.querySelectorAll('input[name="privateDaysYN"]').forEach(function(r) {
+  r.addEventListener('change', function() {
+    document.getElementById('hasPrivateDays').checked = (document.querySelector('input[name="privateDaysYN"]:checked').value === 'yes');
+    document.getElementById('hasPrivateDays').dispatchEvent(new Event('change'));
+  });
+});
 // Hotel mode unified handler (receipt / lumpsum / provided)
 document.querySelectorAll('input[name="hotelMode"]').forEach(function(r) {
   r.addEventListener('change', function() {
@@ -2580,10 +2592,12 @@ function restoreFormData() {
     document.getElementById('bankDetailsBlock').style.display = (advMethodR && advMethodR.value === 'konto') ? 'block' : 'none';
     setTimeout(function() { updateAdvanceSum(); updateMealMax(); }, 100);
     document.getElementById('extraFundingFields').style.display = document.getElementById('multipleFunding').checked ? 'block' : 'none';
-    // Restore private days visibility
+    // Restore private days visibility + sync radios
     var hasPriv = document.getElementById('hasPrivateDays').checked;
     document.getElementById('privateDaysRow').style.display = hasPriv ? '' : 'none';
     document.getElementById('privateDaysHint').style.display = hasPriv ? '' : 'none';
+    document.getElementById('privateDaysYes').checked = hasPriv;
+    document.getElementById('privateDaysNo').checked = !hasPriv;
 
     if (data.selectedCountry) {
       var rate = RATES[data.selectedCountry];
@@ -2690,6 +2704,8 @@ function clearForm() {
   document.getElementById('hotelCostInputRow').style.display = '';
   // Reset private days
   document.getElementById('hasPrivateDays').checked = false;
+  document.getElementById('privateDaysNo').checked = true;
+  document.getElementById('privateDaysYes').checked = false;
   document.getElementById('privateDaysRow').style.display = 'none';
   document.getElementById('privateDaysHint').style.display = 'none';
   document.getElementById('businessStartDate').value = '';
