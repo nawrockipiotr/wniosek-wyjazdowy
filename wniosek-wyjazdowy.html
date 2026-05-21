@@ -2312,6 +2312,8 @@ document.querySelectorAll('input[name="tripType"]').forEach(function(radio) {
       // Reset returnFrom to just the destination city (without country)
       var destCity = document.getElementById('destinationCity').value;
       document.getElementById('returnFrom').value = destCity;
+      // Auto-fill returnTo from departureFrom
+      document.getElementById('returnTo').value = document.getElementById('departureFrom').value;
       // Strip country from departureFrom if it has ', Polska'
       var depFrom = document.getElementById('departureFrom');
       if (depFrom.value.match(/,\s*Polska$/)) depFrom.value = depFrom.value.replace(/,\s*Polska$/, '');
@@ -2329,8 +2331,12 @@ document.querySelectorAll('input[name="tripType"]').forEach(function(radio) {
 
 // Auto-fill return fields when destination changes
 document.getElementById('destinationCity').addEventListener('input', function() {
+  var isDomestic = document.getElementById('tripTypeDomestic').checked;
   var country = document.getElementById('selectedCountry').value;
-  if (country) {
+  if (isDomestic) {
+    // Domestic: returnFrom = destination city (no country suffix)
+    document.getElementById('returnFrom').value = this.value;
+  } else if (country) {
     var rate = RATES[country];
     var displayName = currentLang === 'en' ? (rate.en || country) : country;
     document.getElementById('returnFrom').value = this.value ? (this.value + ', ' + displayName) : displayName;
