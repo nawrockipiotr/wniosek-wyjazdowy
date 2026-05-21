@@ -2617,7 +2617,7 @@ async function exportDocx() {
   }
 
   function para(runs, opts) {
-    var o = Object.assign({ spacing: { after: 0, line: 240 } }, opts || {});
+    var o = Object.assign({ spacing: { after: 0 } }, opts || {});
     o.children = Array.isArray(runs) ? runs : [runs];
     return new Paragraph(o);
   }
@@ -2874,7 +2874,7 @@ async function exportDocx() {
     var bankOwnerVal = document.getElementById('bankOwner').value || '';
     var bankAccountVal = document.getElementById('bankAccount').value || '';
 
-    children.push(para([txt('')], { spacing: { after: 100 } }));
+    children.push(para([txt('')], { spacing: { after: 40 } }));
 
     var advRows = [];
     // Row 1: method + currency checkboxes
@@ -2920,7 +2920,7 @@ async function exportDocx() {
   }
 
   // ====== SIGNATURES ======
-  children.push(para([txt('')], { spacing: { after: 200 } }));
+  children.push(para([txt('')], { spacing: { after: 80 } }));
 
   var sigTable = new Table({
     width: { size: 100, type: WidthType.PERCENTAGE },
@@ -2958,7 +2958,7 @@ async function exportDocx() {
   children.push(sigTable);
 
   // ====== DECLARATION ======
-  children.push(para([txt('')], { spacing: { after: 200 } }));
+  children.push(para([txt('')], { spacing: { after: 80 } }));
 
   var declText = "Z otrzymanej zaliczki zobowiązuję się rozliczyć w ciągu 14 dni od powrotu do kraju. " +
     "Jednocześnie upoważniam Uniwersytet do potrącenia kwoty nierozliczonej zaliczki " +
@@ -2966,7 +2966,7 @@ async function exportDocx() {
     "Oświadczam, że posiadam ubezpieczenie kosztów leczenia i następstw nieszczęśliwych " +
     "wypadków na czas trwania wyjazdu.";
 
-  children.push(para([txt(declText, { size: 16, italics: true })], { spacing: { after: 100 } }));
+  children.push(para([txt(declText, { size: 16, italics: true })], { spacing: { after: 40 } }));
   children.push(para([txt('')], { spacing: { after: 0 } }));
   children.push(para([txt('')], { spacing: { after: 0 } }));
   children.push(para([txt("...........................................................................", { size: 18 })], { alignment: AlignmentType.LEFT }));
