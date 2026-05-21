@@ -1175,7 +1175,7 @@ textarea {
     <div style="margin-bottom:16px;">
       <div class="yesno-row">
         <div class="yesno-label-text">
-          <span data-i18n="localTransportIncluded">Chcę ryczałt na komunikację miejscową</span> <span class="field-hint" data-i18n="localTransportHint">(10% diety/dzień — zagraniczne, 20% — krajowe)</span>
+          <span data-i18n="localTransportLabelForeign">Chcę ryczałt na komunikację miejscową</span> <span class="field-hint" data-i18n="localTransportHint">(10% diety/dzień — zagraniczne, 20% — krajowe)</span>
         </div>
         <div class="yesno-pair">
           <input type="radio" name="ltYN" id="ltNo" value="no">
@@ -1403,6 +1403,8 @@ const TRANSLATIONS = {
     no: "Nie",
     hotelProvidedHint: "(nie nalicza ryczałtu hotelowego)",
     localTransportHint: "(10% diety/dzień — zagraniczne, 20% — krajowe)",
+    localTransportLabelForeign: "Chcę ryczałt na komunikację miejscową",
+    localTransportLabelDomestic: "Chcę ryczałt za dojazdy lokalne",
     rowMealReduction: "Potrącenie za posiłki",
     optionalCostsTitle: "Koszty dodatkowe",
     optionalBadge: "(opcjonalne)",
@@ -1537,6 +1539,8 @@ const TRANSLATIONS = {
     no: "No",
     hotelProvidedHint: "(no hotel allowance charged)",
     localTransportHint: "(10% of daily rate — foreign, 20% — domestic)",
+    localTransportLabelForeign: "I want local transport lump sum",
+    localTransportLabelDomestic: "I want local transport lump sum",
     rowMealReduction: "Meal deductions",
     optionalCostsTitle: "Additional costs",
     optionalBadge: "(optional)",
@@ -2191,6 +2195,13 @@ document.querySelectorAll('input[name="tripType"]').forEach(function(radio) {
       var t = TRANSLATIONS[currentLang];
       placeholder.textContent = isDomestic ? (t.calcPlaceholderDomestic || t.calcPlaceholder) : t.calcPlaceholder;
     }
+    // Update local transport label for trip type
+    var ltLabel = document.querySelector('[data-i18n="localTransportLabelForeign"], [data-i18n="localTransportLabelDomestic"]');
+    if (ltLabel) {
+      var ltKey = isDomestic ? 'localTransportLabelDomestic' : 'localTransportLabelForeign';
+      ltLabel.setAttribute('data-i18n', ltKey);
+      ltLabel.textContent = t[ltKey];
+    }
     // Clear foreign-specific data when switching to domestic
     if (isDomestic) {
       document.getElementById('selectedCountry').value = '';
@@ -2205,9 +2216,10 @@ document.querySelectorAll('input[name="tripType"]').forEach(function(radio) {
       var retTo = document.getElementById('returnTo');
       if (retTo.value.match(/,\s*Polska$/)) retTo.value = retTo.value.replace(/,\s*Polska$/, '');
     }
-    // Clear domestic-specific residuals when switching to foreign
-    // (no specific fields to clear, but recalculate handles display)
-    recalculate();
+    // Clear calculator results and show placeholder on trip type switch
+    document.getElementById('calcBody').innerHTML = '';
+    document.getElementById('calcResults').style.display = 'none';
+    document.getElementById('calcPlaceholder').style.display = 'block';
     saveFormData();
   });
 });
