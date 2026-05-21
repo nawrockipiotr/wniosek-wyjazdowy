@@ -814,10 +814,63 @@ textarea {
   font-weight: 600;
   margin-left: 8px;
 }
+.validation-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000;
+  background: var(--red-dim);
+  border-bottom: 2px solid var(--red);
+  padding: 16px 20px;
+  font-size: 0.9rem;
+  color: var(--red);
+  box-shadow: 0 4px 16px rgba(220,38,38,0.15);
+  transform: translateY(-100%);
+  transition: transform 0.3s ease;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+.validation-banner.visible {
+  transform: translateY(0);
+}
+.validation-banner .vb-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.validation-banner .vb-close {
+  background: none;
+  border: none;
+  color: var(--red);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0 4px;
+  font-weight: 700;
+  line-height: 1;
+}
+.validation-banner ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.validation-banner li {
+  padding: 2px 0;
+  font-size: 0.85rem;
+}
+.validation-banner li::before {
+  content: '• ';
+  font-weight: 700;
+}
 </style>
 </head>
 <body>
 <div class="container">
+
+<div id="validationBanner" class="validation-banner"></div>
 
 <!-- HERO -->
 <div class="hero">
@@ -2524,6 +2577,8 @@ function showToast(msg) {
 // SHARED VALIDATION — used by both exportDocx and printForm
 // ============================================================
 function validateFormFields() {
+  var vBanner = document.getElementById('validationBanner');
+  if (vBanner) vBanner.classList.remove('visible');
   var requiredIds = ['fullName', 'email', 'unitName', 'projectNumber', 'departureDate', 'returnDate', 'destinationCity', 'purposeOfTravel', 'hostInstitution'];
   var missing = [];
   var firstMissingEl = null;
@@ -2608,11 +2663,14 @@ function validateFormFields() {
       }
     };
     var names = fieldNames[currentLang] || fieldNames.pl;
-    var fieldList = missing.map(function(id) { return '  • ' + (names[id] || id); }).join('\n');
-    var msg = (currentLang === 'pl'
-      ? 'Uzupełnij brakujące dane przed eksportem:\n\n'
-      : 'Please fill in missing fields before export:\n\n') + fieldList;
-    alert(msg);
+    var title = currentLang === 'pl'
+      ? 'Uzupełnij brakujące dane przed eksportem:'
+      : 'Please fill in missing fields before export:';
+    var listHtml = missing.map(function(id) { return '<li>' + (names[id] || id) + '</li>'; }).join('');
+    var banner = document.getElementById('validationBanner');
+    banner.innerHTML = '<div class="vb-title"><span>' + title + '</span><button class="vb-close" onclick="this.parentElement.parentElement.classList.remove(\'visible\')">&times;</button></div><ul>' + listHtml + '</ul>';
+    banner.classList.add('visible');
+    setTimeout(function() { banner.classList.remove('visible'); }, 8000);
     if (firstMissingEl) {
       firstMissingEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
       firstMissingEl.focus();
