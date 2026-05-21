@@ -722,6 +722,10 @@ textarea {
   flex-shrink: 0;
 }
 .yesno-pair input { display: none; }
+.hotel-option:has(input:checked) {
+  border-color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 6%, transparent);
+}
 .yesno-pair label {
   padding: 4px 14px;
   font-size: 0.82rem;
@@ -1158,39 +1162,42 @@ textarea {
         </div>
       </div>
     </div>
-    <div style="margin-bottom:10px;">
-      <div style="margin-bottom:6px;">
-        <span style="font-weight:600;" data-i18n="hotelSectionLabel">Nocleg</span>
+    <div style="margin-bottom:12px;">
+      <div class="yesno-row" style="margin-bottom:8px;">
+        <div class="yesno-label-text">
+          <span data-i18n="hotelSectionLabel" style="font-weight:500;">Nocleg</span>
+        </div>
       </div>
-      <div style="display:flex; flex-direction:column; gap:6px;">
-        <label style="display:flex; align-items:flex-start; gap:8px; cursor:pointer; padding:6px 10px; border-radius:8px; border:1.5px solid var(--border); transition:border-color 0.15s;">
-          <input type="radio" name="hotelMode" id="hotelModeReceipt" value="receipt" data-save="hotelMode" checked style="margin-top:3px;">
-          <span>
-            <span data-i18n="hotelModeReceipt" style="font-weight:500;">Znam koszt noclegu</span><br>
-            <span class="field-hint" data-i18n="hotelModeReceiptHint">Mam rezerwację (np. Booking) lub rachunek/fakturę za hotel</span>
+      <div style="display:flex; flex-direction:column; gap:4px; margin-left:2px;">
+        <label class="hotel-option" style="display:flex; align-items:center; gap:8px; cursor:pointer; padding:7px 12px; border-radius:8px; border:1.5px solid var(--border); font-size:0.93em; transition:border-color 0.15s, background 0.15s;">
+          <input type="radio" name="hotelMode" id="hotelModeReceipt" value="receipt" data-save="hotelMode" checked style="flex-shrink:0;">
+          <span style="flex:1;">
+            <span data-i18n="hotelModeReceipt">Znam koszt noclegu</span>
+            <span class="field-hint" data-i18n="hotelModeReceiptHint" style="margin-left:6px;">— mam rezerwację lub rachunek</span>
           </span>
         </label>
-        <label style="display:flex; align-items:flex-start; gap:8px; cursor:pointer; padding:6px 10px; border-radius:8px; border:1.5px solid var(--border); transition:border-color 0.15s;">
-          <input type="radio" name="hotelMode" id="hotelModeLumpsum" value="lumpsum" data-save="hotelMode" style="margin-top:3px;">
-          <span>
-            <span data-i18n="hotelModeLumpsum" style="font-weight:500;">Nie mam rezerwacji — ryczałt</span><br>
-            <span class="field-hint" id="hotelLumpsumDetail" data-i18n="hotelModeLumpsumHint">Ryczałt ustawowy bez rachunku</span>
+        <label class="hotel-option" style="display:flex; align-items:center; gap:8px; cursor:pointer; padding:7px 12px; border-radius:8px; border:1.5px solid var(--border); font-size:0.93em; transition:border-color 0.15s, background 0.15s;">
+          <input type="radio" name="hotelMode" id="hotelModeLumpsum" value="lumpsum" data-save="hotelMode" style="flex-shrink:0;">
+          <span style="flex:1;">
+            <span data-i18n="hotelModeLumpsum">Nie mam rezerwacji</span>
+            <span class="field-hint" data-i18n="hotelModeLumpsumHint" style="margin-left:6px;">— ryczałt ustawowy</span>
+            <span class="field-hint" id="hotelLumpsumDetail" style="margin-left:4px;"></span>
           </span>
         </label>
-        <label style="display:flex; align-items:flex-start; gap:8px; cursor:pointer; padding:6px 10px; border-radius:8px; border:1.5px solid var(--border); transition:border-color 0.15s;">
-          <input type="radio" name="hotelMode" id="hotelModeProvided" value="provided" data-save="hotelMode" style="margin-top:3px;">
-          <span>
-            <span data-i18n="hotelModeProvided" style="font-weight:500;">Mam zapewniony nocleg</span><br>
-            <span class="field-hint" data-i18n="hotelModeProvidedHint">Organizator zapewnia nocleg — nie wnioskuję o zwrot</span>
+        <label class="hotel-option" style="display:flex; align-items:center; gap:8px; cursor:pointer; padding:7px 12px; border-radius:8px; border:1.5px solid var(--border); font-size:0.93em; transition:border-color 0.15s, background 0.15s;">
+          <input type="radio" name="hotelMode" id="hotelModeProvided" value="provided" data-save="hotelMode" style="flex-shrink:0;">
+          <span style="flex:1;">
+            <span data-i18n="hotelModeProvided">Nocleg zapewniony</span>
+            <span class="field-hint" data-i18n="hotelModeProvidedHint" style="margin-left:6px;">— nie wnioskuję o zwrot</span>
           </span>
         </label>
       </div>
       <input type="checkbox" id="hotelProvided" data-save="hotelProvided" style="display:none;">
-      <div id="hotelCostInputRow" style="margin-top:8px; margin-left:28px;">
-        <label for="hotelCostPerNight" style="font-size:0.92em;" data-i18n="hotelCostPerNight">Kwota za dobę hotelową</label>
-        <input type="number" id="hotelCostPerNight" data-save="hotelCostPerNight" min="0" step="0.01" style="width:120px; margin-left:8px;" placeholder="0.00">
-        <span id="hotelCostCurrency" style="margin-left:4px;">PLN</span>
-        <span id="hotelCostLimit" class="field-hint" style="margin-left:8px;"></span>
+      <div id="hotelCostInputRow" style="margin-top:8px; display:flex; align-items:center; gap:8px; margin-left:14px;">
+        <label for="hotelCostPerNight" style="font-size:0.92em; white-space:nowrap;" data-i18n="hotelCostPerNight">Kwota za dobę</label>
+        <input type="number" id="hotelCostPerNight" data-save="hotelCostPerNight" min="0" step="0.01" style="width:110px;" placeholder="0.00">
+        <span id="hotelCostCurrency" style="font-size:0.9em;">PLN</span>
+        <span id="hotelCostLimit" class="field-hint"></span>
       </div>
     </div>
     <div style="margin-bottom:16px;">
@@ -1425,12 +1432,13 @@ const TRANSLATIONS = {
     hotelProvidedHint: "(nie nalicza ryczałtu hotelowego)",
     hotelSectionLabel: "Nocleg",
     hotelModeReceipt: "Znam koszt noclegu",
-    hotelModeReceiptHint: "Mam rezerwację (np. Booking) lub rachunek/fakturę za hotel",
-    hotelModeLumpsum: "Nie mam rezerwacji — ryczałt",
-    hotelModeLumpsumHint: "Ryczałt ustawowy bez rachunku",
-    hotelModeProvided: "Mam zapewniony nocleg",
-    hotelModeProvidedHint: "Organizator zapewnia nocleg — nie wnioskuję o zwrot",
-    hotelCostPerNight: "Kwota za dobę hotelową",
+    hotelModeReceiptHint: "— mam rezerwację lub rachunek",
+    hotelModeLumpsum: "Nie mam rezerwacji",
+    hotelModeLumpsumHint: "— ryczałt ustawowy",
+    hotelModeProvided: "Nocleg zapewniony",
+    hotelModeProvidedHint: "— nie wnioskuję o zwrot",
+    hotelCostPerNight: "Kwota za dobę",
+    hotelLumpsum: "ryczałt",
     hotelLumpsumDomesticHint: "150% diety = 67,50 PLN/nocleg",
     hotelLumpsumForeignHint: "25% limitu hotelowego",
     hotelLimitHint: "max {limit} {curr}/dobę",
@@ -1572,12 +1580,13 @@ const TRANSLATIONS = {
     hotelProvidedHint: "(no hotel allowance charged)",
     hotelSectionLabel: "Accommodation",
     hotelModeReceipt: "I know the hotel cost",
-    hotelModeReceiptHint: "I have a reservation (e.g. Booking) or receipt/invoice",
-    hotelModeLumpsum: "No reservation — lump sum",
-    hotelModeLumpsumHint: "Statutory lump sum without receipt",
-    hotelModeProvided: "Accommodation is provided",
-    hotelModeProvidedHint: "Organizer provides accommodation — no reimbursement needed",
-    hotelCostPerNight: "Cost per hotel night",
+    hotelModeReceiptHint: "— have a reservation or receipt",
+    hotelModeLumpsum: "No reservation",
+    hotelModeLumpsumHint: "— statutory lump sum",
+    hotelModeProvided: "Accommodation provided",
+    hotelModeProvidedHint: "— no reimbursement needed",
+    hotelCostPerNight: "Cost per night",
+    hotelLumpsum: "lump sum",
     hotelLumpsumDomesticHint: "150% of per diem = 67.50 PLN/night",
     hotelLumpsumForeignHint: "25% of hotel limit",
     hotelLimitHint: "max {limit} {curr}/night",
