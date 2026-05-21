@@ -1209,24 +1209,24 @@ textarea {
     <div class="form-row">
       <div class="form-group">
         <label data-i18n="ticketCost">Bilety (kwota)</label>
-        <input type="number" id="ticketCost" data-save="ticketCost" step="0.01" min="0" placeholder="0.00">
+        <input type="number" id="ticketCost" data-save="ticketCost" step="0.01" min="0" value="0.00" placeholder="0.00">
         <span class="field-hint" data-i18n="ticketHint">Koszt biletów lotniczych/kolejowych (jeśli znany)</span>
       </div>
       <div class="form-group">
         <label data-i18n="ticketCurrency">Waluta biletów</label>
-        <input type="text" id="ticketCurrency" data-save="ticketCurrency" placeholder="PLN">
+        <select id="ticketCurrency" data-save="ticketCurrency"><option value="PLN">PLN</option></select>
       </div>
     </div>
 
     <div class="form-row">
       <div class="form-group">
         <label data-i18n="visaCost">Wiza (kwota)</label>
-        <input type="number" id="visaCost" data-save="visaCost" step="0.01" min="0" placeholder="0.00">
+        <input type="number" id="visaCost" data-save="visaCost" step="0.01" min="0" value="0.00" placeholder="0.00">
         <span class="field-hint" data-i18n="visaHint">Opłata wizowa (jeśli dotyczy)</span>
       </div>
       <div class="form-group">
         <label data-i18n="visaCurrency">Waluta wizy</label>
-        <input type="text" id="visaCurrency" data-save="visaCurrency" placeholder="PLN">
+        <select id="visaCurrency" data-save="visaCurrency"><option value="PLN">PLN</option></select>
       </div>
     </div>
 
@@ -2048,6 +2048,33 @@ function updateHighlight() {
   }
 }
 
+
+// Update ticket/visa currency dropdowns based on selected country
+function updateCostCurrencyOptions() {
+  var country = document.getElementById('selectedCountry').value;
+  var isDomestic = document.getElementById('tripTypeDomestic').checked;
+  var currencies = ['PLN'];
+  if (!isDomestic && country && RATES[country]) {
+    var cc = RATES[country].currency;
+    if (cc && cc !== 'PLN') {
+      if (cc !== 'EUR') currencies.push('EUR');
+      currencies.push(cc);
+    } else if (cc !== 'PLN') {
+      currencies.push('EUR');
+    }
+  }
+  ['ticketCurrency', 'visaCurrency'].forEach(function(id) {
+    var sel = document.getElementById(id);
+    var prev = sel.value || 'PLN';
+    sel.innerHTML = currencies.map(function(c) {
+      return '<option value="' + c + '">' + c + '</option>';
+    }).join('');
+    // Restore previous selection if still available
+    if (currencies.indexOf(prev) >= 0) sel.value = prev;
+    else sel.value = 'PLN';
+  });
+}
+
 function selectCountry(plName) {
   var rate = RATES[plName];
   if (!rate) return;
@@ -2076,6 +2103,7 @@ function selectCountry(plName) {
 
   recalculate();
   saveFormData();
+  updateCostCurrencyOptions();
   try { lucide.createIcons(); } catch(e) {}
 }
 
@@ -2613,6 +2641,7 @@ document.querySelectorAll('input[name="tripType"]').forEach(function(radio) {
     document.getElementById('calcPlaceholder').style.display = 'block';
     updateHotelCostHint();
     updateMealReductionLabels();
+    updateCostCurrencyOptions();
     saveFormData();
   });
 });
@@ -4001,6 +4030,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
+  // Format cost fields to 2 decimal places on blur
+  ['ticketCost', 'visaCost'].forEach(function(id) {
+    document.getElementById(id).addEventListener('blur', function() {
+      var v = parseFloat(this.value);
+      if (!isNaN(v)) this.value = v.toFixed(2);
+      else if (this.value === '') this.value = '0.00';
+    });
+  });
+  updateCostCurrencyOptions();
   checkRatesFreshness();
 });
 // ============================================================
