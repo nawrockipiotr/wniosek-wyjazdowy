@@ -803,7 +803,7 @@ textarea {
   <p class="hero-lead" data-i18n="heroLead">Narzędzie do wypełniania wniosków wyjazdowych i automatycznego obliczania diet przysługujących pracownikom, doktorantom i studentom Wydziału Zarządzania UW.</p>
 
   <details>
-    <summary><span data-i18n="howToUse">Jak korzystać z narzędzia</span> <span class="howto-hide-hint" data-i18n="howtoHide">(kliknij, by ukryć)</span></summary>
+    <summary><span data-i18n="howToUse">Jak korzystać z narzędzia</span></summary>
     <div class="details-content">
       <ol>
         <li data-i18n="step1">Wypełnij dane osobowe w sekcji 1.</li>
@@ -1030,7 +1030,7 @@ textarea {
   <div class="form-row">
     <div class="form-group full">
       <label data-i18n="projectNumber">Nr finansowo-księgowy projektu</label>
-      <input type="text" id="projectNumber" required data-save="projectNumber">
+      <input type="text" id="projectNumber" required data-save="projectNumber" placeholder="Numer nadany przez Kwesturę lub Biuro ds. Nauki">
     </div>
   </div>
 
@@ -2363,6 +2363,21 @@ async function exportDocx() {
     if (!firstMissingEl) firstMissingEl = document.getElementById('countrySearch');
   } else {
     document.getElementById('countrySearch').classList.remove('field-error');
+  }
+  // If advance on bank account — require bank name, owner, account number
+  var advanceChecked = document.getElementById('requestAdvance').checked;
+  var advMethodBank = document.getElementById('advMethodBank').checked;
+  if (advanceChecked && advMethodBank) {
+    ['bankName', 'bankOwner', 'bankAccount'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el && !el.value.trim()) {
+        missing.push(id);
+        el.classList.add('field-error');
+        if (!firstMissingEl) firstMissingEl = el;
+      } else if (el) {
+        el.classList.remove('field-error');
+      }
+    });
   }
   if (missing.length > 0) {
     var hasEmailFormat = missing.indexOf('email_format') >= 0;
