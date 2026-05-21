@@ -820,12 +820,12 @@ textarea {
   left: 0;
   right: 0;
   z-index: 10000;
-  background: var(--red-dim);
+  background: #fde8e8;
   border-bottom: 2px solid var(--red);
   padding: 16px 20px;
   font-size: 0.9rem;
   color: var(--red);
-  box-shadow: 0 4px 16px rgba(220,38,38,0.15);
+  box-shadow: 0 4px 16px rgba(220,38,38,0.25);
   transform: translateY(-100%);
   transition: transform 0.3s ease;
   max-height: 60vh;
@@ -851,6 +851,14 @@ textarea {
   padding: 0 4px;
   font-weight: 700;
   line-height: 1;
+}
+.dark-mode .validation-banner {
+  background: #3b1515;
+  color: #f87171;
+  border-bottom-color: #ef4444;
+}
+.dark-mode .validation-banner .vb-close {
+  color: #f87171;
 }
 .validation-banner ul {
   list-style: none;
