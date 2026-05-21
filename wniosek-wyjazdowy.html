@@ -2617,13 +2617,13 @@ async function exportDocx() {
   }
 
   function para(runs, opts) {
-    var o = Object.assign({ spacing: { after: 0 } }, opts || {});
+    var o = Object.assign({ spacing: { after: 0, line: 240 } }, opts || {});
     o.children = Array.isArray(runs) ? runs : [runs];
     return new Paragraph(o);
   }
 
   function cell(content, opts) {
-    var o = Object.assign({ borders: b, verticalAlign: VerticalAlign.CENTER, margins: { top: 20, bottom: 20, left: 40, right: 40 } }, opts || {});
+    var o = Object.assign({ borders: b, verticalAlign: VerticalAlign.CENTER, margins: { top: 10, bottom: 10, left: 30, right: 30 } }, opts || {});
     if (typeof content === 'string') {
       // Handle multiline
       var lines = content.split('\n');
@@ -2648,9 +2648,9 @@ async function exportDocx() {
   var children = [];
 
   // Title
-  children.push(para([txt("Załącznik nr 1", { size: 18, italics: true })], { alignment: AlignmentType.RIGHT, spacing: { before: 400, after: 100 } }));
-  children.push(para([txt("WNIOSEK WYJAZDOWY", { bold: true, size: 28 })], { alignment: AlignmentType.CENTER, spacing: { after: 40 } }));
-  children.push(para([txt("Po czytelnym wypełnieniu formularza należy przekazać go do Kwestury.", { size: 16, italics: true })], { alignment: AlignmentType.CENTER, spacing: { after: 200 } }));
+  children.push(para([txt("Załącznik nr 1", { size: 18, italics: true })], { alignment: AlignmentType.RIGHT, spacing: { before: 0, after: 60 } }));
+  children.push(para([txt("WNIOSEK WYJAZDOWY", { bold: true, size: 26 })], { alignment: AlignmentType.CENTER, spacing: { after: 20 } }));
+  children.push(para([txt("Po czytelnym wypełnieniu formularza należy przekazać go do Kwestury.", { size: 14, italics: true })], { alignment: AlignmentType.CENTER, spacing: { after: 80 } }));
 
   // ====== MAIN TABLE (8 columns) ======
   var colW = [1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200]; // ~equal
@@ -2920,7 +2920,7 @@ async function exportDocx() {
   }
 
   // ====== SIGNATURES ======
-  children.push(para([txt('')], { spacing: { after: 600 } }));
+  children.push(para([txt('')], { spacing: { after: 200 } }));
 
   var sigTable = new Table({
     width: { size: 100, type: WidthType.PERCENTAGE },
@@ -2931,14 +2931,14 @@ async function exportDocx() {
           cell([
             para([txt('', { size: 18 })], { spacing: { after: 0 } }),
             para([txt('', { size: 18 })], { spacing: { after: 0 } }),
-            para([txt('', { size: 18 })], { spacing: { after: 0 } }),
+            
             para([txt("……………………………………………………………", { size: 18 })], { alignment: AlignmentType.CENTER, spacing: { after: 40 } }),
             para([txt("Podpis osoby wyjeżdżającej", { size: 14, italics: true })], { alignment: AlignmentType.CENTER })
           ], { borders: bNone, width: { size: 33, type: WidthType.PERCENTAGE } }),
           cell([
             para([txt('', { size: 18 })], { spacing: { after: 0 } }),
             para([txt('', { size: 18 })], { spacing: { after: 0 } }),
-            para([txt('', { size: 18 })], { spacing: { after: 0 } }),
+            
             para([txt("……………………………………………………………………", { size: 18 })], { alignment: AlignmentType.CENTER, spacing: { after: 40 } }),
             para([txt("Podpis, pieczęć pełnomocnika", { size: 14, italics: true })], { alignment: AlignmentType.CENTER }),
             para([txt("kwestora / kwestora", { size: 14, italics: true })], { alignment: AlignmentType.CENTER })
@@ -2946,7 +2946,7 @@ async function exportDocx() {
           cell([
             para([txt('', { size: 18 })], { spacing: { after: 0 } }),
             para([txt('', { size: 18 })], { spacing: { after: 0 } }),
-            para([txt('', { size: 18 })], { spacing: { after: 0 } }),
+            
             para([txt("……………………………………………………………", { size: 18 })], { alignment: AlignmentType.CENTER, spacing: { after: 40 } }),
             para([txt("Podpis, pieczęć kierownika", { size: 14, italics: true })], { alignment: AlignmentType.CENTER }),
             para([txt("jednostki", { size: 14, italics: true })], { alignment: AlignmentType.CENTER })
@@ -2966,8 +2966,7 @@ async function exportDocx() {
     "Oświadczam, że posiadam ubezpieczenie kosztów leczenia i następstw nieszczęśliwych " +
     "wypadków na czas trwania wyjazdu.";
 
-  children.push(para([txt(declText, { size: 16, italics: true })], { spacing: { after: 200 } }));
-  children.push(para([txt('')], { spacing: { after: 0 } }));
+  children.push(para([txt(declText, { size: 16, italics: true })], { spacing: { after: 100 } }));
   children.push(para([txt('')], { spacing: { after: 0 } }));
   children.push(para([txt('')], { spacing: { after: 0 } }));
   children.push(para([txt("...........................................................................", { size: 18 })], { alignment: AlignmentType.LEFT }));
@@ -2979,7 +2978,7 @@ async function exportDocx() {
       properties: {
         page: {
           size: { width: 11906, height: 16838, orientation: docx.PageOrientation.PORTRAIT },
-          margin: { top: 1417, bottom: 1417, left: 1417, right: 1417, header: 709, footer: 709, gutter: 0 }
+          margin: { top: 567, bottom: 567, left: 850, right: 850, header: 284, footer: 284, gutter: 0 }
         }
       },
       children: children
