@@ -920,6 +920,8 @@ textarea {
 </div>
 <div class="hero-bar"></div>
 
+<div id="validationBanner" class="validation-banner"></div>
+
 <!-- SECTION 1: PERSONAL DATA -->
 <div class="form-section">
   <h2>
@@ -1457,7 +1459,6 @@ textarea {
 
 <div id="ratesWarningBox" style="display:none;background:var(--yellow-dim);border:1px solid var(--yellow);color:var(--yellow);border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:0.85rem;font-weight:600;"></div>
 
-<div id="validationBanner" class="validation-banner"></div>
 
 <!-- ACTION BUTTONS -->
 <div class="form-section no-print" style="background:var(--surface2);">
@@ -3018,7 +3019,7 @@ function validateFormFields() {
     banner.innerHTML = '<div class="vb-title"><span>' + title + '</span><button class="vb-close" onclick="this.parentElement.parentElement.classList.remove(\'visible\')">&times;</button></div><ul>' + listHtml + '</ul>';
     banner.classList.add('visible');
     setTimeout(function() { banner.classList.remove('visible'); }, 8000);
-    banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     if (firstMissingEl) {
       firstMissingEl.focus({ preventScroll: true });
     }
@@ -3085,7 +3086,7 @@ async function generateAgreementDocx() {
     banner.innerHTML = '<div class="vb-title"><span>' + title + '</span><button class="vb-close" onclick="this.parentElement.parentElement.classList.remove(\'visible\')">&times;</button></div><ul>' + listHtml + '</ul>';
     banner.classList.add('visible');
     setTimeout(function() { banner.classList.remove('visible'); }, 8000);
-    banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     return;
   }
 
