@@ -1093,20 +1093,18 @@ textarea {
   </div>
 
   <!-- PRIVATE DAYS -->
-  <div class="form-row" style="grid-template-columns: 1fr;">
-    <div class="form-group" style="flex-direction:row; align-items:center; justify-content:space-between;">
-      <div>
-        <span data-i18n="hasPrivateDays" style="font-size:0.93rem;">Pobyt obejmuje dni prywatne (na własny koszt)</span>
-      </div>
-      <div class="yesno-pair">
-        <input type="radio" name="privateDaysYN" id="privateDaysNo" value="no" checked>
-        <label for="privateDaysNo" data-i18n="no">Nie</label>
-        <input type="radio" name="privateDaysYN" id="privateDaysYes" value="yes">
-        <label for="privateDaysYes" data-i18n="yes">Tak</label>
-      </div>
+  <div class="yesno-row">
+    <div class="yesno-label-text">
+      <span data-i18n="hasPrivateDays">Pobyt obejmuje dni prywatne (na własny koszt)</span>
     </div>
-    <input type="checkbox" id="hasPrivateDays" data-save="hasPrivateDays" style="display:none;">
+    <div class="yesno-pair">
+      <input type="radio" name="privateDaysYN" id="privateDaysNo" value="no" checked>
+      <label for="privateDaysNo" data-i18n="no">Nie</label>
+      <input type="radio" name="privateDaysYN" id="privateDaysYes" value="yes">
+      <label for="privateDaysYes" data-i18n="yes">Tak</label>
+    </div>
   </div>
+  <input type="checkbox" id="hasPrivateDays" data-save="hasPrivateDays" style="display:none;">
   <div id="privateDaysRow" class="form-row" style="display:none;">
     <div class="form-group">
       <label data-i18n="businessStartDate">Początek delegacji służbowej</label>
