@@ -862,7 +862,7 @@ textarea {
 .dark-mode .validation-banner {
   background: #3b1515;
   color: #f87171;
-  border-bottom-color: #ef4444;
+  border-color: #ef4444;
 }
 .dark-mode .validation-banner .vb-close {
   color: #f87171;
@@ -2085,11 +2085,10 @@ function calculateCosts() {
   if (hasPrivate) {
     var bsVal = document.getElementById('businessStartDate').value;
     var beVal = document.getElementById('businessEndDate').value;
-    if (bsVal && beVal) {
-      bizDep = new Date(bsVal);
-      bizRet = new Date(beVal);
-      if (bizRet <= bizDep) return null;
-    }
+    if (!bsVal || !beVal) return null;
+    bizDep = new Date(bsVal);
+    bizRet = new Date(beVal);
+    if (bizRet <= bizDep) return null;
   }
 
   var diffMs = bizRet.getTime() - bizDep.getTime();
@@ -2098,9 +2097,6 @@ function calculateCosts() {
   var effectiveDays = fullDays + 1;
   var nights = fullDays;
 
-  // Travel dates for travel allowance
-  var travelDiffMs = ret.getTime() - dep.getTime();
-  var travelFullDays = Math.floor(travelDiffMs / (1000 * 60 * 60 * 24));
 
   var DOMESTIC_RATE = 45, DOMESTIC_HOTEL = 900, DOMESTIC_TRANSPORT = 9;
   var perDiemRate = isDomestic ? DOMESTIC_RATE : RATES[country].perDiem;
@@ -2223,6 +2219,7 @@ function recalculate() {
       '<td><strong>' + (c.ltIncluded ? formatNum(c.localTransport) + ' ' + curr : '—') + '</strong></td>' +
       '<td>' + curr + '</td>' +
     '</tr>' +
+    (c.hasPrivateDays ? '<tr style="font-size:0.82em;color:var(--text-dim);"><td colspan="5">⚠ ' + (currentLang === 'pl' ? 'Kalkulacja za okres delegacji służbowej: ' + c.businessStartDate + ' – ' + c.businessEndDate : 'Calculated for business period: ' + c.businessStartDate + ' – ' + c.businessEndDate) + '</td></tr>' : '') +
     '<tr class="total-row">' +
       '<td>' + t.rowTotal + '</td>' +
       '<td></td>' +
