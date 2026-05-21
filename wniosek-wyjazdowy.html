@@ -3356,6 +3356,10 @@ async function exportDocx() {
     destDisplay = destinationCity ? (destinationCity + ', ' + (currentLang === 'en' && rateLookup ? rateLookup.en : country)) : country;
   }
 
+  // Date display DD.MM.YYYY
+  var depDateDisplay = fmtDate(depDate);
+  var retDateDisplay = fmtDate(retDate);
+
   // ---------- BORDERS ----------
   var b = {
     top: { style: BorderStyle.SINGLE, size: 1 },
