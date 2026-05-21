@@ -2076,7 +2076,7 @@ function selectCountry(plName) {
 
   recalculate();
   saveFormData();
-  lucide.createIcons();
+  try { lucide.createIcons(); } catch(e) {}
 }
 
 countrySearchInput.addEventListener('focus', function() { renderDropdown(countrySearchInput.value); });
@@ -3911,6 +3911,31 @@ function loadExternalRates(url) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+
+  // ---- Event listeners (no inline onclick — CSP-safe for iframe) ----
+  document.getElementById('exportBtn').addEventListener('click', function() {
+    exportDocx().catch(function(e) { console.error(e); showToast('Error: ' + e.message); });
+  });
+  document.getElementById('agreementBtn').addEventListener('click', function() {
+    generateAgreementDocx().catch(function(e) { console.error(e); showToast('Error: ' + e.message); });
+  });
+  document.getElementById('clearBtn').addEventListener('click', handleClearClick);
+  document.getElementById('resetRatesBtn').addEventListener('click', resetCustomRates);
+  document.querySelectorAll('.lang-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() { setLang(this.getAttribute('data-lang')); });
+  });
+  document.getElementById('darkToggleBtn').addEventListener('click', toggleDark);
+  // Event delegation for dynamically created close buttons
+  document.addEventListener('click', function(e) {
+    if (e.target.getAttribute('data-action') === 'close-banner') {
+      var banner = e.target.closest('.validation-banner');
+      if (banner) banner.classList.remove('visible');
+    }
+    if (e.target.getAttribute('data-action') === 'close-dlbar') {
+      e.target.parentElement.remove();
+    }
+  });
+
   // Set default date
   document.getElementById('submissionDate').value = new Date().toISOString().split('T')[0];
 
@@ -3951,7 +3976,7 @@ document.addEventListener('DOMContentLoaded', function() {
   if (savedLang) setLang(savedLang);
 
   // Init icons
-  lucide.createIcons();
+  try { lucide.createIcons(); } catch(e) { console.warn('Lucide icons not loaded:', e.message); }
 
   // === STATUS: show/hide "Inna osoba" section ===
   function toggleOtherPersonSection() {
@@ -4003,29 +4028,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // ---- Event listeners (no inline onclick — CSP-safe for iframe) ----
-  document.getElementById('exportBtn').addEventListener('click', function() {
-    exportDocx().catch(function(e) { console.error(e); showToast('Error: ' + e.message); });
-  });
-  document.getElementById('agreementBtn').addEventListener('click', function() {
-    generateAgreementDocx().catch(function(e) { console.error(e); showToast('Error: ' + e.message); });
-  });
-  document.getElementById('clearBtn').addEventListener('click', handleClearClick);
-  document.getElementById('resetRatesBtn').addEventListener('click', resetCustomRates);
-  document.querySelectorAll('.lang-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() { setLang(this.getAttribute('data-lang')); });
-  });
-  document.getElementById('darkToggleBtn').addEventListener('click', toggleDark);
-  // Event delegation for dynamically created close buttons
-  document.addEventListener('click', function(e) {
-    if (e.target.getAttribute('data-action') === 'close-banner') {
-      var banner = e.target.closest('.validation-banner');
-      if (banner) banner.classList.remove('visible');
-    }
-    if (e.target.getAttribute('data-action') === 'close-dlbar') {
-      e.target.parentElement.remove();
-    }
-  });
   checkRatesFreshness();
 });
 // ============================================================
