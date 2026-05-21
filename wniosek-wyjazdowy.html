@@ -1137,7 +1137,7 @@ textarea {
       <input type="date" id="departureDate" required aria-required="true" data-save="departureDate">
       <div class="domestic-only-field" style="display:none;margin-top:8px;">
         <label data-i18n="departureTime" style="font-size:0.82rem;">Godz. wyjazdu <span class="req-star">*</span></label>
-        <input type="time" id="departureTime" data-save="departureTime" required aria-required="true">
+        <input type="time" id="departureTime" data-save="departureTime">
       </div>
     </div>
     <div class="form-group">
@@ -1145,7 +1145,7 @@ textarea {
       <input type="date" id="returnDate" required aria-required="true" data-save="returnDate">
       <div class="domestic-only-field" style="display:none;margin-top:8px;">
         <label data-i18n="returnTime" style="font-size:0.82rem;">Godz. powrotu <span class="req-star">*</span></label>
-        <input type="time" id="returnTime" data-save="returnTime" required aria-required="true">
+        <input type="time" id="returnTime" data-save="returnTime">
       </div>
     </div>
   </div>
@@ -1463,11 +1463,11 @@ textarea {
 <!-- ACTION BUTTONS -->
 <div class="form-section no-print" style="background:var(--surface2);">
   <div class="btn-group" style="justify-content:center;">
-    <button class="btn btn-primary" onclick="exportDocx().catch(function(e){ console.error(e); alert('Export error: ' + e.message); })">
+    <button class="btn btn-primary" onclick="exportDocx().catch(function(e){ console.error(e); showToast('Export error: ' + e.message); })">
       <i data-lucide="file-text" style="width:16px;height:16px;"></i>
       <span data-i18n="exportDocx">Pobierz wniosek (DOCX)</span>
     </button>
-    <button id="agreementBtn" class="btn btn-secondary" style="display:none;" onclick="generateAgreementDocx().catch(function(e){ console.error(e); alert('Error: ' + e.message); })">
+    <button id="agreementBtn" class="btn btn-secondary" style="display:none;" onclick="generateAgreementDocx().catch(function(e){ console.error(e); showToast('Error: ' + e.message); })">
       <i data-lucide="file-signature" style="width:16px;height:16px;"></i>
       <span data-i18n="downloadAgreement">Pobierz umowę (DOCX)</span>
     </button>
@@ -3231,9 +3231,9 @@ async function exportDocx() {
   if (!validateFormFields()) return;
   var t = TRANSLATIONS[currentLang];
   if (typeof docx === 'undefined') {
-    alert(currentLang === 'pl'
-      ? 'Błąd: biblioteka docx nie jest załadowana. Sprawdź połączenie z internetem i odśwież stronę.'
-      : 'Error: docx library not loaded. Check your internet connection and reload the page.');
+    showToast(currentLang === 'pl'
+      ? 'Błąd: biblioteka docx nie jest załadowana. Odśwież stronę.'
+      : 'Error: docx library not loaded. Reload the page.');
     return;
   }
   var D = docx;
