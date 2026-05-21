@@ -3019,8 +3019,8 @@ function validateFormFields() {
     banner.innerHTML = '<div class="vb-title"><span>' + title + '</span><button class="vb-close" onclick="this.parentElement.parentElement.classList.remove(\'visible\')">&times;</button></div><ul>' + listHtml + '</ul>';
     banner.classList.add('visible');
     setTimeout(function() { banner.classList.remove('visible'); }, 8000);
+    banner.scrollIntoView({ behavior: 'smooth', block: 'start' });
     if (firstMissingEl) {
-      firstMissingEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
       setTimeout(function() { firstMissingEl.focus({ preventScroll: true }); }, 400);
     }
     return false;
