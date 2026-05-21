@@ -960,18 +960,22 @@ textarea {
     </div>
     <div class="form-row">
       <div class="form-group">
-        <label data-i18n="otherFullName">Imię i nazwisko osoby wyjeżdżającej <span class="req-star">*</span></label>
-        <input type="text" id="otherFullName" data-save="otherFullName">
+        <label data-i18n="otherStreet">Ulica i numer <span class="req-star">*</span></label>
+        <input type="text" id="otherStreet" data-save="otherStreet">
+      </div>
+      <div class="form-group">
+        <label data-i18n="otherPostalCode">Kod pocztowy <span class="req-star">*</span></label>
+        <input type="text" id="otherPostalCode" data-save="otherPostalCode" placeholder="00-000">
       </div>
     </div>
     <div class="form-row">
       <div class="form-group">
-        <label data-i18n="otherCity">Miejscowość zamieszkania <span class="req-star">*</span></label>
+        <label data-i18n="otherCity">Miejscowość <span class="req-star">*</span></label>
         <input type="text" id="otherCity" data-save="otherCity">
       </div>
       <div class="form-group">
-        <label data-i18n="otherStreet">Ulica i numer <span class="req-star">*</span></label>
-        <input type="text" id="otherStreet" data-save="otherStreet">
+        <label data-i18n="otherCountry">Kraj <span class="req-star">*</span></label>
+        <input type="text" id="otherCountry" data-save="otherCountry" value="Polska">
       </div>
     </div>
   </div>
@@ -1130,7 +1134,7 @@ textarea {
       <input type="date" id="departureDate" required aria-required="true" data-save="departureDate">
       <div class="domestic-only-field" style="display:none;margin-top:8px;">
         <label data-i18n="departureTime" style="font-size:0.82rem;">Godz. wyjazdu</label>
-        <input type="time" id="departureTime" data-save="departureTime">
+        <input type="time" id="departureTime" data-save="departureTime" style="width:100%;min-width:120px;font-size:1rem;padding:10px 12px;">
       </div>
     </div>
     <div class="form-group">
@@ -1138,7 +1142,7 @@ textarea {
       <input type="date" id="returnDate" required aria-required="true" data-save="returnDate">
       <div class="domestic-only-field" style="display:none;margin-top:8px;">
         <label data-i18n="returnTime" style="font-size:0.82rem;">Godz. powrotu</label>
-        <input type="time" id="returnTime" data-save="returnTime">
+        <input type="time" id="returnTime" data-save="returnTime" style="width:100%;min-width:120px;font-size:1rem;padding:10px 12px;">
       </div>
     </div>
   </div>
@@ -1504,8 +1508,9 @@ const TRANSLATIONS = {
     statusStudent: "Student",
     statusOther: "Inna osoba",
     otherPersonInfo: "Dla osób niebędących pracownikami UW wymagana jest umowa finansowania kosztów podróży. Pobierz wypełniony wzór poniżej, wydrukuj, podpisz i dostarcz do sekcji rozliczającej wyjazd wraz z wnioskiem wyjazdowym.",
-    otherFullName: "Imię i nazwisko osoby wyjeżdżającej",
-    otherCity: "Miejscowość zamieszkania",
+    otherCity: "Miejscowość",
+    otherPostalCode: "Kod pocztowy",
+    otherCountry: "Kraj",
     otherStreet: "Ulica i numer",
     downloadAgreement: "Pobierz umowę (DOCX)",
     unitName: "Nazwa jednostki UW",
@@ -1668,8 +1673,9 @@ const TRANSLATIONS = {
     statusStudent: "Student",
     statusOther: "Other",
     otherPersonInfo: "For persons who are not UW employees, a travel cost financing agreement is required. Download the pre-filled template below, print it, sign it, and deliver it to the settlement section along with the travel request form.",
-    otherFullName: "Full name of the traveler",
-    otherCity: "City of residence",
+    otherCity: "City",
+    otherPostalCode: "Postal code",
+    otherCountry: "Country",
     otherStreet: "Street and number",
     downloadAgreement: "Download agreement (DOCX)",
     unitName: "UW Unit name",
@@ -2067,19 +2073,6 @@ function selectCountry(plName) {
   recalculate();
   saveFormData();
   lucide.createIcons();
-
-  // === STATUS: show/hide "Inna osoba" section ===
-  function toggleOtherPersonSection() {
-    var isInna = document.getElementById('statusInna').checked;
-    var sec = document.getElementById('otherPersonSection');
-    if (sec) sec.style.display = isInna ? '' : 'none';
-    var agrBtn = document.getElementById('agreementBtn');
-    if (agrBtn) agrBtn.style.display = isInna ? '' : 'none';
-  }
-  document.querySelectorAll('input[name="status"]').forEach(function(r) {
-    r.addEventListener('change', function() { toggleOtherPersonSection(); saveFormData(); });
-  });
-  toggleOtherPersonSection();
 }
 
 countrySearchInput.addEventListener('focus', function() { renderDropdown(countrySearchInput.value); });
@@ -3004,9 +2997,11 @@ async function generateAgreementDocx() {
         PageOrientation, SectionType, TabStopType, TabStopPosition } = docx;
 
   // Gather data
-  var otherName = (document.getElementById('otherFullName').value || '').trim();
+  var otherName = (document.getElementById('fullName').value || '').trim();
   var otherCity = (document.getElementById('otherCity').value || '').trim();
+  var otherPostalCode = (document.getElementById('otherPostalCode').value || '').trim();
   var otherStreet = (document.getElementById('otherStreet').value || '').trim();
+  var otherCountry = (document.getElementById('otherCountry').value || '').trim();
   var submDate = document.getElementById('submissionDate').value || '';
   var purpose = (document.getElementById('purposeOfTravel').value || '').trim();
   var projectNr = (document.getElementById('projectNumber').value || '').trim();
@@ -3033,8 +3028,9 @@ async function generateAgreementDocx() {
 
   // Validation
   var missing = [];
-  if (!otherName) missing.push(currentLang === 'pl' ? 'Imię i nazwisko osoby' : 'Traveler name');
-  if (!otherCity) missing.push(currentLang === 'pl' ? 'Miejscowość zamieszkania' : 'City');
+  if (!otherName) missing.push(currentLang === 'pl' ? 'Imię i nazwisko (sekcja 1)' : 'Full name (section 1)');
+  if (!otherCity) missing.push(currentLang === 'pl' ? 'Miejscowość' : 'City');
+  if (!otherPostalCode) missing.push(currentLang === 'pl' ? 'Kod pocztowy' : 'Postal code');
   if (!otherStreet) missing.push(currentLang === 'pl' ? 'Ulica' : 'Street');
   if (!submDate) missing.push(currentLang === 'pl' ? 'Data złożenia wniosku' : 'Submission date');
   if (!purpose) missing.push(currentLang === 'pl' ? 'Cel wyjazdu' : 'Purpose');
@@ -3077,12 +3073,8 @@ async function generateAgreementDocx() {
   children.push(para([
     txt('a '),
     txt(otherName, { bold: true }),
-    txt(' zam. w '),
-    txt(otherCity, { bold: true }),
-  ]));
-  children.push(para([
-    txt('przy ul. '),
-    txt(otherStreet, { bold: true }),
+    txt(' zamieszkałym/-ą: '),
+    txt(otherStreet + ', ' + otherPostalCode + ' ' + otherCity + (otherCountry && otherCountry !== 'Polska' ? ', ' + otherCountry : ''), { bold: true }),
     txt(', zwanym dalej Wyjeżdżającym.'),
   ], { spacing: { after: 200 } }));
 
@@ -3859,6 +3851,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Init icons
   lucide.createIcons();
+
+  // === STATUS: show/hide "Inna osoba" section ===
+  function toggleOtherPersonSection() {
+    var isInna = document.getElementById('statusInna').checked;
+    var sec = document.getElementById('otherPersonSection');
+    if (sec) sec.style.display = isInna ? '' : 'none';
+    var agrBtn = document.getElementById('agreementBtn');
+    if (agrBtn) agrBtn.style.display = isInna ? '' : 'none';
+  }
+  document.querySelectorAll('input[name="status"]').forEach(function(r) {
+    r.addEventListener('change', function() { toggleOtherPersonSection(); saveFormData(); });
+  });
+  toggleOtherPersonSection();
 
   // Clear field-error on input
   document.querySelectorAll('.field-error').forEach(function(el) {
