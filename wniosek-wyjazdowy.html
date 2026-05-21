@@ -2178,7 +2178,17 @@ document.querySelectorAll('input[name="tripType"]').forEach(function(radio) {
     if (countryWrapper) countryWrapper.parentElement.style.display = isDomestic ? 'none' : '';
     var rateInfoBox = document.getElementById('rateInfoBox');
     if (rateInfoBox) rateInfoBox.style.display = 'none';
-    // Hide travel allowance row in domestic mode (handled in recalculate)
+    // Clear foreign-specific data when switching to domestic
+    if (isDomestic) {
+      document.getElementById('selectedCountry').value = '';
+      var csi = document.getElementById('countrySearch');
+      if (csi) csi.value = '';
+      // Reset returnFrom to just the destination city (without country)
+      var destCity = document.getElementById('destinationCity').value;
+      document.getElementById('returnFrom').value = destCity;
+    }
+    // Clear domestic-specific residuals when switching to foreign
+    // (no specific fields to clear, but recalculate handles display)
     recalculate();
     saveFormData();
   });
