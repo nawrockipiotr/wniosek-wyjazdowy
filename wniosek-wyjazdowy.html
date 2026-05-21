@@ -2892,7 +2892,7 @@ async function exportDocx() {
   }
 
   // ====== SIGNATURES ======
-  children.push(para([txt('')], { spacing: { after: 400 } }));
+  children.push(para([txt('')], { spacing: { after: 600 } }));
 
   var sigTable = new Table({
     width: { size: 100, type: WidthType.PERCENTAGE },
@@ -2901,16 +2901,16 @@ async function exportDocx() {
       new TableRow({
         children: [
           cell([
-            para([txt("…………………………………………", { size: 18 })], { alignment: AlignmentType.CENTER, spacing: { after: 40 } }),
+            para([txt("……………………………………………………………", { size: 18 })], { alignment: AlignmentType.CENTER, spacing: { after: 40 } }),
             para([txt("Podpis osoby wyjeżdżającej", { size: 14, italics: true })], { alignment: AlignmentType.CENTER })
           ], { borders: bNone, width: { size: 33, type: WidthType.PERCENTAGE } }),
           cell([
-            para([txt("………………………………………………………", { size: 18 })], { alignment: AlignmentType.CENTER, spacing: { after: 40 } }),
+            para([txt("……………………………………………………………………", { size: 18 })], { alignment: AlignmentType.CENTER, spacing: { after: 40 } }),
             para([txt("Podpis, pieczęć pełnomocnika", { size: 14, italics: true })], { alignment: AlignmentType.CENTER }),
             para([txt("kwestora / kwestora", { size: 14, italics: true })], { alignment: AlignmentType.CENTER })
           ], { borders: bNone, width: { size: 34, type: WidthType.PERCENTAGE } }),
           cell([
-            para([txt("…………………………………………", { size: 18 })], { alignment: AlignmentType.CENTER, spacing: { after: 40 } }),
+            para([txt("……………………………………………………………", { size: 18 })], { alignment: AlignmentType.CENTER, spacing: { after: 40 } }),
             para([txt("Podpis, pieczęć kierownika", { size: 14, italics: true })], { alignment: AlignmentType.CENTER }),
             para([txt("jednostki", { size: 14, italics: true })], { alignment: AlignmentType.CENTER })
           ], { borders: bNone, width: { size: 33, type: WidthType.PERCENTAGE } })
@@ -2931,7 +2931,7 @@ async function exportDocx() {
 
   children.push(para([txt(declText, { size: 16, italics: true })], { spacing: { after: 200 } }));
   children.push(para([txt('')], { spacing: { after: 100 } }));
-  children.push(para([txt(".........................................................", { size: 18 })], { alignment: AlignmentType.LEFT }));
+  children.push(para([txt("...........................................................................", { size: 18 })], { alignment: AlignmentType.LEFT }));
   children.push(para([txt("podpis osoby wyjeżdżającej", { size: 14, italics: true })], { alignment: AlignmentType.LEFT }));
 
   // Build document
