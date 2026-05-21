@@ -3019,9 +3019,9 @@ function validateFormFields() {
     banner.innerHTML = '<div class="vb-title"><span>' + title + '</span><button class="vb-close" onclick="this.parentElement.parentElement.classList.remove(\'visible\')">&times;</button></div><ul>' + listHtml + '</ul>';
     banner.classList.add('visible');
     setTimeout(function() { banner.classList.remove('visible'); }, 8000);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
     if (firstMissingEl) {
-      firstMissingEl.focus({ preventScroll: true });
+      firstMissingEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(function() { firstMissingEl.focus({ preventScroll: true }); }, 400);
     }
     return false;
   }
@@ -3086,7 +3086,8 @@ async function generateAgreementDocx() {
     banner.innerHTML = '<div class="vb-title"><span>' + title + '</span><button class="vb-close" onclick="this.parentElement.parentElement.classList.remove(\'visible\')">&times;</button></div><ul>' + listHtml + '</ul>';
     banner.classList.add('visible');
     setTimeout(function() { banner.classList.remove('visible'); }, 8000);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    var firstField = document.getElementById('fullName');
+    if (!firstField.value.trim()) { firstField.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
     return;
   }
 
