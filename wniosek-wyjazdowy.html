@@ -798,6 +798,11 @@ textarea {
   font-size: 0.82rem;
   color: var(--text-dim);
 }
+.hotel-option .field-hint {
+  font-weight: 400;
+  font-size: 0.82rem;
+  color: var(--text-dim);
+}
 
 
 /* Required field asterisk */
@@ -1273,8 +1278,7 @@ textarea {
           <input type="radio" name="hotelMode" id="hotelModeLumpsum" value="lumpsum" data-save="hotelMode" style="flex-shrink:0;">
           <span style="flex:1;">
             <span data-i18n="hotelModeLumpsum">Nie mam rezerwacji</span>
-            <span class="field-hint" data-i18n="hotelModeLumpsumHint" style="margin-left:4px;">(ryczałt ustawowy)</span>
-            <span class="field-hint" id="hotelLumpsumDetail" style="margin-left:4px;"></span>
+            <span class="field-hint" style="margin-left:4px;">(<span data-i18n="hotelModeLumpsumHint">ryczałt ustawowy</span><span id="hotelLumpsumDetail"></span>)</span>
           </span>
         </label>
         <label class="hotel-option" style="display:flex; align-items:center; gap:8px; cursor:pointer; padding:7px 12px; border-radius:8px; border:1.5px solid var(--border); font-size:0.93em; transition:border-color 0.15s, background 0.15s;">
@@ -1534,7 +1538,7 @@ const TRANSLATIONS = {
     hotelModeReceipt: "Znam koszt noclegu",
     hotelModeReceiptHint: "(mam rezerwację lub rachunek)",
     hotelModeLumpsum: "Nie mam rezerwacji",
-    hotelModeLumpsumHint: "(ryczałt ustawowy)",
+    hotelModeLumpsumHint: "ryczałt ustawowy",
     hotelModeProvided: "Nocleg zapewniony",
     hotelModeProvidedHint: "(nie wnioskuję o zwrot)",
     hotelCostPerNight: "Kwota za dobę",
@@ -1686,7 +1690,7 @@ const TRANSLATIONS = {
     hotelModeReceipt: "I know the hotel cost",
     hotelModeReceiptHint: "(have a reservation or receipt)",
     hotelModeLumpsum: "No reservation",
-    hotelModeLumpsumHint: "(statutory lump sum)",
+    hotelModeLumpsumHint: "statutory lump sum",
     hotelModeProvided: "Accommodation provided",
     hotelModeProvidedHint: "(no reimbursement needed)",
     hotelCostPerNight: "Cost per night",
@@ -2376,7 +2380,7 @@ function updateHotelCostHint() {
       hintEl.textContent = '';
       costInput.removeAttribute('max');
     }
-    if (detailEl) detailEl.textContent = '150% diety = 67,50 PLN/nocleg';
+    if (detailEl) detailEl.textContent = ', 150% diety = 67,50 PLN/nocleg';
   } else {
     var country = document.getElementById('selectedCountry').value;
     if (country && RATES[country]) {
@@ -2390,11 +2394,11 @@ function updateHotelCostHint() {
         hintEl.textContent = '';
         costInput.removeAttribute('max');
       }
-      if (detailEl) detailEl.textContent = '25% limitu = ' + formatNum(roundCurr(rate.hotel * 0.25)) + ' ' + curr + '/nocleg';
+      if (detailEl) detailEl.textContent = ', 25% limitu = ' + formatNum(roundCurr(rate.hotel * 0.25)) + ' ' + curr + '/nocleg';
     } else {
       currEl.textContent = '';
       hintEl.textContent = '';
-      if (detailEl) detailEl.textContent = t.hotelModeLumpsumHint || '';
+      if (detailEl) detailEl.textContent = '';
     }
   }
 }
