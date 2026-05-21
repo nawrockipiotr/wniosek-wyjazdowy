@@ -1092,6 +1092,30 @@ textarea {
     </div>
   </div>
 
+  <!-- PRIVATE DAYS -->
+  <div class="form-row" style="grid-template-columns: 1fr;">
+    <div class="form-group" style="flex-direction:row; align-items:center; gap:10px;">
+      <label class="toggle-switch" style="margin:0;">
+        <input type="checkbox" id="hasPrivateDays" data-save="hasPrivateDays">
+        <span class="toggle-slider"></span>
+      </label>
+      <span data-i18n="hasPrivateDays" style="font-size:0.93rem;">Pobyt obejmuje dni prywatne (na własny koszt)</span>
+    </div>
+  </div>
+  <div id="privateDaysRow" class="form-row" style="display:none;">
+    <div class="form-group">
+      <label data-i18n="businessStartDate">Początek delegacji służbowej</label>
+      <input type="date" id="businessStartDate" data-save="businessStartDate">
+    </div>
+    <div class="form-group">
+      <label data-i18n="businessEndDate">Koniec delegacji służbowej</label>
+      <input type="date" id="businessEndDate" data-save="businessEndDate">
+    </div>
+  </div>
+  <div id="privateDaysHint" style="display:none; font-size:0.82rem; color:var(--muted); margin:-8px 0 8px 0; padding:0 4px;" data-i18n="privateDaysHint">
+    Diety, noclegi i transport lokalny będą liczone tylko za okres delegacji służbowej.
+  </div>
+
   <div class="form-row" style="grid-template-columns: 2fr 1fr 2fr;">
     <div class="form-group">
       <label data-i18n="returnFrom">Powrót z <span class="label-hint" data-i18n="autoFilled">(auto)</span></label>
@@ -1469,6 +1493,10 @@ const TRANSLATIONS = {
     searchCountry: "Wpisz nazwę kraju...",
     departureDate: "Data wyjazdu",
     returnDate: "Data powrotu",
+    hasPrivateDays: "Pobyt obejmuje dni prywatne (na własny koszt)",
+    businessStartDate: "Początek delegacji służbowej",
+    businessEndDate: "Koniec delegacji służbowej",
+    privateDaysHint: "Diety, noclegi i transport lokalny będą liczone tylko za okres delegacji służbowej.",
     returnFrom: "Powrót z",
     returnVia: "Przez",
     returnTo: "Do",
@@ -1622,6 +1650,10 @@ const TRANSLATIONS = {
     searchCountry: "Type country name...",
     departureDate: "Departure date",
     returnDate: "Return date",
+    hasPrivateDays: "Stay includes private days (at own expense)",
+    businessStartDate: "Business trip start",
+    businessEndDate: "Business trip end",
+    privateDaysHint: "Per diems, hotel, and local transport will be calculated only for the business trip period.",
     returnFrom: "Return from",
     returnVia: "Via",
     returnTo: "Return to",
@@ -2039,11 +2071,28 @@ function calculateCosts() {
   var dep = new Date(depDate), ret = new Date(retDate);
   if (ret <= dep) return null;
 
-  var diffMs = ret.getTime() - dep.getTime();
+  // Private days: use business dates for per diem/hotel/transport
+  var hasPrivate = document.getElementById('hasPrivateDays').checked;
+  var bizDep = dep, bizRet = ret;
+  if (hasPrivate) {
+    var bsVal = document.getElementById('businessStartDate').value;
+    var beVal = document.getElementById('businessEndDate').value;
+    if (bsVal && beVal) {
+      bizDep = new Date(bsVal);
+      bizRet = new Date(beVal);
+      if (bizRet <= bizDep) return null;
+    }
+  }
+
+  var diffMs = bizRet.getTime() - bizDep.getTime();
   var totalHours = diffMs / (1000 * 60 * 60);
   var fullDays = Math.floor(totalHours / 24);
   var effectiveDays = fullDays + 1;
   var nights = fullDays;
+
+  // Travel dates for travel allowance
+  var travelDiffMs = ret.getTime() - dep.getTime();
+  var travelFullDays = Math.floor(travelDiffMs / (1000 * 60 * 60 * 24));
 
   var DOMESTIC_RATE = 45, DOMESTIC_HOTEL = 900, DOMESTIC_TRANSPORT = 9;
   var perDiemRate = isDomestic ? DOMESTIC_RATE : RATES[country].perDiem;
@@ -2098,7 +2147,12 @@ function calculateCosts() {
     ticketCost: ticketCost,
     ticketCurr: ticketCurr,
     visaCost: visaCost,
-    visaCurr: visaCurr
+    visaCurr: visaCurr,
+    hasPrivateDays: hasPrivate,
+    depDate: depDate,
+    retDate: retDate,
+    businessStartDate: hasPrivate ? document.getElementById('businessStartDate').value : depDate,
+    businessEndDate: hasPrivate ? document.getElementById('businessEndDate').value : retDate
   };
 }
 
@@ -2187,7 +2241,7 @@ function formatInt(n) {
 
 
 // Recalc triggers
-['departureDate', 'returnDate', 'mealsProvided', 'mealBreakfast', 'mealLunch', 'mealDinner', 'hotelProvided', 'hotelCostPerNight', 'localTransportIncluded', 'ticketCost', 'ticketCurrency', 'visaCost', 'visaCurrency', 'requestAdvance', 'advanceCurrency', 'bankName', 'bankSwift', 'bankOwner', 'bankAccount'].forEach(function(id) {
+['departureDate', 'returnDate', 'hasPrivateDays', 'businessStartDate', 'businessEndDate', 'mealsProvided', 'mealBreakfast', 'mealLunch', 'mealDinner', 'hotelProvided', 'hotelCostPerNight', 'localTransportIncluded', 'ticketCost', 'ticketCurrency', 'visaCost', 'visaCurrency', 'requestAdvance', 'advanceCurrency', 'bankName', 'bankSwift', 'bankOwner', 'bankAccount'].forEach(function(id) {
   document.getElementById(id).addEventListener('change', function() { recalculate(); saveFormData(); });
 });
 
@@ -2207,6 +2261,57 @@ document.getElementById('departureDate').addEventListener('change', function() {
     ret.min = '';
   }
 });
+
+// ---- Private days toggle & business date constraints ----
+document.getElementById('hasPrivateDays').addEventListener('change', function() {
+  var show = this.checked;
+  document.getElementById('privateDaysRow').style.display = show ? '' : 'none';
+  document.getElementById('privateDaysHint').style.display = show ? '' : 'none';
+  if (show) {
+    constrainBusinessDates();
+    // Pre-fill business dates = travel dates if empty
+    var bs = document.getElementById('businessStartDate');
+    var be = document.getElementById('businessEndDate');
+    if (!bs.value) bs.value = document.getElementById('departureDate').value;
+    if (!be.value) be.value = document.getElementById('returnDate').value;
+  }
+  recalculate();
+  saveFormData();
+});
+
+function constrainBusinessDates() {
+  var dep = document.getElementById('departureDate').value;
+  var ret = document.getElementById('returnDate').value;
+  var bs = document.getElementById('businessStartDate');
+  var be = document.getElementById('businessEndDate');
+  if (dep) { bs.min = dep; if (bs.value && bs.value < dep) bs.value = dep; }
+  if (ret) { bs.max = ret; be.max = ret; if (bs.value && bs.value > ret) bs.value = ret; if (be.value && be.value > ret) be.value = ret; }
+  if (dep) { be.min = dep; if (be.value && be.value < dep) be.value = dep; }
+  // businessEnd >= businessStart
+  if (bs.value) { be.min = bs.value; if (be.value && be.value < bs.value) be.value = bs.value; }
+}
+
+document.getElementById('businessStartDate').addEventListener('change', function() {
+  constrainBusinessDates();
+  recalculate();
+  saveFormData();
+});
+document.getElementById('businessEndDate').addEventListener('change', function() {
+  constrainBusinessDates();
+  recalculate();
+  saveFormData();
+});
+
+// Also constrain business dates when travel dates change
+(function() {
+  var origDepHandler = document.getElementById('departureDate').onchange;
+  document.getElementById('departureDate').addEventListener('change', function() {
+    if (document.getElementById('hasPrivateDays').checked) constrainBusinessDates();
+  });
+  document.getElementById('returnDate').addEventListener('change', function() {
+    if (document.getElementById('hasPrivateDays').checked) constrainBusinessDates();
+  });
+})();
 
 document.getElementById('requestAdvance').addEventListener('change', function() {
   document.getElementById('advanceDetailsBlock').style.display = this.checked ? 'block' : 'none';
@@ -2475,6 +2580,10 @@ function restoreFormData() {
     document.getElementById('bankDetailsBlock').style.display = (advMethodR && advMethodR.value === 'konto') ? 'block' : 'none';
     setTimeout(function() { updateAdvanceSum(); updateMealMax(); }, 100);
     document.getElementById('extraFundingFields').style.display = document.getElementById('multipleFunding').checked ? 'block' : 'none';
+    // Restore private days visibility
+    var hasPriv = document.getElementById('hasPrivateDays').checked;
+    document.getElementById('privateDaysRow').style.display = hasPriv ? '' : 'none';
+    document.getElementById('privateDaysHint').style.display = hasPriv ? '' : 'none';
 
     if (data.selectedCountry) {
       var rate = RATES[data.selectedCountry];
@@ -2579,6 +2688,12 @@ function clearForm() {
   document.getElementById('hotelProvided').checked = false;
   document.getElementById('hotelCostPerNight').value = '';
   document.getElementById('hotelCostInputRow').style.display = '';
+  // Reset private days
+  document.getElementById('hasPrivateDays').checked = false;
+  document.getElementById('privateDaysRow').style.display = 'none';
+  document.getElementById('privateDaysHint').style.display = 'none';
+  document.getElementById('businessStartDate').value = '';
+  document.getElementById('businessEndDate').value = '';
   document.getElementById('ltYes').checked = true;
   document.getElementById('ltNo').checked = false;
   document.getElementById('localTransportIncluded').checked = true;
@@ -2677,6 +2792,15 @@ function validateFormFields() {
     var tg = document.getElementById('transportGroup');
     if (tg) tg.classList.remove('field-error');
   }
+  // Business dates check: if private days enabled, both dates required
+  if (document.getElementById('hasPrivateDays').checked) {
+    var bsEl = document.getElementById('businessStartDate');
+    var beEl = document.getElementById('businessEndDate');
+    if (!bsEl.value) { missing.push('businessStartDate'); bsEl.classList.add('field-error'); if (!firstMissingEl) firstMissingEl = bsEl; }
+    else bsEl.classList.remove('field-error');
+    if (!beEl.value) { missing.push('businessEndDate'); beEl.classList.add('field-error'); if (!firstMissingEl) firstMissingEl = beEl; }
+    else beEl.classList.remove('field-error');
+  }
   // Hotel cost check: if receipt mode selected, cost must be > 0
   var hotelModeEl = document.querySelector('input[name="hotelMode"]:checked');
   var hotelMode = hotelModeEl ? hotelModeEl.value : 'receipt';
@@ -2698,7 +2822,7 @@ function validateFormFields() {
       pl: {
         fullName: 'Imię i nazwisko', email: 'Email', email_format: 'Email (nieprawidłowy format)',
         unitName: 'Nazwa jednostki UW', projectNumber: 'Źródło finansowania',
-        departureDate: 'Data wyjazdu', returnDate: 'Data powrotu',
+        departureDate: 'Data wyjazdu', returnDate: 'Data powrotu', businessStartDate: 'Początek delegacji służbowej', businessEndDate: 'Koniec delegacji służbowej',
         destinationCity: 'Miejsce docelowe', purposeOfTravel: 'Cel wyjazdu',
         hostInstitution: 'Instytucja przyjmująca', selectedCountry: 'Kraj (wybierz z listy)',
         transport: 'Środek transportu', returnDate_order: 'Data powrotu musi być późniejsza niż wyjazdu',
@@ -2709,7 +2833,7 @@ function validateFormFields() {
       en: {
         fullName: 'Full name', email: 'Email', email_format: 'Email (invalid format)',
         unitName: 'Unit name', projectNumber: 'Funding source',
-        departureDate: 'Departure date', returnDate: 'Return date',
+        departureDate: 'Departure date', returnDate: 'Return date', businessStartDate: 'Business trip start', businessEndDate: 'Business trip end',
         destinationCity: 'Destination', purposeOfTravel: 'Purpose of travel',
         hostInstitution: 'Host institution', selectedCountry: 'Country (select from list)',
         transport: 'Transport mode', returnDate_order: 'Return date must be after departure date',
@@ -3029,7 +3153,23 @@ async function exportDocx() {
     ]
   }));
 
-  // Spacer removed for compactness
+  // Business dates row (if private days)
+  var hasPriv = document.getElementById('hasPrivateDays').checked;
+  if (hasPriv) {
+    var bsDate = document.getElementById('businessStartDate').value || '';
+    var beDate = document.getElementById('businessEndDate').value || '';
+    mainRows.push(new TableRow({
+      children: [
+        cell([para([txt(currentLang === 'pl' ? 'Okres delegacji służbowej:' : 'Business trip period:', { size: 14, bold: true })])], { columnSpan: 4, borders: b }),
+        cell([para([txt(fmtDate(bsDate) + ' – ' + fmtDate(beDate), { size: 16 })])], { columnSpan: 4, borders: b })
+      ]
+    }));
+    mainRows.push(new TableRow({
+      children: [
+        cell([para([txt(currentLang === 'pl' ? 'Uwaga: pobyt obejmuje dni prywatne (na koszt własny). Diety i noclegi liczone za okres delegacji.' : 'Note: stay includes private days (at own expense). Per diems and hotel calculated for business period only.', { size: 13, italics: true })])], { columnSpan: 8, borders: bNone })
+      ]
+    }));
+  }
 
   // ====== COST TABLE HEADER ======
   mainRows.push(new TableRow({
@@ -3590,6 +3730,15 @@ function printForm() {
   h += '<td class="label">przez</td>';
   h += '<td colspan="3" class="label">do</td>';
   h += '<td colspan="2" class="label">dnia</td></tr>';
+
+  // Business dates row (if private days)
+  if (document.getElementById('hasPrivateDays').checked) {
+    var bsDate = document.getElementById('businessStartDate').value || '';
+    var beDate = document.getElementById('businessEndDate').value || '';
+    h += '<tr><td colspan="4" style="font-weight:bold;font-size:8pt;">Okres delegacji służbowej:</td>';
+    h += '<td colspan="4">' + fmtDate(bsDate) + ' – ' + fmtDate(beDate) + '</td></tr>';
+    h += '<tr><td colspan="8" class="label" style="font-style:italic;">Pobyt obejmuje dni prywatne. Diety i noclegi liczone za okres delegacji.</td></tr>';
+  }
 
   // Cost table header
   h += '<tr><td></td><td colspan="2" class="center bold" style="font-size:8pt;">Źródła finansowania wyjazdu</td>';
