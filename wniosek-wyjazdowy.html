@@ -1031,6 +1031,7 @@ textarea {
     <div class="form-group full">
       <label data-i18n="projectNumber">Nr finansowo-księgowy projektu</label>
       <input type="text" id="projectNumber" required data-save="projectNumber" placeholder="Numer nadany przez Kwesturę lub Biuro ds. Nauki">
+        <span class="field-hint" data-i18n="projectNumberHint">Numer przypisany do projektu/grantu w systemie finansowym UW — znajdziesz go w umowie grantowej lub u kierownika projektu</span>
     </div>
   </div>
 
@@ -1228,7 +1229,7 @@ textarea {
     <div id="bankDetailsBlock">
       <div class="form-row">
         <div class="form-group">
-          <label data-i18n="bankName">Nazwa banku</label>
+          <label data-i18n="bankName">Nazwa banku <span class="bank-req" style="color:var(--accent);">*</span></label>
           <input type="text" id="bankName" data-save="bankName" placeholder="np. mBank">
         </div>
         <div class="form-group">
@@ -1237,13 +1238,13 @@ textarea {
           <span class="field-hint" data-i18n="swiftHint">Opcjonalne — tylko przy zagranicznym koncie bankowym</span>
         </div>
         <div class="form-group">
-          <label data-i18n="bankOwner">Właściciel konta</label>
+          <label data-i18n="bankOwner">Właściciel konta <span class="bank-req" style="color:var(--accent);">*</span></label>
           <input type="text" id="bankOwner" data-save="bankOwner">
         </div>
       </div>
       <div class="form-row">
         <div class="form-group full">
-          <label data-i18n="bankAccount">Numer konta</label>
+          <label data-i18n="bankAccount">Numer konta <span class="bank-req" style="color:var(--accent);">*</span></label>
           <input type="text" id="bankAccount" data-save="bankAccount" placeholder="PL00 0000 0000 0000 0000 0000 0000">
         </div>
       </div>
@@ -1353,6 +1354,7 @@ const TRANSLATIONS = {
     autoFilled: "(auto)",
     sec4Title: "4. Źródło finansowania",
     projectNumber: "Nr finansowo-księgowy projektu *",
+    projectNumberHint: "Numer przypisany do projektu/grantu w systemie finansowym UW — znajdziesz go w umowie grantowej lub u kierownika projektu",
     ticketCost: "Bilety (kwota)",
     ticketCurrency: "Waluta biletów",
     visaCost: "Wiza (kwota)",
@@ -1489,6 +1491,7 @@ const TRANSLATIONS = {
     autoFilled: "(auto)",
     sec4Title: "4. Funding Source",
     projectNumber: "Financial project number",
+    projectNumberHint: "Number assigned to the project/grant in the UW financial system — check your grant agreement or ask the project PI",
     multipleFunding: "Trip funded from multiple sources",
     additionalSource: "Additional funding source",
     additionalAmount: "Amount from additional source",
@@ -2166,6 +2169,7 @@ function saveFormData() {
   });
   data._countrySearch = countrySearchInput.value;
   data._lang = currentLang;
+  data._version = 2;
   sessionStorage.setItem('ww_formData', JSON.stringify(data));
 }
 
@@ -2175,7 +2179,7 @@ function restoreFormData() {
   // Clear stale data from older versions
   try {
     var _tmp = JSON.parse(raw);
-    if ('advancePayment' in _tmp) { sessionStorage.removeItem('ww_formData'); return; }
+    if ('advancePayment' in _tmp || !_tmp._version || _tmp._version < 2) { sessionStorage.removeItem('ww_formData'); return; }
   } catch(e) { sessionStorage.removeItem('ww_formData'); return; }
   try {
     var data = JSON.parse(raw);
@@ -2184,7 +2188,7 @@ function restoreFormData() {
       if (!(key in data)) return;
       if (el.type === 'checkbox') el.checked = data[key];
       else if (el.type === 'radio') el.checked = (el.value === data[key]);
-      else el.value = data[key];
+      else { if (key === 'unitName' && !data[key]) return; el.value = data[key]; }
     });
     if (data._countrySearch) countrySearchInput.value = data._countrySearch;
     if (data._lang) setLang(data._lang);
@@ -2333,7 +2337,7 @@ function showToast(msg) {
 // ============================================================
 async function exportDocx() {
   // Validate required fields
-  var requiredIds = ['fullName', 'email', 'projectNumber', 'departureDate', 'returnDate', 'destinationCity', 'purposeOfTravel', 'hostInstitution'];
+  var requiredIds = ['fullName', 'email', 'unitName', 'projectNumber', 'departureDate', 'returnDate', 'destinationCity', 'purposeOfTravel', 'hostInstitution'];
   var t = TRANSLATIONS[currentLang];
   var missing = [];
   var firstMissingEl = null;
