@@ -2623,7 +2623,7 @@ async function exportDocx() {
   }
 
   function cell(content, opts) {
-    var o = Object.assign({ borders: b, verticalAlign: VerticalAlign.CENTER, margins: { top: 10, bottom: 10, left: 30, right: 30 } }, opts || {});
+    var o = Object.assign({ borders: b, verticalAlign: VerticalAlign.CENTER, margins: { top: 4, bottom: 4, left: 20, right: 20 } }, opts || {});
     if (typeof content === 'string') {
       // Handle multiline
       var lines = content.split('\n');
@@ -2637,11 +2637,11 @@ async function exportDocx() {
   }
 
   function labelCell(text, opts) {
-    return cell([para([txt(text, { size: 16, italics: true })], { spacing: { after: 0 } })], opts);
+    return cell([para([txt(text, { size: 14, italics: true })], { spacing: { after: 0 } })], opts);
   }
 
   function valueCell(text, opts) {
-    return cell([para([txt(text, { bold: false, size: 20 })])], opts);
+    return cell([para([txt(text, { bold: false, size: 18 })])], opts);
   }
 
   // ---------- BUILD DOCUMENT ----------
@@ -2661,9 +2661,9 @@ async function exportDocx() {
   // R1: Name value | empty | Date value
   mainRows.push(new TableRow({
     children: [
-      cell([para([txt(fullName, { bold: true, size: 20 })])], { columnSpan: 5, borders: bBottom }),
+      cell([para([txt(fullName, { bold: true, size: 18 })])], { columnSpan: 5, borders: bBottom }),
       cell([para([txt('')])], { borders: bNone }),
-      cell([para([txt(fmtDate(submissionDate), { size: 20 })])], { columnSpan: 2, borders: bBottom })
+      cell([para([txt(fmtDate(submissionDate), { size: 18 })])], { columnSpan: 2, borders: bBottom })
     ]
   }));
 
@@ -2680,16 +2680,16 @@ async function exportDocx() {
   var statusLine = 'PRACOWNIK ' + chk(status, 'pracownik') + '     DOKTORANT ' + chk(status, 'doktorant') + '     STUDENT ' + chk(status, 'student') + '     INNA OSOBA ' + chk(status, 'inna');
   mainRows.push(new TableRow({
     children: [
-      cell([para([txt(statusLine, { size: 20 })])], { columnSpan: 8, borders: b })
+      cell([para([txt(statusLine, { size: 18 })])], { columnSpan: 8, borders: b })
     ]
   }));
 
   // R4: Unit name + tel. sluzbowy
   mainRows.push(new TableRow({
     children: [
-      cell([para([txt(unitName || '', { size: 20 })])], { columnSpan: 4, borders: b, rowSpan: 3 }),
+      cell([para([txt(unitName || '', { size: 18 })])], { columnSpan: 4, borders: b, rowSpan: 3 }),
       cell([para([txt("tel. służbowy:", { size: 16, italics: true })])], { columnSpan: 2, borders: bNone }),
-      cell([para([txt(workPhone, { size: 20 })])], { columnSpan: 2, borders: bBottom })
+      cell([para([txt(workPhone, { size: 18 })])], { columnSpan: 2, borders: bBottom })
     ]
   }));
 
@@ -2697,7 +2697,7 @@ async function exportDocx() {
   mainRows.push(new TableRow({
     children: [
       cell([para([txt("tel. prywatny:", { size: 16, italics: true })])], { columnSpan: 2, borders: bNone }),
-      cell([para([txt(privatePhone, { size: 20 })])], { columnSpan: 2, borders: bBottom })
+      cell([para([txt(privatePhone, { size: 18 })])], { columnSpan: 2, borders: bBottom })
     ]
   }));
 
@@ -2705,7 +2705,7 @@ async function exportDocx() {
   mainRows.push(new TableRow({
     children: [
       cell([para([txt("e-mail:", { size: 16, italics: true })])], { columnSpan: 2, borders: bNone }),
-      cell([para([txt(email, { size: 20 })])], { columnSpan: 2, borders: bBottom })
+      cell([para([txt(email, { size: 18 })])], { columnSpan: 2, borders: bBottom })
     ]
   }));
 
@@ -2721,7 +2721,7 @@ async function exportDocx() {
   var transportLine = 'Środek podróży:   samolot ' + chkTransport('samolot') + '   pociąg ' + chkTransport('pociag') + '   autobus ' + chkTransport('autobus') + '   prom ' + chkTransport('prom') + '   samochód ' + chkTransport('samochod');
   mainRows.push(new TableRow({
     children: [
-      cell([para([txt(transportLine, { size: 20 })])], { columnSpan: 8, borders: b })
+      cell([para([txt(transportLine, { size: 18 })])], { columnSpan: 8, borders: b })
     ]
   }));
 
@@ -2729,7 +2729,7 @@ async function exportDocx() {
   mainRows.push(new TableRow({
     children: [
       cell([para([txt("Instytucja przyjmująca\n(pełna nazwa, państwo)", { size: 16, italics: true })])], { columnSpan: 2, borders: b }),
-      cell([para([txt(hostInstitution, { size: 20 })])], { columnSpan: 6, borders: b })
+      cell([para([txt(hostInstitution, { size: 18 })])], { columnSpan: 6, borders: b })
     ]
   }));
 
@@ -2737,24 +2737,24 @@ async function exportDocx() {
   mainRows.push(new TableRow({
     children: [
       cell([para([txt("Cel wyjazdu", { size: 16, italics: true })])], { columnSpan: 2, borders: b }),
-      cell([para([txt(purpose, { size: 20 })])], { columnSpan: 6, borders: b })
+      cell([para([txt(purpose, { size: 18 })])], { columnSpan: 6, borders: b })
     ]
   }));
 
   // R10: Route header
   mainRows.push(new TableRow({
     children: [
-      cell([para([txt("Trasa i data podróży:", { bold: true, size: 20 })])], { columnSpan: 8, borders: b })
+      cell([para([txt("Trasa i data podróży:", { bold: true, size: 18 })])], { columnSpan: 8, borders: b })
     ]
   }));
 
   // R11: Departure values
   mainRows.push(new TableRow({
     children: [
-      cell([para([txt(departureFrom, { size: 20 })])], { columnSpan: 2, borders: b }),
-      cell([para([txt(via || '—', { size: 20 })])], { borders: b }),
-      cell([para([txt(destDisplay, { size: 20 })])], { columnSpan: 3, borders: b }),
-      cell([para([txt(fmtDate(depDate), { size: 20 })])], { columnSpan: 2, borders: b })
+      cell([para([txt(departureFrom, { size: 18 })])], { columnSpan: 2, borders: b }),
+      cell([para([txt(via || '—', { size: 18 })])], { borders: b }),
+      cell([para([txt(destDisplay, { size: 18 })])], { columnSpan: 3, borders: b }),
+      cell([para([txt(fmtDate(depDate), { size: 18 })])], { columnSpan: 2, borders: b })
     ]
   }));
 
@@ -2771,10 +2771,10 @@ async function exportDocx() {
   // R13: Return values
   mainRows.push(new TableRow({
     children: [
-      cell([para([txt(returnFrom || destDisplay, { size: 20 })])], { columnSpan: 2, borders: b }),
-      cell([para([txt(returnVia || '—', { size: 20 })])], { borders: b }),
-      cell([para([txt(returnTo || departureFrom, { size: 20 })])], { columnSpan: 3, borders: b }),
-      cell([para([txt(fmtDate(retDate), { size: 20 })])], { columnSpan: 2, borders: b })
+      cell([para([txt(returnFrom || destDisplay, { size: 18 })])], { columnSpan: 2, borders: b }),
+      cell([para([txt(returnVia || '—', { size: 18 })])], { borders: b }),
+      cell([para([txt(returnTo || departureFrom, { size: 18 })])], { columnSpan: 3, borders: b }),
+      cell([para([txt(fmtDate(retDate), { size: 18 })])], { columnSpan: 2, borders: b })
     ]
   }));
 
@@ -2788,12 +2788,7 @@ async function exportDocx() {
     ]
   }));
 
-  // Spacer
-  mainRows.push(new TableRow({
-    children: [
-      cell([para([txt('')])], { columnSpan: 8, borders: bNone })
-    ]
-  }));
+  // Spacer removed for compactness
 
   // ====== COST TABLE HEADER ======
   mainRows.push(new TableRow({
@@ -2814,8 +2809,8 @@ async function exportDocx() {
       cell([para([txt('')])], { columnSpan: 2, borders: b }),
       cell([para([txt('')])], { borders: b }),
       cell([para([txt('')])], { borders: b }),
-      cell([para([txt(ticketCost > 0 ? formatNum(ticketCost) : '', { size: 20, bold: ticketCost > 0 })], { alignment: AlignmentType.RIGHT })], { columnSpan: 2, borders: b }),
-      cell([para([txt(ticketCost > 0 ? ticketCurr : '', { size: 20 })], { alignment: AlignmentType.CENTER })], { borders: b })
+      cell([para([txt(ticketCost > 0 ? formatNum(ticketCost) : '', { size: 18, bold: ticketCost > 0 })], { alignment: AlignmentType.RIGHT })], { columnSpan: 2, borders: b }),
+      cell([para([txt(ticketCost > 0 ? ticketCurr : '', { size: 18 })], { alignment: AlignmentType.CENTER })], { borders: b })
     ]
   }));
 
@@ -2826,8 +2821,8 @@ async function exportDocx() {
       cell([para([txt('')])], { columnSpan: 2, borders: b }),
       cell([para([txt('')])], { borders: b }),
       cell([para([txt('')])], { borders: b }),
-      cell([para([txt(visaCost > 0 ? formatNum(visaCost) : '', { size: 20, bold: visaCost > 0 })], { alignment: AlignmentType.RIGHT })], { columnSpan: 2, borders: b }),
-      cell([para([txt(visaCost > 0 ? visaCurr : '', { size: 20 })], { alignment: AlignmentType.CENTER })], { borders: b })
+      cell([para([txt(visaCost > 0 ? formatNum(visaCost) : '', { size: 18, bold: visaCost > 0 })], { alignment: AlignmentType.RIGHT })], { columnSpan: 2, borders: b }),
+      cell([para([txt(visaCost > 0 ? visaCurr : '', { size: 18 })], { alignment: AlignmentType.CENTER })], { borders: b })
     ]
   }));
 
@@ -2837,10 +2832,10 @@ async function exportDocx() {
       children: [
         cell(row.label, { borders: b }),
         cell([para([txt('')])], { columnSpan: 2, borders: b }),
-        cell([para([txt(row.count, { size: 20 })], { alignment: AlignmentType.CENTER })], { borders: b }),
-        cell([para([txt(row.rate, { size: 20 })], { alignment: AlignmentType.RIGHT })], { borders: b }),
-        cell([para([txt(row.amount, { size: 20, bold: true })], { alignment: AlignmentType.RIGHT })], { columnSpan: 2, borders: b }),
-        cell([para([txt(curr, { size: 20 })], { alignment: AlignmentType.CENTER })], { borders: b })
+        cell([para([txt(row.count, { size: 18 })], { alignment: AlignmentType.CENTER })], { borders: b }),
+        cell([para([txt(row.rate, { size: 18 })], { alignment: AlignmentType.RIGHT })], { borders: b }),
+        cell([para([txt(row.amount, { size: 18, bold: true })], { alignment: AlignmentType.RIGHT })], { columnSpan: 2, borders: b }),
+        cell([para([txt(curr, { size: 18 })], { alignment: AlignmentType.CENTER })], { borders: b })
       ]
     }));
   });
@@ -2851,9 +2846,9 @@ async function exportDocx() {
       cell([para([txt('')])], { borders: b }),
       cell([para([txt("nr projektu " + projectNumber, { size: 16 })])], { columnSpan: 2, borders: b }),
       cell([para([txt("Zaliczka: " + (advanceAmt > 0 ? formatNum(advanceAmt) + ' ' + advanceCurr : ''), { size: 16, italics: true })], { alignment: AlignmentType.CENTER })], { borders: b }),
-      cell([para([txt("Łącznie:", { bold: true, size: 20 })], { alignment: AlignmentType.RIGHT })], { borders: b }),
-      cell([para([txt(grandTotal, { bold: true, size: 20 })], { alignment: AlignmentType.RIGHT })], { columnSpan: 2, borders: b }),
-      cell([para([txt(curr, { bold: true, size: 20 })], { alignment: AlignmentType.CENTER })], { borders: b })
+      cell([para([txt("Łącznie:", { bold: true, size: 18 })], { alignment: AlignmentType.RIGHT })], { borders: b }),
+      cell([para([txt(grandTotal, { bold: true, size: 18 })], { alignment: AlignmentType.RIGHT })], { columnSpan: 2, borders: b }),
+      cell([para([txt(curr, { bold: true, size: 18 })], { alignment: AlignmentType.CENTER })], { borders: b })
     ]
   }));
 
@@ -2881,18 +2876,18 @@ async function exportDocx() {
     advRows.push(new TableRow({
       children: [
         cell([para([
-          txt("Proszę o wypłatę zaliczki: ", { bold: true, size: 20 }),
-          txt("a) w kasie głównej UW", { size: 20 })
+          txt("Proszę o wypłatę zaliczki: ", { bold: true, size: 18 }),
+          txt("a) w kasie głównej UW", { size: 18 })
         ])], { columnSpan: 3, borders: b }),
         cell([
-          para([txt("w PLN  " + ((!isCash || advCurr2 === 'PLN') && isCash ? "☒" : "☐"), { size: 20 })]),
-          para([txt("w walucie " + advCurr2 + "  " + ((!isCash || advCurr2 !== 'PLN') && isCash ? "☒" : "☐"), { size: 20 })])
+          para([txt("w PLN  " + ((!isCash || advCurr2 === 'PLN') && isCash ? "☒" : "☐"), { size: 18 })]),
+          para([txt("w walucie " + advCurr2 + "  " + ((!isCash || advCurr2 !== 'PLN') && isCash ? "☒" : "☐"), { size: 18 })])
         ], { borders: b }),
-        cell([para([txt("b) na konto", { size: 20 })], { alignment: AlignmentType.CENTER })], { borders: b }),
-        cell([para([txt(!isCash ? "X" : "", { bold: true, size: 20 })], { alignment: AlignmentType.CENTER })], { borders: b }),
+        cell([para([txt("b) na konto", { size: 18 })], { alignment: AlignmentType.CENTER })], { borders: b }),
+        cell([para([txt(!isCash ? "X" : "", { bold: true, size: 18 })], { alignment: AlignmentType.CENTER })], { borders: b }),
         cell([
-          para([txt("w PLN  " + (!isCash && advCurr2 === 'PLN' ? "☒" : "☐"), { size: 20 })]),
-          para([txt("w walucie " + advCurr2 + "  " + (!isCash && advCurr2 !== 'PLN' ? "☒" : "☐"), { size: 20 })])
+          para([txt("w PLN  " + (!isCash && advCurr2 === 'PLN' ? "☒" : "☐"), { size: 18 })]),
+          para([txt("w walucie " + advCurr2 + "  " + (!isCash && advCurr2 !== 'PLN' ? "☒" : "☐"), { size: 18 })])
         ], { columnSpan: 2, borders: b })
       ]
     }));
@@ -2920,7 +2915,7 @@ async function exportDocx() {
   }
 
   // ====== SIGNATURES ======
-  children.push(para([txt('')], { spacing: { after: 80 } }));
+  children.push(para([txt('')], { spacing: { after: 40 } }));
 
   var sigTable = new Table({
     width: { size: 100, type: WidthType.PERCENTAGE },
@@ -2958,7 +2953,7 @@ async function exportDocx() {
   children.push(sigTable);
 
   // ====== DECLARATION ======
-  children.push(para([txt('')], { spacing: { after: 80 } }));
+  children.push(para([txt('')], { spacing: { after: 40 } }));
 
   var declText = "Z otrzymanej zaliczki zobowiązuję się rozliczyć w ciągu 14 dni od powrotu do kraju. " +
     "Jednocześnie upoważniam Uniwersytet do potrącenia kwoty nierozliczonej zaliczki " +
@@ -2966,7 +2961,7 @@ async function exportDocx() {
     "Oświadczam, że posiadam ubezpieczenie kosztów leczenia i następstw nieszczęśliwych " +
     "wypadków na czas trwania wyjazdu.";
 
-  children.push(para([txt(declText, { size: 16, italics: true })], { spacing: { after: 40 } }));
+  children.push(para([txt(declText, { size: 14, italics: true })], { spacing: { after: 40 } }));
   children.push(para([txt('')], { spacing: { after: 0 } }));
   children.push(para([txt('')], { spacing: { after: 0 } }));
   children.push(para([txt("...........................................................................", { size: 18 })], { alignment: AlignmentType.LEFT }));
