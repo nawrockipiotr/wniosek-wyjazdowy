@@ -134,7 +134,7 @@ body {
 
 .lang-btn {
   padding: 5px 14px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   font-family: 'Titillium Web', sans-serif;
   border: none;
@@ -310,7 +310,7 @@ body {
 .form-group label .label-hint {
   font-weight: 400;
   color: var(--text-dim);
-  font-size: 12px;
+  font-size: 14px;
 }
 
 input[type="text"],
@@ -358,7 +358,7 @@ textarea {
   min-width: 100px;
   padding: 10px 16px;
   text-align: center;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   border-right: 1px solid var(--border);
@@ -414,7 +414,7 @@ textarea {
   padding: 10px 14px;
   text-align: left;
   font-weight: 600;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .calc-table th:first-child { border-radius: 10px 0 0 0; }
@@ -432,7 +432,7 @@ textarea {
 
 .calc-table tr.total-row td {
   font-weight: 700;
-  font-size: 15px;
+  font-size: 16px;
   background: var(--accent-dim);
   color: var(--accent);
   border-top: 2px solid var(--accent);
@@ -447,7 +447,7 @@ textarea {
   gap: 6px;
   background: var(--accent-teal-dim);
   color: var(--accent-teal);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   padding: 4px 12px;
   border-radius: 6px;
@@ -527,7 +527,7 @@ textarea {
 
 .country-option {
   padding: 9px 14px;
-  font-size: 13px;
+  font-size: 14px;
   cursor: pointer;
   transition: background 0.15s;
   display: flex;
@@ -540,7 +540,7 @@ textarea {
 
 .country-option .rate-hint {
   color: var(--text-dim);
-  font-size: 12px;
+  font-size: 14px;
   font-family: 'JetBrains Mono', monospace;
 }
 
@@ -554,7 +554,7 @@ textarea {
 .advanced-section summary {
   padding: 12px 16px;
   font-weight: 600;
-  font-size: 13px;
+  font-size: 14px;
   cursor: pointer;
   color: var(--accent-teal);
   list-style: none;
@@ -600,13 +600,13 @@ textarea {
 }
 
 .meal-card label {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
 }
 
 .meal-card .reduction {
-  font-size: 11px;
+  font-size: 14px;
   color: var(--text-dim);
   margin-top: 4px;
   font-family: 'JetBrains Mono', monospace;
@@ -2607,7 +2607,7 @@ async function exportDocx() {
   }
 
   function cell(content, opts) {
-    var o = Object.assign({ borders: b, verticalAlign: VerticalAlign.CENTER }, opts || {});
+    var o = Object.assign({ borders: b, verticalAlign: VerticalAlign.CENTER, margins: { top: 20, bottom: 20, left: 40, right: 40 } }, opts || {});
     if (typeof content === 'string') {
       // Handle multiline
       var lines = content.split('\n');
@@ -2625,14 +2625,14 @@ async function exportDocx() {
   }
 
   function valueCell(text, opts) {
-    return cell([para([txt(text, { bold: false })])], opts);
+    return cell([para([txt(text, { bold: false, size: 20 })])], opts);
   }
 
   // ---------- BUILD DOCUMENT ----------
   var children = [];
 
   // Title
-  children.push(para([txt("Załącznik nr 1", { size: 18, italics: true })], { alignment: AlignmentType.RIGHT, spacing: { after: 100 } }));
+  children.push(para([txt("Załącznik nr 1", { size: 18, italics: true })], { alignment: AlignmentType.RIGHT, spacing: { before: 400, after: 100 } }));
   children.push(para([txt("WNIOSEK WYJAZDOWY", { bold: true, size: 28 })], { alignment: AlignmentType.CENTER, spacing: { after: 40 } }));
   children.push(para([txt("Po czytelnym wypełnieniu formularza należy przekazać go do Kwestury.", { size: 16, italics: true })], { alignment: AlignmentType.CENTER, spacing: { after: 200 } }));
 
@@ -2645,7 +2645,7 @@ async function exportDocx() {
   // R1: Name value | empty | Date value
   mainRows.push(new TableRow({
     children: [
-      cell([para([txt(fullName, { bold: true, size: 22 })])], { columnSpan: 5, borders: bBottom }),
+      cell([para([txt(fullName, { bold: true, size: 20 })])], { columnSpan: 5, borders: bBottom }),
       cell([para([txt('')])], { borders: bNone }),
       cell([para([txt(fmtDate(submissionDate), { size: 20 })])], { columnSpan: 2, borders: bBottom })
     ]
@@ -2664,16 +2664,16 @@ async function exportDocx() {
   var statusLine = 'PRACOWNIK ' + chk(status, 'pracownik') + '     DOKTORANT ' + chk(status, 'doktorant') + '     STUDENT ' + chk(status, 'student') + '     INNA OSOBA ' + chk(status, 'inna');
   mainRows.push(new TableRow({
     children: [
-      cell([para([txt(statusLine, { size: 18 })])], { columnSpan: 8, borders: b })
+      cell([para([txt(statusLine, { size: 20 })])], { columnSpan: 8, borders: b })
     ]
   }));
 
   // R4: Unit name + tel. sluzbowy
   mainRows.push(new TableRow({
     children: [
-      cell([para([txt(unitName || '', { size: 18 })])], { columnSpan: 4, borders: b, rowSpan: 3 }),
+      cell([para([txt(unitName || '', { size: 20 })])], { columnSpan: 4, borders: b, rowSpan: 3 }),
       cell([para([txt("tel. służbowy:", { size: 16, italics: true })])], { columnSpan: 2, borders: bNone }),
-      cell([para([txt(workPhone, { size: 18 })])], { columnSpan: 2, borders: bBottom })
+      cell([para([txt(workPhone, { size: 20 })])], { columnSpan: 2, borders: bBottom })
     ]
   }));
 
@@ -2681,7 +2681,7 @@ async function exportDocx() {
   mainRows.push(new TableRow({
     children: [
       cell([para([txt("tel. prywatny:", { size: 16, italics: true })])], { columnSpan: 2, borders: bNone }),
-      cell([para([txt(privatePhone, { size: 18 })])], { columnSpan: 2, borders: bBottom })
+      cell([para([txt(privatePhone, { size: 20 })])], { columnSpan: 2, borders: bBottom })
     ]
   }));
 
@@ -2689,7 +2689,7 @@ async function exportDocx() {
   mainRows.push(new TableRow({
     children: [
       cell([para([txt("e-mail:", { size: 16, italics: true })])], { columnSpan: 2, borders: bNone }),
-      cell([para([txt(email, { size: 18 })])], { columnSpan: 2, borders: bBottom })
+      cell([para([txt(email, { size: 20 })])], { columnSpan: 2, borders: bBottom })
     ]
   }));
 
@@ -2705,7 +2705,7 @@ async function exportDocx() {
   var transportLine = 'Środek podróży:   samolot ' + chkTransport('samolot') + '   pociąg ' + chkTransport('pociag') + '   autobus ' + chkTransport('autobus') + '   prom ' + chkTransport('prom') + '   samochód ' + chkTransport('samochod');
   mainRows.push(new TableRow({
     children: [
-      cell([para([txt(transportLine, { size: 18 })])], { columnSpan: 8, borders: b })
+      cell([para([txt(transportLine, { size: 20 })])], { columnSpan: 8, borders: b })
     ]
   }));
 
@@ -2713,7 +2713,7 @@ async function exportDocx() {
   mainRows.push(new TableRow({
     children: [
       cell([para([txt("Instytucja przyjmująca\n(pełna nazwa, państwo)", { size: 16, italics: true })])], { columnSpan: 2, borders: b }),
-      cell([para([txt(hostInstitution, { size: 18 })])], { columnSpan: 6, borders: b })
+      cell([para([txt(hostInstitution, { size: 20 })])], { columnSpan: 6, borders: b })
     ]
   }));
 
@@ -2721,24 +2721,24 @@ async function exportDocx() {
   mainRows.push(new TableRow({
     children: [
       cell([para([txt("Cel wyjazdu", { size: 16, italics: true })])], { columnSpan: 2, borders: b }),
-      cell([para([txt(purpose, { size: 18 })])], { columnSpan: 6, borders: b })
+      cell([para([txt(purpose, { size: 20 })])], { columnSpan: 6, borders: b })
     ]
   }));
 
   // R10: Route header
   mainRows.push(new TableRow({
     children: [
-      cell([para([txt("Trasa i data podróży:", { bold: true, size: 18 })])], { columnSpan: 8, borders: b })
+      cell([para([txt("Trasa i data podróży:", { bold: true, size: 20 })])], { columnSpan: 8, borders: b })
     ]
   }));
 
   // R11: Departure values
   mainRows.push(new TableRow({
     children: [
-      cell([para([txt(departureFrom, { size: 18 })])], { columnSpan: 2, borders: b }),
-      cell([para([txt(via || '—', { size: 18 })])], { borders: b }),
-      cell([para([txt(destDisplay, { size: 18 })])], { columnSpan: 3, borders: b }),
-      cell([para([txt(fmtDate(depDate), { size: 18 })])], { columnSpan: 2, borders: b })
+      cell([para([txt(departureFrom, { size: 20 })])], { columnSpan: 2, borders: b }),
+      cell([para([txt(via || '—', { size: 20 })])], { borders: b }),
+      cell([para([txt(destDisplay, { size: 20 })])], { columnSpan: 3, borders: b }),
+      cell([para([txt(fmtDate(depDate), { size: 20 })])], { columnSpan: 2, borders: b })
     ]
   }));
 
@@ -2755,10 +2755,10 @@ async function exportDocx() {
   // R13: Return values
   mainRows.push(new TableRow({
     children: [
-      cell([para([txt(returnFrom || destDisplay, { size: 18 })])], { columnSpan: 2, borders: b }),
-      cell([para([txt(returnVia || '—', { size: 18 })])], { borders: b }),
-      cell([para([txt(returnTo || departureFrom, { size: 18 })])], { columnSpan: 3, borders: b }),
-      cell([para([txt(fmtDate(retDate), { size: 18 })])], { columnSpan: 2, borders: b })
+      cell([para([txt(returnFrom || destDisplay, { size: 20 })])], { columnSpan: 2, borders: b }),
+      cell([para([txt(returnVia || '—', { size: 20 })])], { borders: b }),
+      cell([para([txt(returnTo || departureFrom, { size: 20 })])], { columnSpan: 3, borders: b }),
+      cell([para([txt(fmtDate(retDate), { size: 20 })])], { columnSpan: 2, borders: b })
     ]
   }));
 
@@ -2798,8 +2798,8 @@ async function exportDocx() {
       cell([para([txt('')])], { columnSpan: 2, borders: b }),
       cell([para([txt('')])], { borders: b }),
       cell([para([txt('')])], { borders: b }),
-      cell([para([txt(ticketCost > 0 ? formatNum(ticketCost) : '', { size: 18, bold: ticketCost > 0 })], { alignment: AlignmentType.RIGHT })], { columnSpan: 2, borders: b }),
-      cell([para([txt(ticketCost > 0 ? ticketCurr : '', { size: 18 })], { alignment: AlignmentType.CENTER })], { borders: b })
+      cell([para([txt(ticketCost > 0 ? formatNum(ticketCost) : '', { size: 20, bold: ticketCost > 0 })], { alignment: AlignmentType.RIGHT })], { columnSpan: 2, borders: b }),
+      cell([para([txt(ticketCost > 0 ? ticketCurr : '', { size: 20 })], { alignment: AlignmentType.CENTER })], { borders: b })
     ]
   }));
 
@@ -2810,8 +2810,8 @@ async function exportDocx() {
       cell([para([txt('')])], { columnSpan: 2, borders: b }),
       cell([para([txt('')])], { borders: b }),
       cell([para([txt('')])], { borders: b }),
-      cell([para([txt(visaCost > 0 ? formatNum(visaCost) : '', { size: 18, bold: visaCost > 0 })], { alignment: AlignmentType.RIGHT })], { columnSpan: 2, borders: b }),
-      cell([para([txt(visaCost > 0 ? visaCurr : '', { size: 18 })], { alignment: AlignmentType.CENTER })], { borders: b })
+      cell([para([txt(visaCost > 0 ? formatNum(visaCost) : '', { size: 20, bold: visaCost > 0 })], { alignment: AlignmentType.RIGHT })], { columnSpan: 2, borders: b }),
+      cell([para([txt(visaCost > 0 ? visaCurr : '', { size: 20 })], { alignment: AlignmentType.CENTER })], { borders: b })
     ]
   }));
 
@@ -2821,10 +2821,10 @@ async function exportDocx() {
       children: [
         cell(row.label, { borders: b }),
         cell([para([txt('')])], { columnSpan: 2, borders: b }),
-        cell([para([txt(row.count, { size: 18 })], { alignment: AlignmentType.CENTER })], { borders: b }),
-        cell([para([txt(row.rate, { size: 18 })], { alignment: AlignmentType.RIGHT })], { borders: b }),
-        cell([para([txt(row.amount, { size: 18, bold: true })], { alignment: AlignmentType.RIGHT })], { columnSpan: 2, borders: b }),
-        cell([para([txt(curr, { size: 18 })], { alignment: AlignmentType.CENTER })], { borders: b })
+        cell([para([txt(row.count, { size: 20 })], { alignment: AlignmentType.CENTER })], { borders: b }),
+        cell([para([txt(row.rate, { size: 20 })], { alignment: AlignmentType.RIGHT })], { borders: b }),
+        cell([para([txt(row.amount, { size: 20, bold: true })], { alignment: AlignmentType.RIGHT })], { columnSpan: 2, borders: b }),
+        cell([para([txt(curr, { size: 20 })], { alignment: AlignmentType.CENTER })], { borders: b })
       ]
     }));
   });
@@ -2835,9 +2835,9 @@ async function exportDocx() {
       cell([para([txt('')])], { borders: b }),
       cell([para([txt("nr projektu " + projectNumber, { size: 16 })])], { columnSpan: 2, borders: b }),
       cell([para([txt("Zaliczka: " + (advanceAmt > 0 ? formatNum(advanceAmt) + ' ' + advanceCurr : ''), { size: 16, italics: true })], { alignment: AlignmentType.CENTER })], { borders: b }),
-      cell([para([txt("Łącznie:", { bold: true, size: 18 })], { alignment: AlignmentType.RIGHT })], { borders: b }),
+      cell([para([txt("Łącznie:", { bold: true, size: 20 })], { alignment: AlignmentType.RIGHT })], { borders: b }),
       cell([para([txt(grandTotal, { bold: true, size: 20 })], { alignment: AlignmentType.RIGHT })], { columnSpan: 2, borders: b }),
-      cell([para([txt(curr, { bold: true, size: 18 })], { alignment: AlignmentType.CENTER })], { borders: b })
+      cell([para([txt(curr, { bold: true, size: 20 })], { alignment: AlignmentType.CENTER })], { borders: b })
     ]
   }));
 
@@ -2865,18 +2865,18 @@ async function exportDocx() {
     advRows.push(new TableRow({
       children: [
         cell([para([
-          txt("Proszę o wypłatę zaliczki: ", { bold: true, size: 18 }),
-          txt("a) w kasie głównej UW", { size: 18 })
+          txt("Proszę o wypłatę zaliczki: ", { bold: true, size: 20 }),
+          txt("a) w kasie głównej UW", { size: 20 })
         ])], { columnSpan: 3, borders: b }),
         cell([
-          para([txt("w PLN  " + ((!isCash || advCurr2 === 'PLN') && isCash ? "☒" : "☐"), { size: 18 })]),
-          para([txt("w walucie " + advCurr2 + "  " + ((!isCash || advCurr2 !== 'PLN') && isCash ? "☒" : "☐"), { size: 18 })])
+          para([txt("w PLN  " + ((!isCash || advCurr2 === 'PLN') && isCash ? "☒" : "☐"), { size: 20 })]),
+          para([txt("w walucie " + advCurr2 + "  " + ((!isCash || advCurr2 !== 'PLN') && isCash ? "☒" : "☐"), { size: 20 })])
         ], { borders: b }),
-        cell([para([txt("b) na konto", { size: 18 })], { alignment: AlignmentType.CENTER })], { borders: b }),
-        cell([para([txt(!isCash ? "X" : "", { bold: true, size: 22 })], { alignment: AlignmentType.CENTER })], { borders: b }),
+        cell([para([txt("b) na konto", { size: 20 })], { alignment: AlignmentType.CENTER })], { borders: b }),
+        cell([para([txt(!isCash ? "X" : "", { bold: true, size: 20 })], { alignment: AlignmentType.CENTER })], { borders: b }),
         cell([
-          para([txt("w PLN  " + (!isCash && advCurr2 === 'PLN' ? "☒" : "☐"), { size: 18 })]),
-          para([txt("w walucie " + advCurr2 + "  " + (!isCash && advCurr2 !== 'PLN' ? "☒" : "☐"), { size: 18 })])
+          para([txt("w PLN  " + (!isCash && advCurr2 === 'PLN' ? "☒" : "☐"), { size: 20 })]),
+          para([txt("w walucie " + advCurr2 + "  " + (!isCash && advCurr2 !== 'PLN' ? "☒" : "☐"), { size: 20 })])
         ], { columnSpan: 2, borders: b })
       ]
     }));
