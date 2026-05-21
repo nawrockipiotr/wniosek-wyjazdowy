@@ -316,6 +316,7 @@ input[type="email"],
 input[type="tel"],
 input[type="date"],
 input[type="number"],
+input[type="time"],
 input[type="file"],
 textarea,
 select {
@@ -2782,7 +2783,7 @@ function resetCustomRates() {
 // CLEAR FORM
 // ============================================================
 function clearForm() {
-  document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="date"], input[type="number"], textarea').forEach(function(el) {
+  document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="date"], input[type="time"], input[type="number"], textarea').forEach(function(el) {
     if (el.id === 'unitName') el.value = "Wydział Zarządzania UW, ul. Szturmowa 1/3, 02-678 Warszawa";
     else if (el.id === 'departureFrom') el.value = "Warszawa, Polska";
     else el.value = '';
@@ -3165,7 +3166,8 @@ async function generateAgreementDocx() {
         sigCell([para([txt('Kwestor/Pełnomocnik Kwestora', { size: 20, italics: true })], { alignment: AlignmentType.CENTER })])
       ]})
     ],
-    width: { size: 100, type: WidthType.PERCENTAGE }
+    width: { size: 100, type: WidthType.PERCENTAGE },
+    borders: { top: { style: BorderStyle.NONE }, bottom: { style: BorderStyle.NONE }, left: { style: BorderStyle.NONE }, right: { style: BorderStyle.NONE }, insideHorizontal: { style: BorderStyle.NONE }, insideVertical: { style: BorderStyle.NONE } }
   });
   children.push(sigTable);
 
@@ -3895,6 +3897,17 @@ document.addEventListener('DOMContentLoaded', function() {
     r.addEventListener('change', function() { toggleOtherPersonSection(); saveFormData(); });
   });
   toggleOtherPersonSection();
+
+  // Postal code auto-format (00-000)
+  var postalEl = document.getElementById('otherPostalCode');
+  if (postalEl) {
+    postalEl.addEventListener('input', function() {
+      var v = this.value.replace(/[^0-9]/g, '');
+      if (v.length > 2) v = v.substring(0, 2) + '-' + v.substring(2, 5);
+      else if (v.length > 5) v = v.substring(0, 5);
+      this.value = v;
+    });
+  }
 
   // Auto-fill "Powrót z" for domestic trips
   document.getElementById('destinationCity').addEventListener('input', function() {
