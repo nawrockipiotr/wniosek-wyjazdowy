@@ -2008,10 +2008,7 @@ function recalculate() {
 
 function roundCurr(v) { return Math.round(v * 100) / 100; }
 function formatNum(n) {
-  var s = n.toFixed(2);
-  // Remove trailing zeros after decimal but keep at least integer
-  s = s.replace(/\.00$/, '').replace(/(\.\d)0$/, '$1');
-  return s || '0';
+  return n.toFixed(2);
 }
 
 
