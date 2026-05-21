@@ -780,6 +780,13 @@ textarea {
   font-size: 0.82rem;
   color: var(--text-dim);
 }
+
+/* Validation error highlight */
+.field-error {
+  border: 1.5px solid #e74c3c !important;
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.15) !important;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
 </style>
 </head>
 <body>
@@ -1030,8 +1037,8 @@ textarea {
   <div class="form-row">
     <div class="form-group full">
       <label data-i18n="projectNumber">Nr finansowo-księgowy projektu</label>
-      <input type="text" id="projectNumber" required data-save="projectNumber" placeholder="Numer nadany przez Kwesturę lub Biuro ds. Nauki">
-        <span class="field-hint" data-i18n="projectNumberHint">Numer przypisany do projektu/grantu w systemie finansowym UW — znajdziesz go w umowie grantowej lub u kierownika projektu</span>
+      <input type="text" id="projectNumber" required data-save="projectNumber" placeholder="Numer z umowy grantowej lub od kierownika projektu">
+        <span class="field-hint" data-i18n="projectNumberHint">Numer ewidencyjny projektu w systemie finansowym UW (nadawany przez Kwesturę)</span>
     </div>
   </div>
 
@@ -1354,7 +1361,7 @@ const TRANSLATIONS = {
     autoFilled: "(auto)",
     sec4Title: "4. Źródło finansowania",
     projectNumber: "Nr finansowo-księgowy projektu *",
-    projectNumberHint: "Numer przypisany do projektu/grantu w systemie finansowym UW — znajdziesz go w umowie grantowej lub u kierownika projektu",
+    projectNumberHint: "Numer ewidencyjny projektu w systemie finansowym UW (nadawany przez Kwesturę)",
     ticketCost: "Bilety (kwota)",
     ticketCurrency: "Waluta biletów",
     visaCost: "Wiza (kwota)",
@@ -1491,7 +1498,7 @@ const TRANSLATIONS = {
     autoFilled: "(auto)",
     sec4Title: "4. Funding Source",
     projectNumber: "Financial project number",
-    projectNumberHint: "Number assigned to the project/grant in the UW financial system — check your grant agreement or ask the project PI",
+    projectNumberHint: "Project ledger number in the UW financial system (assigned by the Bursar's Office)",
     multipleFunding: "Trip funded from multiple sources",
     additionalSource: "Additional funding source",
     additionalAmount: "Amount from additional source",
@@ -3128,6 +3135,16 @@ document.addEventListener('DOMContentLoaded', function() {
   lucide.createIcons();
 
   // Check rates freshness
+
+  // Clear field-error on input
+  document.querySelectorAll('.field-error').forEach(function(el) {
+    el.classList.remove('field-error');
+  });
+  document.addEventListener('input', function(e) {
+    if (e.target.classList.contains('field-error')) {
+      e.target.classList.remove('field-error');
+    }
+  });
   checkRatesFreshness();
 });
 </script>
