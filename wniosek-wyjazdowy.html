@@ -781,6 +781,9 @@ textarea {
   color: var(--text-dim);
 }
 
+
+/* Required field asterisk */
+.req-star { color: var(--accent); font-weight: 700; }
 /* Validation error highlight */
 .field-error {
   border: 1.5px solid #e74c3c !important;
@@ -835,11 +838,11 @@ textarea {
 
   <div class="form-row">
     <div class="form-group">
-      <label data-i18n="fullName">Imię i nazwisko</label>
+      <label data-i18n="fullName">Imię i nazwisko <span class="req-star">*</span></label>
       <input type="text" id="fullName" required data-save="fullName">
     </div>
     <div class="form-group">
-      <label data-i18n="email">Email</label>
+      <label data-i18n="email">Email <span class="req-star">*</span></label>
       <input type="email" id="email" required data-save="email" pattern="[^\s@]+@[^\s@]+\.[^\s@]+" title="np. jan@uw.edu.pl">
     </div>
   </div>
@@ -862,7 +865,7 @@ textarea {
 
   <div class="form-row">
     <div class="form-group full">
-      <label data-i18n="unitName">Nazwa jednostki UW</label>
+      <label data-i18n="unitName">Nazwa jednostki UW <span class="req-star">*</span></label>
       <input type="text" id="unitName" data-save="unitName" value="Wydział Zarządzania UW, ul. Szturmowa 1/3, 02-678 Warszawa">
     </div>
   </div>
@@ -918,14 +921,14 @@ textarea {
 
   <div class="form-row">
     <div class="form-group full">
-      <label data-i18n="hostInstitution">Instytucja przyjmująca</label>
+      <label data-i18n="hostInstitution">Instytucja przyjmująca <span class="req-star">*</span></label>
       <input type="text" id="hostInstitution" required data-save="hostInstitution">
     </div>
   </div>
 
   <div class="form-row">
     <div class="form-group full">
-      <label data-i18n="purposeOfTravel">Cel wyjazdu</label>
+      <label data-i18n="purposeOfTravel">Cel wyjazdu <span class="req-star">*</span></label>
       <textarea id="purposeOfTravel" required data-save="purposeOfTravel" rows="3"></textarea>
     </div>
   </div>
@@ -980,7 +983,7 @@ textarea {
 
   <div class="form-row">
     <div class="form-group">
-      <label data-i18n="destinationCity">Miejsce docelowe</label>
+      <label data-i18n="destinationCity">Miejsce docelowe <span class="req-star">*</span></label>
       <input type="text" id="destinationCity" required data-save="destinationCity">
     </div>
     <div class="form-group">
@@ -995,11 +998,11 @@ textarea {
 
   <div class="form-row">
     <div class="form-group">
-      <label data-i18n="departureDate">Data wyjazdu</label>
+      <label data-i18n="departureDate">Data wyjazdu <span class="req-star">*</span></label>
       <input type="date" id="departureDate" required data-save="departureDate">
     </div>
     <div class="form-group">
-      <label data-i18n="returnDate">Data powrotu</label>
+      <label data-i18n="returnDate">Data powrotu <span class="req-star">*</span></label>
       <input type="date" id="returnDate" required data-save="returnDate">
     </div>
   </div>
@@ -1036,7 +1039,7 @@ textarea {
 
   <div class="form-row">
     <div class="form-group full">
-      <label data-i18n="projectNumber">Nr finansowo-księgowy projektu</label>
+      <label data-i18n="projectNumber">Nr finansowo-księgowy projektu <span class="req-star">*</span></label>
       <input type="text" id="projectNumber" required data-save="projectNumber" placeholder="Numer przypisany przez Kwesturę do projektu/grantu w systemie finansowym UW (znajdziesz go w umowie grantowej lub u kierownika projektu)">
     </div>
   </div>
@@ -1318,14 +1321,14 @@ const TRANSLATIONS = {
     authorLine: "Wniosek wyjazdowy CSRI · autor: Piotr Nawrocki",
     author: "by Piotr Nawrocki",
     sec1Title: "1. Dane osobowe",
-    fullName: "Imię i nazwisko *",
-    email: "Email *",
+    fullName: "Imię i nazwisko",
+    email: "Email",
     statusLabel: "Status",
     statusEmployee: "Pracownik",
     statusPhd: "Doktorant",
     statusStudent: "Student",
     statusOther: "Inna osoba",
-    unitName: "Nazwa jednostki UW *",
+    unitName: "Nazwa jednostki UW",
     workPhone: "Telefon służbowy",
     privatePhone: "Telefon prywatny",
     submissionDate: "Data złożenia wniosku",
@@ -1336,8 +1339,8 @@ const TRANSLATIONS = {
     domesticBobLink: "→ Strona BOB UW: Podróże krajowe",
     domesticCity: "Miejscowość docelowa",
     sec2Title: "2. Szczegóły wyjazdu",
-    hostInstitution: "Instytucja przyjmująca *",
-    purposeOfTravel: "Cel wyjazdu *",
+    hostInstitution: "Instytucja przyjmująca",
+    purposeOfTravel: "Cel wyjazdu",
     transport: "Środek transportu",
     trPlane: "Samolot",
     trTrain: "Pociąg",
@@ -1349,17 +1352,17 @@ const TRANSLATIONS = {
     departureFrom: "Wyjazd z",
     via: "Przez",
     optional: "(opcjonalnie)",
-    destinationCity: "Miejsce docelowe *",
+    destinationCity: "Miejsce docelowe",
     destinationCountry: "Kraj docelowy",
     searchCountry: "Wpisz nazwę kraju...",
-    departureDate: "Data wyjazdu *",
-    returnDate: "Data powrotu *",
+    departureDate: "Data wyjazdu",
+    returnDate: "Data powrotu",
     returnFrom: "Powrót z",
     returnVia: "Przez",
     returnTo: "Do",
     autoFilled: "(auto)",
     sec4Title: "4. Źródło finansowania",
-    projectNumber: "Nr finansowo-księgowy projektu *",
+    projectNumber: "Nr finansowo-księgowy projektu",
     projectNumberHint: "Znajdziesz go w umowie grantowej lub u kierownika projektu",
     ticketCost: "Bilety (kwota)",
     ticketCurrency: "Waluta biletów",
@@ -1455,14 +1458,14 @@ const TRANSLATIONS = {
     authorLine: "Travel Request CSRI · by Piotr Nawrocki",
     author: "by Piotr Nawrocki",
     sec1Title: "1. Personal Data",
-    fullName: "Full name *",
-    email: "Email *",
+    fullName: "Full name",
+    email: "Email",
     statusLabel: "Status",
     statusEmployee: "Employee",
     statusPhd: "PhD Student",
     statusStudent: "Student",
     statusOther: "Other",
-    unitName: "UW Unit name *",
+    unitName: "UW Unit name",
     workPhone: "Work phone",
     privatePhone: "Private phone",
     submissionDate: "Date of submission",
@@ -1473,8 +1476,8 @@ const TRANSLATIONS = {
     domesticBobLink: "→ BOB UW: Domestic Travel",
     domesticCity: "Destination city",
     sec2Title: "2. Trip Details",
-    hostInstitution: "Host institution *",
-    purposeOfTravel: "Purpose of travel *",
+    hostInstitution: "Host institution",
+    purposeOfTravel: "Purpose of travel",
     transport: "Means of transport",
     trPlane: "Plane",
     trTrain: "Train",
@@ -1486,11 +1489,11 @@ const TRANSLATIONS = {
     departureFrom: "Departure from",
     via: "Via",
     optional: "(optional)",
-    destinationCity: "Destination city *",
+    destinationCity: "Destination city",
     destinationCountry: "Destination country",
     searchCountry: "Type country name...",
-    departureDate: "Departure date *",
-    returnDate: "Return date *",
+    departureDate: "Departure date",
+    returnDate: "Return date",
     returnFrom: "Return from",
     returnVia: "Via",
     returnTo: "Return to",
@@ -1588,7 +1591,17 @@ function setLang(lang) {
   document.querySelectorAll('.lang-btn').forEach(function(b) { b.classList.toggle('active', b.dataset.lang === lang); });
   document.querySelectorAll('[data-i18n]').forEach(function(el) {
     var key = el.getAttribute('data-i18n');
-    if (TRANSLATIONS[lang][key]) el.textContent = TRANSLATIONS[lang][key];
+    if (!TRANSLATIONS[lang][key]) return;
+    // Preserve child elements (e.g. <span class="req-star">)
+    var children = Array.from(el.children);
+    if (children.length > 0) {
+      // Update only the first text node
+      var firstText = Array.from(el.childNodes).find(function(n) { return n.nodeType === 3; });
+      if (firstText) firstText.textContent = TRANSLATIONS[lang][key];
+      else el.insertBefore(document.createTextNode(TRANSLATIONS[lang][key]), el.firstChild);
+    } else {
+      el.textContent = TRANSLATIONS[lang][key];
+    }
   });
   document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
     var key = el.getAttribute('data-i18n-placeholder');
