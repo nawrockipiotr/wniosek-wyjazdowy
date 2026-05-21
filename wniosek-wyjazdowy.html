@@ -627,9 +627,25 @@ textarea {
 
 /* Print */
 @media print {
-  body { padding: 0; }
-  .hero-controls, .btn-group, .no-print { display: none !important; }
-  .form-section, .hero { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
+  * { color: #000 !important; background: #fff !important; box-shadow: none !important; }
+  body { padding: 0; margin: 0; font-size: 11pt; }
+  .hero-controls, .btn-group, .no-print, .hero-lead, .org-badge, .author-line,
+  .version-tag, .howto-section, .form-section.no-print, #ratesWarningBox,
+  .field-hint, .optional-badge, .regulation-line { display: none !important; }
+  .container { max-width: 100%; padding: 0; }
+  .hero { box-shadow: none; border: none; margin-bottom: 0; padding: 8px 0; }
+  .hero-title { font-size: 16pt; margin-bottom: 4px; }
+  .form-section { box-shadow: none; border: 1px solid #ccc; padding: 10px; margin-bottom: 8px; page-break-inside: avoid; }
+  .form-row { margin-bottom: 4px; }
+  .form-group label { font-size: 9pt; }
+  input, select, textarea { font-size: 10pt !important; border: none !important; border-bottom: 1px solid #999 !important; border-radius: 0 !important; padding: 2px 4px !important; background: transparent !important; min-height: auto !important; }
+  .provider-tabs label { font-size: 9pt; padding: 2px 8px; border: 1px solid #999; }
+  .provider-tabs input:checked + label { background: #000 !important; color: #fff !important; }
+  .checkbox-group label { font-size: 9pt; }
+  .section-title { font-size: 12pt; }
+  .calc-table { font-size: 9pt; }
+  .calc-table th, .calc-table td { padding: 3px 6px; }
+  @page { size: A4; margin: 2cm; }
 }
 
 /* Scrollbar */
