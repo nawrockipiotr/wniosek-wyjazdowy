@@ -3111,7 +3111,7 @@ async function generateAgreementDocx() {
   var costs = calculateCosts();
   var costLimit = '…………';
   if (costs) {
-    costLimit = formatNum(costs.total) + ' ' + costs.currency;
+    costLimit = formatNum(costs.grandTotal) + ' ' + costs.curr;
   }
 
   // Validation
