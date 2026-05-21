@@ -2588,12 +2588,10 @@ function showToast(msg) {
 }
 
 // ============================================================
-// DOCX EXPORT
+// SHARED VALIDATION — used by both exportDocx and printForm
 // ============================================================
-async function exportDocx() {
-  // Validate required fields
+function validateFormFields() {
   var requiredIds = ['fullName', 'email', 'unitName', 'projectNumber', 'departureDate', 'returnDate', 'destinationCity', 'purposeOfTravel', 'hostInstitution'];
-  var t = TRANSLATIONS[currentLang];
   var missing = [];
   var firstMissingEl = null;
   requiredIds.forEach(function(id) {
@@ -2607,14 +2605,12 @@ async function exportDocx() {
       el.classList.remove('field-error');
     }
   });
-  // Email format check
   var emailEl = document.getElementById('email');
   if (emailEl && emailEl.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim())) {
     missing.push('email_format');
     emailEl.classList.add('field-error');
     if (!firstMissingEl) firstMissingEl = emailEl;
   }
-  // For foreign trips, country is also required
   var isForeign = document.getElementById('tripTypeForeign').checked;
   if (isForeign && !document.getElementById('selectedCountry').value) {
     missing.push('selectedCountry');
@@ -2623,7 +2619,6 @@ async function exportDocx() {
   } else {
     document.getElementById('countrySearch').classList.remove('field-error');
   }
-  // If advance on bank account — require bank name, owner, account number
   var advanceChecked = document.getElementById('requestAdvance').checked;
   var advMethodBank = document.getElementById('advMethodBank').checked;
   if (advanceChecked && advMethodBank) {
@@ -2638,7 +2633,6 @@ async function exportDocx() {
       }
     });
   }
-  // At least one transport mode must be selected
   var anyTransport = document.querySelectorAll('input[name="transport"]:checked').length > 0;
   if (!anyTransport) {
     missing.push('transport');
@@ -2649,24 +2643,48 @@ async function exportDocx() {
     if (tg) tg.classList.remove('field-error');
   }
   if (missing.length > 0) {
-    var hasEmailFormat = missing.indexOf('email_format') >= 0;
-    var msg;
-    if (hasEmailFormat && missing.length === 1) {
-      msg = currentLang === 'pl'
-        ? 'Podaj poprawny adres email.'
-        : 'Please enter a valid email address.';
-    } else {
-      msg = currentLang === 'pl'
-        ? 'Wypełnij wymagane pola oznaczone gwiazdką (*) przed eksportem.'
-        : 'Please fill in required fields marked with (*) before exporting.';
-    }
+    var fieldNames = {
+      pl: {
+        fullName: 'Imię i nazwisko', email: 'Email', email_format: 'Email (nieprawidłowy format)',
+        unitName: 'Nazwa jednostki UW', projectNumber: 'Źródło finansowania',
+        departureDate: 'Data wyjazdu', returnDate: 'Data powrotu',
+        destinationCity: 'Miejsce docelowe', purposeOfTravel: 'Cel wyjazdu',
+        hostInstitution: 'Instytucja przyjmująca', selectedCountry: 'Kraj (wybierz z listy)',
+        transport: 'Środek transportu', bankName: 'Nazwa banku',
+        bankOwner: 'Właściciel konta', bankAccount: 'Numer konta'
+      },
+      en: {
+        fullName: 'Full name', email: 'Email', email_format: 'Email (invalid format)',
+        unitName: 'Unit name', projectNumber: 'Funding source',
+        departureDate: 'Departure date', returnDate: 'Return date',
+        destinationCity: 'Destination', purposeOfTravel: 'Purpose of travel',
+        hostInstitution: 'Host institution', selectedCountry: 'Country (select from list)',
+        transport: 'Transport mode', bankName: 'Bank name',
+        bankOwner: 'Account owner', bankAccount: 'Account number'
+      }
+    };
+    var names = fieldNames[currentLang] || fieldNames.pl;
+    var fieldList = missing.map(function(id) { return '  • ' + (names[id] || id); }).join('\n');
+    var msg = (currentLang === 'pl'
+      ? 'Uzupełnij brakujące dane przed eksportem:\n\n'
+      : 'Please fill in missing fields before export:\n\n') + fieldList;
     alert(msg);
     if (firstMissingEl) {
       firstMissingEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
       firstMissingEl.focus();
     }
-    return;
+    return false;
   }
+  return true;
+}
+
+// ============================================================
+// DOCX EXPORT
+// ============================================================
+async function exportDocx() {
+  // Validate required fields
+  if (!validateFormFields()) return;
+  var t = TRANSLATIONS[currentLang];
   if (typeof docx === 'undefined') {
     alert(currentLang === 'pl'
       ? 'Błąd: biblioteka docx nie jest załadowana. Sprawdź połączenie z internetem i odśwież stronę.'
@@ -3443,6 +3461,8 @@ document.addEventListener('DOMContentLoaded', function() {
 // PRINT FORM — generates formal document HTML and opens print dialog
 // ============================================================
 function printForm() {
+  // Validate required fields
+  if (!validateFormFields()) return;
   // Gather same data as exportDocx
   var fullName = document.getElementById('fullName').value || '_______________';
   var status = document.querySelector('input[name="status"]:checked');
