@@ -965,7 +965,7 @@ textarea {
       </div>
       <div class="form-group">
         <label data-i18n="otherPostalCode">Kod pocztowy <span class="req-star">*</span></label>
-        <input type="text" id="otherPostalCode" data-save="otherPostalCode" placeholder="00-000">
+        <input type="text" id="otherPostalCode" data-save="otherPostalCode" placeholder="00-000" pattern="[0-9]{2}-[0-9]{3}" maxlength="6" title="Format: 00-000">
       </div>
     </div>
     <div class="form-row">
@@ -3064,7 +3064,7 @@ async function generateAgreementDocx() {
 
   // Helper
   function txt(t, opts) { return new TextRun(Object.assign({ text: t, font: 'Times New Roman', size: 24 }, opts || {})); }
-  function para(children, opts) { return new Paragraph(Object.assign({ children: children, spacing: { after: 80 } }, opts || {})); }
+  function para(children, opts) { return new Paragraph(Object.assign({ children: children, spacing: { after: 80 }, alignment: AlignmentType.JUSTIFIED }, opts || {})); }
   function emptyP() { return para([txt('')]); }
 
   var children = [];
@@ -3127,26 +3127,47 @@ async function generateAgreementDocx() {
     children.push(para([txt((i + 1) + '. ' + bullets[i])], { spacing: { after: 40 } }));
   }
 
-  // Signature lines
-  children.push(emptyP());
+  // Signature lines — using table for proper alignment
+  var bNoneSig = { top: { style: BorderStyle.NONE, size: 0 }, bottom: { style: BorderStyle.NONE, size: 0 }, left: { style: BorderStyle.NONE, size: 0 }, right: { style: BorderStyle.NONE, size: 0 } };
+  function sigCell(children, opts) {
+    return new TableCell(Object.assign({ children: children, borders: bNoneSig, width: { size: 4500, type: WidthType.DXA } }, opts || {}));
+  }
+
   children.push(emptyP());
   children.push(emptyP());
 
-  // Row 1: Wyjeżdżający + Uniwersytet
-  children.push(para([
-    txt('……………………………………………                                                    …………………………………………………', { size: 22 }),
-  ]));
-  children.push(para([
-    txt('                Wyjeżdżający                                                                                    Uniwersytet', { size: 20, italics: true }),
-  ], { spacing: { after: 300 } }));
-
-  // Row 2: Kierownik + Kwestor
-  children.push(para([
-    txt('……………………………………………                                                    …………………………………………………', { size: 22 }),
-  ]));
-  children.push(para([
-    txt('    Kierownik tematu/projektu                                                              Kwestor/Pełnomocnik Kwestora', { size: 20, italics: true }),
-  ]));
+  var sigTable = new Table({
+    rows: [
+      new TableRow({ children: [
+        sigCell([para([txt('…………………………………………………', { size: 22 })], { alignment: AlignmentType.CENTER })]),
+        sigCell([para([txt('')])]),
+        sigCell([para([txt('…………………………………………………', { size: 22 })], { alignment: AlignmentType.CENTER })])
+      ]}),
+      new TableRow({ children: [
+        sigCell([para([txt('Wyjeżdżający', { size: 20, italics: true })], { alignment: AlignmentType.CENTER })]),
+        sigCell([para([txt('')])]),
+        sigCell([para([txt('Uniwersytet', { size: 20, italics: true })], { alignment: AlignmentType.CENTER })])
+      ]}),
+      // empty spacer row
+      new TableRow({ children: [
+        sigCell([emptyP(), emptyP()]),
+        sigCell([emptyP()]),
+        sigCell([emptyP()])
+      ]}),
+      new TableRow({ children: [
+        sigCell([para([txt('…………………………………………………', { size: 22 })], { alignment: AlignmentType.CENTER })]),
+        sigCell([para([txt('')])]),
+        sigCell([para([txt('…………………………………………………', { size: 22 })], { alignment: AlignmentType.CENTER })])
+      ]}),
+      new TableRow({ children: [
+        sigCell([para([txt('Kierownik tematu/projektu', { size: 20, italics: true })], { alignment: AlignmentType.CENTER })]),
+        sigCell([para([txt('')])]),
+        sigCell([para([txt('Kwestor/Pełnomocnik Kwestora', { size: 20, italics: true })], { alignment: AlignmentType.CENTER })])
+      ]})
+    ],
+    width: { size: 100, type: WidthType.PERCENTAGE }
+  });
+  children.push(sigTable);
 
   children.push(emptyP());
   children.push(para([txt('*) nie dotyczy diet oraz wydatków określonych ryczałtami', { size: 18, italics: true })]));
@@ -3875,6 +3896,16 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   toggleOtherPersonSection();
 
+  // Auto-fill "Powrót z" for domestic trips
+  document.getElementById('destinationCity').addEventListener('input', function() {
+    var isDom = document.getElementById('tripTypeDomestic').checked;
+    if (isDom) {
+      var city = this.value.trim();
+      document.getElementById('returnFrom').value = city;
+      document.getElementById('returnTo').value = document.getElementById('departureFrom').value;
+    }
+  });
+
   // Clear field-error on input
   document.querySelectorAll('.field-error').forEach(function(el) {
     el.classList.remove('field-error');
@@ -3895,258 +3926,6 @@ document.addEventListener('DOMContentLoaded', function() {
 // ============================================================
 // PRINT FORM — generates formal document HTML and opens print dialog
 // ============================================================
-function printForm() {
-  // Validate required fields
-  if (!validateFormFields()) return;
-  // Gather same data as exportDocx
-  var fullName = document.getElementById('fullName').value || '_______________';
-  var status = document.querySelector('input[name="status"]:checked');
-  status = status ? status.value : '';
-  var unitName = document.getElementById('unitName').value || '';
-  var email = document.getElementById('email').value || '';
-  var workPhone = document.getElementById('workPhone').value || '';
-  var privatePhone = document.getElementById('privatePhone').value || '';
-  var submissionDate = document.getElementById('submissionDate').value || '';
-  var hostInstitution = document.getElementById('hostInstitution').value || '';
-  var purpose = document.getElementById('purposeOfTravel').value || '';
-  var transport = [];
-  document.querySelectorAll('input[name="transport"]:checked').forEach(function(cb) { transport.push(cb.value); });
-  var departureFrom = document.getElementById('departureFrom').value || '';
-  var via = document.getElementById('via').value || '';
-  var destinationCity = document.getElementById('destinationCity').value || '';
-  var country = document.getElementById('selectedCountry').value || '';
-  var depDate = document.getElementById('departureDate').value || '';
-  var retDate = document.getElementById('returnDate').value || '';
-  var returnFrom = document.getElementById('returnFrom').value || '';
-  var returnTo = document.getElementById('returnTo').value || '';
-  var returnVia = document.getElementById('returnVia') ? document.getElementById('returnVia').value || '' : '';
-  var projectNumber = document.getElementById('projectNumber').value || '';
-  var tripType = document.querySelector('input[name="tripType"]:checked').value;
-
-  function fmtDate(d) {
-    if (!d) return '';
-    var p = d.split('-');
-    return p.length === 3 ? p[2] + '.' + p[1] + '.' + p[0] : d;
-  }
-  var depTime = document.getElementById('departureTime').value || '';
-  var retTime = document.getElementById('returnTime').value || '';
-  function chk(val, expected) { return val === expected ? '&#9746;' : '&#9744;'; }
-  function chkT(t) { return transport.indexOf(t) >= 0 ? '&#9746;' : '&#9744;'; }
-
-  // Calculate costs using shared function
-  var c = calculateCosts();
-  var calcRows = [];
-  var grandTotal = '';
-  var curr = '';
-  var requestAdvanceChecked = document.getElementById('requestAdvance').checked;
-  var _adv = getAdvanceAmount();
-  var advanceAmt = requestAdvanceChecked ? _adv.amount : 0;
-  var advanceCurr = _adv.currency;
-  var ticketCost = 0, ticketCurr = 'PLN', visaCost = 0, visaCurr = 'PLN';
-
-  if (c) {
-    curr = c.curr;
-    grandTotal = formatNum(c.grandTotal);
-    ticketCost = c.ticketCost;
-    ticketCurr = c.ticketCurr;
-    visaCost = c.visaCost;
-    visaCurr = c.visaCurr;
-    var htLabel = c.hotel.isProvided ? 'Nocleg (zapewniony)' : c.hotel.label === 'lumpsum' ? 'Nocleg (ryczałt)' : 'Nocleg (wg rachunku)';
-    if (c.isDomestic) {
-      calcRows = [
-        { label: 'Diety pobytowe', count: formatNum(c.effectiveDays), rate: formatNum(c.perDiemRate), amount: formatNum(c.perDiemTotal) },
-        { label: htLabel, count: c.hotel.isProvided ? '—' : '' + c.nights, rate: c.hotel.isProvided ? '—' : formatNum(c.hotel.ratePerNight), amount: formatNum(c.hotel.total) },
-        { label: 'Inne koszty:<br>Ryczałt za dojazdy lokalne', count: formatNum(c.effectiveDays), rate: formatNum(c.ltRate), amount: formatNum(c.localTransport) }
-      ];
-    } else {
-      calcRows = [
-        { label: 'Dieta dojazdowa', count: '1', rate: formatNum(c.perDiemRate), amount: formatNum(c.travelAllowance) },
-        { label: 'Diety pobytowe', count: formatNum(c.effectiveDays), rate: formatNum(c.perDiemRate), amount: formatNum(c.perDiemTotal) },
-        { label: htLabel, count: c.hotel.isProvided ? '—' : '' + c.nights, rate: c.hotel.isProvided ? '—' : formatNum(c.hotel.ratePerNight), amount: formatNum(c.hotel.total) },
-        { label: 'Inne koszty:<br>Ryczałt za komunikację miejską', count: formatNum(c.effectiveDays), rate: formatNum(c.ltRate), amount: formatNum(c.localTransport) }
-      ];
-    }
-  }
-
-  // Destination display
-  var destDisplay = destinationCity;
-  if (country && tripType !== 'domestic') {
-    var rateLookup = RATES[country];
-    destDisplay = destinationCity ? (destinationCity + ', ' + (currentLang === 'en' && rateLookup ? rateLookup.en : country)) : country;
-  }
-
-  // Build HTML
-  var h = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Wniosek Wyjazdowy</title>';
-  h += '<style>';
-  h += 'body{font-family:Calibri,Arial,sans-serif;font-size:9pt;margin:0;padding:20mm 22mm;}';
-  h += 'table{border-collapse:collapse;width:calc(100% - 2px);margin:0 1px;}';
-  h += 'td,th{border:1px solid #000;padding:2px 4px;font-size:9pt;vertical-align:middle;}';
-  h += '.nb{border:none;}';
-  h += '.bb{border:none;border-bottom:1px solid #000;}';
-  h += '.label{font-size:7pt;font-style:italic;text-align:center;border:none;}';
-  h += '.title{font-size:13pt;font-weight:bold;text-align:center;}';
-  h += '.right{text-align:right;}';
-  h += '.center{text-align:center;}';
-  h += '.bold{font-weight:bold;}';
-  h += '.sig-dots{text-align:center;padding-top:20px;}';
-  h += '.sig-label{font-size:7pt;font-style:italic;text-align:center;}';
-  h += '.decl{font-size:7pt;font-style:italic;margin-top:8px;}';
-  h += '@media print{@page{size:A4;margin:20mm 22mm;}body{padding:0;}}';
-  h += '</style></head><body>';
-
-  // Header
-  h += '<p style="text-align:right;font-size:8pt;font-style:italic;margin-bottom:4px;">Załącznik nr 1</p>';
-  h += '<p class="title" style="margin:0 0 2px;">WNIOSEK WYJAZDOWY</p>';
-  h += '<p style="text-align:center;font-size:7pt;font-style:italic;margin:0 0 8px;">Po czytelnym wypełnieniu formularza należy przekazać go do Kwestury.</p>';
-
-  // Main table
-  h += '<table>';
-
-  // Name + date
-  h += '<tr><td colspan="5" class="bb" style="font-weight:bold;">' + fullName + '</td>';
-  h += '<td class="nb"></td>';
-  h += '<td colspan="2" class="bb">' + fmtDate(submissionDate) + '</td></tr>';
-
-  h += '<tr><td colspan="5" class="label">Imię i nazwisko</td>';
-  h += '<td class="nb"></td>';
-  h += '<td colspan="2" class="label">Data złożenia wniosku</td></tr>';
-
-  // Status
-  h += '<tr><td colspan="8">PRACOWNIK ' + chk(status,'pracownik') + '&nbsp;&nbsp;&nbsp;DOKTORANT ' + chk(status,'doktorant') + '&nbsp;&nbsp;&nbsp;STUDENT ' + chk(status,'student') + '&nbsp;&nbsp;&nbsp;INNA OSOBA ' + chk(status,'inna') + '</td></tr>';
-
-  // Unit + contacts
-  h += '<tr><td colspan="4" rowspan="3">' + unitName + '</td>';
-  h += '<td colspan="2" class="nb" style="font-size:7pt;font-style:italic;">tel. służbowy:</td>';
-  h += '<td colspan="2" class="bb">' + workPhone + '</td></tr>';
-
-  h += '<tr><td colspan="2" class="nb" style="font-size:7pt;font-style:italic;">tel. prywatny:</td>';
-  h += '<td colspan="2" class="bb">' + privatePhone + '</td></tr>';
-
-  h += '<tr><td colspan="2" class="nb" style="font-size:7pt;font-style:italic;">e-mail:</td>';
-  h += '<td colspan="2" class="bb">' + email + '</td></tr>';
-
-  h += '<tr><td colspan="4" class="label">Nazwa i adres jednostki UW</td><td colspan="4" class="nb"></td></tr>';
-
-  // Transport
-  h += '<tr><td colspan="8">Środek podróży: samolot ' + chkT('samolot') + '&nbsp;&nbsp;pociąg ' + chkT('pociag') + '&nbsp;&nbsp;autobus ' + chkT('autobus') + '&nbsp;&nbsp;prom ' + chkT('prom') + '&nbsp;&nbsp;samochód ' + chkT('samochod') + '</td></tr>';
-
-  // Host institution
-  h += '<tr><td colspan="2" style="font-size:7pt;font-style:italic;">Instytucja przyjmująca<br>(pełna nazwa, państwo)</td>';
-  h += '<td colspan="6">' + hostInstitution + '</td></tr>';
-
-  // Purpose
-  h += '<tr><td colspan="2" style="font-size:7pt;font-style:italic;">Cel wyjazdu</td>';
-  h += '<td colspan="6">' + purpose + '</td></tr>';
-
-  // Route header
-  h += '<tr><td colspan="8" style="font-weight:bold;">Trasa i data podróży:</td></tr>';
-
-  // Departure
-  h += '<tr><td colspan="2">' + departureFrom + '</td>';
-  h += '<td>' + (via || '—') + '</td>';
-  h += '<td colspan="3">' + destDisplay + '</td>';
-  h += '<td colspan="2">' + fmtDate(depDate) + (depTime ? ' godz. ' + depTime : '') + '</td></tr>';
-
-  h += '<tr><td colspan="2" class="label">Odlot, wyjazd z</td>';
-  h += '<td class="label">przez</td>';
-  h += '<td colspan="3" class="label">do (miejscowość, państwo)</td>';
-  h += '<td colspan="2" class="label">dnia</td></tr>';
-
-  // Return
-  h += '<tr><td colspan="2">' + (returnFrom || destDisplay) + '</td>';
-  h += '<td>' + (returnVia || '—') + '</td>';
-  h += '<td colspan="3">' + (returnTo || departureFrom) + '</td>';
-  h += '<td colspan="2">' + fmtDate(retDate) + (retTime ? ' godz. ' + retTime : '') + '</td></tr>';
-
-  h += '<tr><td colspan="2" class="label">Powrót z</td>';
-  h += '<td class="label">przez</td>';
-  h += '<td colspan="3" class="label">do</td>';
-  h += '<td colspan="2" class="label">dnia</td></tr>';
-
-  // Business dates row (if private days)
-  if (document.getElementById('hasPrivateDays').checked) {
-    var bsDate = document.getElementById('businessStartDate').value || '';
-    var beDate = document.getElementById('businessEndDate').value || '';
-    h += '<tr><td colspan="4" style="font-weight:bold;font-size:8pt;">Okres delegacji służbowej:</td>';
-    h += '<td colspan="4">' + fmtDate(bsDate) + ' – ' + fmtDate(beDate) + '</td></tr>';
-    h += '<tr><td colspan="8" class="label" style="font-style:italic;">Pobyt obejmuje dni prywatne. Diety i noclegi liczone za okres delegacji.</td></tr>';
-  }
-
-  // Cost table header
-  h += '<tr><td></td><td colspan="2" class="center bold" style="font-size:8pt;">Źródła finansowania wyjazdu</td>';
-  h += '<td class="center bold" style="font-size:8pt;">Liczba</td>';
-  h += '<td class="center bold" style="font-size:8pt;">Stawka</td>';
-  h += '<td colspan="2" class="center bold" style="font-size:8pt;">Kwota</td>';
-  h += '<td class="center bold" style="font-size:8pt;">Waluta</td></tr>';
-
-  // Tickets
-  h += '<tr><td style="font-size:8pt;">Bilety</td><td colspan="2"></td><td></td><td></td>';
-  h += '<td colspan="2" class="right">' + (ticketCost > 0 ? '<b>' + formatNum(ticketCost) + '</b>' : '') + '</td>';
-  h += '<td class="center">' + (ticketCost > 0 ? ticketCurr : '') + '</td></tr>';
-
-  // Visa
-  h += '<tr><td style="font-size:8pt;">Wiza</td><td colspan="2"></td><td></td><td></td>';
-  h += '<td colspan="2" class="right">' + (visaCost > 0 ? '<b>' + formatNum(visaCost) + '</b>' : '') + '</td>';
-  h += '<td class="center">' + (visaCost > 0 ? visaCurr : '') + '</td></tr>';
-
-  // Cost rows
-  calcRows.forEach(function(row) {
-    h += '<tr><td style="font-size:8pt;">' + row.label + '</td><td colspan="2"></td>';
-    h += '<td class="center">' + row.count + '</td>';
-    h += '<td class="right">' + row.rate + '</td>';
-    h += '<td colspan="2" class="right bold">' + row.amount + '</td>';
-    h += '<td class="center">' + curr + '</td></tr>';
-  });
-
-  // Totals
-  h += '<tr><td></td><td colspan="2" style="font-size:8pt;">nr projektu ' + projectNumber + '</td>';
-  h += '<td class="center" style="font-size:8pt;font-style:italic;">Zaliczka: ' + (advanceAmt > 0 ? formatNum(advanceAmt) + ' ' + advanceCurr : '') + '</td>';
-  h += '<td class="right bold">Łącznie:</td>';
-  h += '<td colspan="2" class="right bold">' + grandTotal + '</td>';
-  h += '<td class="center bold">' + curr + '</td></tr>';
-
-  h += '</table>';
-
-  // Advance section
-  if (requestAdvanceChecked && advanceAmt > 0) {
-    var advMethod = document.querySelector('input[name="advanceMethod"]:checked');
-    var isCash = advMethod && advMethod.value === 'kasa';
-    var bankNameVal = document.getElementById('bankName').value || '';
-    var bankSwiftVal = document.getElementById('bankSwift').value || '';
-    var bankOwnerVal = document.getElementById('bankOwner').value || '';
-    var bankAccountVal = document.getElementById('bankAccount').value || '';
-
-    h += '<table style="margin-top:6px;">';
-    h += '<tr><td colspan="3"><b>Proszę o wypłatę zaliczki:</b> a) w kasie głównej UW</td>';
-    h += '<td>w PLN ' + ((isCash && advanceCurr === 'PLN') ? '&#9746;' : '&#9744;') + '<br>w walucie ' + advanceCurr + ' ' + ((isCash && advanceCurr !== 'PLN') ? '&#9746;' : '&#9744;') + '</td>';
-    h += '<td class="center">b) na konto</td>';
-    h += '<td class="center bold">' + (!isCash ? 'X' : '') + '</td>';
-    h += '<td colspan="2">w PLN ' + ((!isCash && advanceCurr === 'PLN') ? '&#9746;' : '&#9744;') + '<br>w walucie ' + advanceCurr + ' ' + ((!isCash && advanceCurr !== 'PLN') ? '&#9746;' : '&#9744;') + '</td></tr>';
-    if (!isCash) {
-      h += '<tr><td colspan="8" style="font-size:8pt;">bank: <b>' + bankNameVal + (bankSwiftVal ? ', SWIFT: ' + bankSwiftVal : '') + '</b>, właściciel: <b>' + bankOwnerVal + '</b>, nr konta: <b>' + bankAccountVal + '</b></td></tr>';
-    }
-    h += '</table>';
-  }
-
-  // Signatures
-  h += '<table style="margin-top:10px;"><tr>';
-  h += '<td class="nb sig-dots" style="width:33%;">……………………………………<br><span class="sig-label">Podpis osoby wyjeżdżającej</span></td>';
-  h += '<td class="nb sig-dots" style="width:34%;">……………………………………<br><span class="sig-label">Podpis, pieczęć pełnomocnika<br>kwestora / kwestora</span></td>';
-  h += '<td class="nb sig-dots" style="width:33%;">……………………………………<br><span class="sig-label">Podpis, pieczęć kierownika<br>jednostki</span></td>';
-  h += '</tr></table>';
-
-  // Declaration
-  h += '<p class="decl">Z otrzymanej zaliczki zobowiązuję się rozliczyć w ciągu 14 dni od powrotu do kraju. Jednocześnie upoważniam Uniwersytet do potrącenia kwoty nierozliczonej zaliczki z mojego wynagrodzenia lub innych należności lub stypendium.<br>Oświadczam, że posiadam ubezpieczenie kosztów leczenia i następstw nieszczęśliwych wypadków na czas trwania wyjazdu.</p>';
-  h += '<p style="margin-top:15px;">...........................................................................<br><span class="sig-label" style="text-align:left;">podpis osoby wyjeżdżającej</span></p>';
-
-  h += '</body></html>';
-
-  var w = window.open('', '_blank');
-  w.document.write(h);
-  w.document.close();
-  setTimeout(function() { w.print(); }, 300);
-}
-
 </script>
 </body>
 </html>
