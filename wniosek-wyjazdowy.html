@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wniosek wyjazdowy CSRI</title>
+<title>Wniosek wyjazdowy — Wydział Zarządzania UW</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
 <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
@@ -1306,7 +1306,7 @@ textarea {
       <i data-lucide="printer" style="width:16px;height:16px;"></i>
       <span data-i18n="printPdf">Drukuj / PDF</span>
     </button>
-    <button class="btn btn-danger" onclick="clearForm()">
+    <button class="btn btn-danger" onclick="if(confirm(currentLang==='pl'?'Czy na pewno chcesz wyczyścić formularz?':'Are you sure you want to clear the form?'))clearForm()">
       <i data-lucide="trash-2" style="width:16px;height:16px;"></i>
       <span data-i18n="clearForm">Wyczyść formularz</span>
     </button>
@@ -1390,6 +1390,7 @@ const TRANSLATIONS = {
     additionalAmount: "Kwota z dodatkowego źródła",
     sec5Title: "5. Kalkulator diet",
     calcPlaceholder: "Wybierz kraj docelowy oraz daty wyjazdu i powrotu, aby automatycznie obliczyć należne diety.",
+    calcPlaceholderDomestic: "Wprowadź daty wyjazdu i powrotu, aby automatycznie obliczyć należne diety.",
     mealsProvided: "Mam zapewnione posiłki przez organizatora",
     breakfast: "Śniadanie",
     lunch: "Obiad",
@@ -1448,6 +1449,7 @@ const TRANSLATIONS = {
     hotelProvidedShort: "nocleg zapewniony we własnym zakresie",
     ltNotRequested: "nie wnioskowano",
     rowLocalTransport: "Ryczałt na komunikację miejską",
+    rowLocalTransportDomestic: "Ryczałt za dojazdy lokalne",
     rowTotal: "ŁĄCZNIE",
     days: "dni",
     nights: "nocy",
@@ -1522,6 +1524,7 @@ const TRANSLATIONS = {
     additionalAmount: "Amount from additional source",
     sec5Title: "5. Per Diem Calculator",
     calcPlaceholder: "Select a destination country and travel dates to auto-calculate per diem allowances.",
+    calcPlaceholderDomestic: "Enter departure and return dates to auto-calculate per diem allowances.",
     mealsProvided: "Meals provided by the organizer",
     breakfast: "Breakfast",
     lunch: "Lunch",
@@ -1587,6 +1590,7 @@ const TRANSLATIONS = {
     hotelProvidedShort: "accommodation self-arranged",
     ltNotRequested: "not requested",
     rowLocalTransport: "Local transport lump sum",
+    rowLocalTransportDomestic: "Local transport lump sum",
     rowTotal: "TOTAL",
     days: "days",
     nights: "nights",
@@ -1940,7 +1944,7 @@ function recalculate() {
   var t = TRANSLATIONS[currentLang];
   var curr = rate.currency;
 
-  var displayDays = '' + effectiveDays;
+  var displayDays = formatInt(effectiveDays);
 
   // Get ticket/visa/advance values
   var ticketCost = parseFloat(document.getElementById('ticketCost').value) || 0;
@@ -2010,6 +2014,9 @@ function roundCurr(v) { return Math.round(v * 100) / 100; }
 function formatNum(n) {
   return n.toFixed(2);
 }
+function formatInt(n) {
+  return Number.isInteger(n) ? '' + n : n.toFixed(1);
+}
 
 
 // DOMESTIC TRAVEL CALCULATION
@@ -2053,8 +2060,9 @@ function recalculateDomestic(depDate, retDate) {
 
   var t = TRANSLATIONS[currentLang];
   var curr = 'PLN';
+  var displayDays = formatInt(effectiveDays);
 
-  var displayDays = '' + effectiveDays;
+  var displayDays = formatInt(effectiveDays);
 
   var ticketCost = parseFloat(document.getElementById('ticketCost').value) || 0;
   var ticketCurr = document.getElementById('ticketCurrency').value || 'PLN';
@@ -2089,7 +2097,7 @@ function recalculateDomestic(depDate, retDate) {
       '<td>' + curr + '</td>' +
     '</tr>' +
     '<tr>' +
-      '<td>' + t.rowLocalTransport + ' (20%)' + (!ltIncluded ? ' <em style="font-size:0.85em;color:var(--text-dim)">(' + t.ltNotRequested + ')</em>' : '') + '</td>' +
+      '<td>' + t.rowLocalTransportDomestic + ' (20%)' + (!ltIncluded ? ' <em style="font-size:0.85em;color:var(--text-dim)">(' + t.ltNotRequested + ')</em>' : '') + '</td>' +
       '<td>' + (ltIncluded ? displayDays + ' ' + t.days : '—') + '</td>' +
       '<td>' + (ltIncluded ? formatNum(DOMESTIC_TRANSPORT) + ' ' + curr : '—') + '</td>' +
       '<td><strong>' + (ltIncluded ? formatNum(localTransport) + ' ' + curr : '—') + '</strong></td>' +
@@ -2178,6 +2186,13 @@ document.querySelectorAll('input[name="tripType"]').forEach(function(radio) {
     if (countryWrapper) countryWrapper.parentElement.style.display = isDomestic ? 'none' : '';
     var rateInfoBox = document.getElementById('rateInfoBox');
     if (rateInfoBox) rateInfoBox.style.display = 'none';
+    // Update calc placeholder for trip type
+    var placeholder = document.getElementById('calcPlaceholder').querySelector('p');
+    if (placeholder) {
+      placeholder.setAttribute('data-i18n', isDomestic ? 'calcPlaceholderDomestic' : 'calcPlaceholder');
+      var t = TRANSLATIONS[currentLang];
+      placeholder.textContent = isDomestic ? (t.calcPlaceholderDomestic || t.calcPlaceholder) : t.calcPlaceholder;
+    }
     // Clear foreign-specific data when switching to domestic
     if (isDomestic) {
       document.getElementById('selectedCountry').value = '';
@@ -2186,6 +2201,11 @@ document.querySelectorAll('input[name="tripType"]').forEach(function(radio) {
       // Reset returnFrom to just the destination city (without country)
       var destCity = document.getElementById('destinationCity').value;
       document.getElementById('returnFrom').value = destCity;
+      // Strip country from departureFrom if it has ', Polska'
+      var depFrom = document.getElementById('departureFrom');
+      if (depFrom.value.match(/,\s*Polska$/)) depFrom.value = depFrom.value.replace(/,\s*Polska$/, '');
+      var retTo = document.getElementById('returnTo');
+      if (retTo.value.match(/,\s*Polska$/)) retTo.value = retTo.value.replace(/,\s*Polska$/, '');
     }
     // Clear domestic-specific residuals when switching to foreign
     // (no specific fields to clear, but recalculate handles display)
@@ -2373,6 +2393,33 @@ function clearForm() {
   document.getElementById('calcResults').style.display = 'none';
 
   sessionStorage.removeItem('ww_formData');
+  // Reset yes/no radios to default
+  document.getElementById('mealsNo').checked = true;
+  document.getElementById('mealsYes').checked = false;
+  document.getElementById('mealsProvided').checked = false;
+  document.getElementById('mealsDetails').style.display = 'none';
+  document.getElementById('hotelNo').checked = true;
+  document.getElementById('hotelYes').checked = false;
+  document.getElementById('hotelProvided').checked = false;
+  document.getElementById('ltYes').checked = true;
+  document.getElementById('ltNo').checked = false;
+  document.getElementById('localTransportIncluded').checked = true;
+  // Reset advance
+  document.getElementById('advanceDetailsBlock').style.display = 'none';
+  document.getElementById('bankDetailsBlock').style.display = 'block';
+  document.getElementById('advMethodBank').checked = true;
+  // Reset trip type to foreign
+  document.getElementById('tripTypeForeign').checked = true;
+  document.getElementById('tripTypeDomestic').checked = false;
+  document.getElementById('domesticInfoBox').style.display = 'none';
+  var cw = document.querySelector('.country-search-wrapper');
+  if (cw) cw.parentElement.style.display = '';
+  // Reset extra funding
+  document.getElementById('multipleFunding').checked = false;
+  document.getElementById('extraFundingFields').style.display = 'none';
+  // Reset calculator
+  document.getElementById('calcPlaceholder').style.display = 'block';
+  document.getElementById('calcResults').style.display = 'none';
   showToast(TRANSLATIONS[currentLang].formCleared);
 }
 
@@ -2549,9 +2596,9 @@ async function exportDocx() {
     var total = roundCurr(pdTotal + htTotal + ltTotal);
     grandTotal = formatNum(total);
     calcRows = [
-      { label: 'Diety pobytowe', count: formatNum(effectiveDays), rate: formatNum(adjPD), amount: formatNum(pdTotal) },
+      { label: 'Diety pobytowe', count: formatInt(effectiveDays), rate: formatNum(adjPD), amount: formatNum(pdTotal) },
       { label: 'Diety hotelowe', count: '' + nights, rate: formatNum(DOMESTIC_HOTEL), amount: formatNum(htTotal) },
-      { label: 'Inne koszty:\nRyczałt za dojazdy lokalne', count: formatNum(effectiveDays), rate: formatNum(DOMESTIC_TRANSPORT), amount: formatNum(ltTotal) }
+      { label: 'Inne koszty:\nRyczałt za dojazdy lokalne', count: formatInt(effectiveDays), rate: formatNum(DOMESTIC_TRANSPORT), amount: formatNum(ltTotal) }
     ];
   } else if (country && depDate && retDate && RATES[country]) {
     var rate = RATES[country];
@@ -2581,9 +2628,9 @@ async function exportDocx() {
     grandTotal = formatNum(total);
     calcRows = [
       { label: 'Dieta dojazdowa', count: '1', rate: formatNum(rate.perDiem), amount: formatNum(travelAllowance) },
-      { label: 'Diety pobytowe', count: formatNum(effectiveDays), rate: formatNum(adjPD), amount: formatNum(pdTotal) },
+      { label: 'Diety pobytowe', count: formatInt(effectiveDays), rate: formatNum(adjPD), amount: formatNum(pdTotal) },
       { label: 'Diety hotelowe', count: '' + nights, rate: formatNum(rate.hotel), amount: formatNum(htTotal) },
-      { label: 'Inne koszty:\nRyczałt za komunikację miejską', count: formatNum(effectiveDays), rate: formatNum(roundCurr(rate.perDiem * 0.10)), amount: formatNum(ltTotal) }
+      { label: 'Inne koszty:\nRyczałt za komunikację miejską', count: formatInt(effectiveDays), rate: formatNum(roundCurr(rate.perDiem * 0.10)), amount: formatNum(ltTotal) }
     ];
   }
 
@@ -3178,6 +3225,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Restore saved data
   restoreFormData();
+
+  // Sync yes/no radios with restored checkbox states
+  if (document.getElementById('mealsProvided').checked) {
+    document.getElementById('mealsYes').checked = true;
+    document.getElementById('mealsDetails').style.display = 'grid';
+  }
+  if (document.getElementById('hotelProvided').checked) {
+    document.getElementById('hotelYes').checked = true;
+  }
+  if (!document.getElementById('localTransportIncluded').checked) {
+    document.getElementById('ltNo').checked = true;
+    document.getElementById('ltYes').checked = false;
+  }
+  if (document.getElementById('requestAdvance').checked) {
+    document.getElementById('advanceDetailsBlock').style.display = 'block';
+  }
+  if (document.getElementById('multipleFunding').checked) {
+    document.getElementById('extraFundingFields').style.display = 'block';
+  }
+  // Restore trip type visibility
+  var isDomesticRestore = document.getElementById('tripTypeDomestic').checked;
+  if (isDomesticRestore) {
+    document.getElementById('domesticInfoBox').style.display = 'block';
+    var cw = document.querySelector('.country-search-wrapper');
+    if (cw) cw.parentElement.style.display = 'none';
+  }
 
   // Restore dark mode
   if (sessionStorage.getItem('ww_dark') === '1') {
