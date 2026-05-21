@@ -1144,19 +1144,19 @@ textarea {
       <div id="mealsDetails" style="display:none;" class="meals-grid">
         <div class="meal-card">
           <label class="meal-num-label" data-i18n="breakfast">Śniadanie</label>
-          <div class="reduction">-15%</div>
+          <div class="reduction" id="reductionBreakfast">-15%</div>
           <input type="number" id="mealBreakfast" data-save="mealBreakfast" min="0" value="0" class="meal-num-input">
           <span class="meal-num-hint" data-i18n="mealsCount">szt.</span>
         </div>
         <div class="meal-card">
           <label class="meal-num-label" data-i18n="lunch">Obiad</label>
-          <div class="reduction">-30%</div>
+          <div class="reduction" id="reductionLunch">-30%</div>
           <input type="number" id="mealLunch" data-save="mealLunch" min="0" value="0" class="meal-num-input">
           <span class="meal-num-hint" data-i18n="mealsCount">szt.</span>
         </div>
         <div class="meal-card">
           <label class="meal-num-label" data-i18n="dinner">Kolacja</label>
-          <div class="reduction">-30%</div>
+          <div class="reduction" id="reductionDinner">-30%</div>
           <input type="number" id="mealDinner" data-save="mealDinner" min="0" value="0" class="meal-num-input">
           <span class="meal-num-hint" data-i18n="mealsCount">szt.</span>
         </div>
@@ -2120,7 +2120,7 @@ function recalculateDomestic(depDate, retDate) {
     var numBreakfasts = parseInt(document.getElementById('mealBreakfast').value) || 0;
     var numLunches = parseInt(document.getElementById('mealLunch').value) || 0;
     var numDinners = parseInt(document.getElementById('mealDinner').value) || 0;
-    mealReductionTotal = roundCurr(numBreakfasts * 0.15 * DOMESTIC_RATE + numLunches * 0.30 * DOMESTIC_RATE + numDinners * 0.30 * DOMESTIC_RATE);
+    mealReductionTotal = roundCurr(numBreakfasts * 0.25 * DOMESTIC_RATE + numLunches * 0.50 * DOMESTIC_RATE + numDinners * 0.25 * DOMESTIC_RATE);
   }
 
   var perDiemGross = roundCurr(effectiveDays * DOMESTIC_RATE);
@@ -2275,6 +2275,12 @@ function updateHotelCostHint() {
     }
   }
 }
+function updateMealReductionLabels() {
+  var isDomestic = document.getElementById('tripTypeDomestic').checked;
+  document.getElementById('reductionBreakfast').textContent = isDomestic ? '-25%' : '-15%';
+  document.getElementById('reductionLunch').textContent = isDomestic ? '-50%' : '-30%';
+  document.getElementById('reductionDinner').textContent = isDomestic ? '-25%' : '-30%';
+}
 document.querySelectorAll('input[name="ltYN"]').forEach(function(r) {
   r.addEventListener('change', function() {
     document.getElementById('localTransportIncluded').checked = (document.querySelector('input[name="ltYN"]:checked').value === 'yes');
@@ -2344,6 +2350,7 @@ document.querySelectorAll('input[name="tripType"]').forEach(function(radio) {
     document.getElementById('calcResults').style.display = 'none';
     document.getElementById('calcPlaceholder').style.display = 'block';
     updateHotelCostHint();
+    updateMealReductionLabels();
     saveFormData();
   });
 });
@@ -2732,7 +2739,7 @@ async function exportDocx() {
       var numBreakfasts = parseInt(document.getElementById('mealBreakfast').value) || 0;
       var numLunches = parseInt(document.getElementById('mealLunch').value) || 0;
       var numDinners = parseInt(document.getElementById('mealDinner').value) || 0;
-      mealReductionTotal = roundCurr(numBreakfasts * 0.15 * DOMESTIC_RATE + numLunches * 0.30 * DOMESTIC_RATE + numDinners * 0.30 * DOMESTIC_RATE);
+      mealReductionTotal = roundCurr(numBreakfasts * 0.25 * DOMESTIC_RATE + numLunches * 0.50 * DOMESTIC_RATE + numDinners * 0.25 * DOMESTIC_RATE);
     }
     var adjPD = DOMESTIC_RATE;
     var hotel = getHotelCalc(nights, DOMESTIC_HOTEL, 'PLN', true);
@@ -3246,7 +3253,7 @@ function getAdvanceAmount() {
 
   if (isDomestic) {
     var pdGross = effectiveDays * DOMESTIC_RATE;
-    var mealRed = mealsProvided ? roundCurr(numB * 0.15 * DOMESTIC_RATE + numL * 0.30 * DOMESTIC_RATE + numD * 0.30 * DOMESTIC_RATE) : 0;
+    var mealRed = mealsProvided ? roundCurr(numB * 0.25 * DOMESTIC_RATE + numL * 0.50 * DOMESTIC_RATE + numD * 0.25 * DOMESTIC_RATE) : 0;
     var pdNet = roundCurr(pdGross - mealRed);
     var htCalc = getHotelCalc(nights, DOMESTIC_HOTEL, 'PLN', true);
     var ht = htCalc.total;
@@ -3497,7 +3504,7 @@ function printForm() {
       var numB = parseInt(document.getElementById('mealBreakfast').value) || 0;
       var numL = parseInt(document.getElementById('mealLunch').value) || 0;
       var numD = parseInt(document.getElementById('mealDinner').value) || 0;
-      mealReductionTotal = roundCurr(numB * 0.15 * DOMESTIC_RATE + numL * 0.30 * DOMESTIC_RATE + numD * 0.30 * DOMESTIC_RATE);
+      mealReductionTotal = roundCurr(numB * 0.25 * DOMESTIC_RATE + numL * 0.50 * DOMESTIC_RATE + numD * 0.25 * DOMESTIC_RATE);
     }
     var hotel = getHotelCalc(nights, DOMESTIC_HOTEL, 'PLN', true);
     var pdTotal = roundCurr(effectiveDays * DOMESTIC_RATE - mealReductionTotal);
