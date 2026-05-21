@@ -369,7 +369,7 @@ textarea {
 
 .provider-tabs label:last-child { border-right: none; }
 
-.provider-tabs input[type="radio"] { display: none; }
+.provider-tabs input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none; }
 
 .provider-tabs input[type="radio"]:checked + label {
   background: var(--accent);
