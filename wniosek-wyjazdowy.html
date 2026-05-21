@@ -881,6 +881,8 @@ textarea {
   content: '• ';
   font-weight: 700;
 }
+
+
 </style>
 </head>
 <body>
@@ -892,11 +894,11 @@ textarea {
     <div class="org-badge-row">
       <div class="org-badge" data-i18n="orgBadge">Centrum Innowacji Odpowiedzialnych Społecznie (CSRI)</div>
       <div class="lang-toggle">
-        <button class="lang-btn active" data-lang="pl" onclick="setLang('pl')">PL</button>
-        <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+        <button class="lang-btn active" data-lang="pl">PL</button>
+        <button class="lang-btn" data-lang="en">EN</button>
       </div>
     </div>
-    <button class="dark-toggle" onclick="toggleDark()" title="Dark mode">
+    <button class="dark-toggle" id="darkToggleBtn" title="Dark mode">
       <i data-lucide="moon" style="width:18px;height:18px;"></i> <span data-i18n="darkLabel">Ciemny</span>
     </button>
   </div>
@@ -1449,7 +1451,7 @@ textarea {
       <p style="font-size:13px;color:var(--text-dim);margin-bottom:12px;" data-i18n="customRatesDesc">Wgraj plik CSV lub JSON z własnymi stawkami diet. Format CSV: kraj,waluta,dieta,hotel. Format JSON: obiekt z kluczami = nazwa kraju.</p>
       <input type="file" id="customRatesFile" accept=".csv,.json" style="margin-bottom:12px;">
       <div id="customRatesStatus"></div>
-      <button class="btn btn-secondary" onclick="resetCustomRates()" style="margin-top:8px;">
+      <button id="resetRatesBtn" class="btn btn-secondary" style="margin-top:8px;">
         <i data-lucide="rotate-ccw" style="width:14px;height:14px;"></i>
         <span data-i18n="resetRates">Przywróć domyślne stawki</span>
       </button>
@@ -1463,15 +1465,15 @@ textarea {
 <!-- ACTION BUTTONS -->
 <div class="form-section no-print" style="background:var(--surface2);">
   <div class="btn-group" style="justify-content:center;">
-    <button class="btn btn-primary" onclick="exportDocx().catch(function(e){ console.error(e); showToast('Export error: ' + e.message); })">
+    <button id="exportBtn" class="btn btn-primary">
       <i data-lucide="file-text" style="width:16px;height:16px;"></i>
       <span data-i18n="exportDocx">Pobierz wniosek (DOCX)</span>
     </button>
-    <button id="agreementBtn" class="btn btn-secondary" style="display:none;" onclick="generateAgreementDocx().catch(function(e){ console.error(e); showToast('Error: ' + e.message); })">
+    <button id="agreementBtn" class="btn btn-secondary" style="display:none;">
       <i data-lucide="file-signature" style="width:16px;height:16px;"></i>
       <span data-i18n="downloadAgreement">Pobierz umowę (DOCX)</span>
     </button>
-    <button id="clearBtn" class="btn btn-danger" onclick="handleClearClick()">
+    <button id="clearBtn" class="btn btn-danger">
       <i data-lucide="trash-2" style="width:16px;height:16px;"></i>
       <span data-i18n="clearForm">Wyczyść formularz</span>
     </button>
@@ -2337,8 +2339,6 @@ function formatInt(n) {
   return Number.isInteger(n) ? '' + n : n.toFixed(1);
 }
 
-
-
 // Recalc triggers
 ['departureDate', 'departureTime', 'returnDate', 'returnTime', 'hasPrivateDays', 'businessStartDate', 'businessEndDate', 'mealsProvided', 'mealBreakfast', 'mealLunch', 'mealDinner', 'hotelProvided', 'hotelCostPerNight', 'localTransportIncluded', 'ticketCost', 'ticketCurrency', 'visaCost', 'visaCurrency', 'requestAdvance', 'advanceCurrency', 'bankName', 'bankSwift', 'bankOwner', 'bankAccount'].forEach(function(id) {
   document.getElementById(id).addEventListener('change', function() { recalculate(); saveFormData(); });
@@ -3016,7 +3016,7 @@ function validateFormFields() {
       : 'Please fill in missing fields before export:';
     var listHtml = missing.map(function(id) { return '<li>' + (names[id] || id) + '</li>'; }).join('');
     var banner = document.getElementById('validationBanner');
-    banner.innerHTML = '<div class="vb-title"><span>' + title + '</span><button class="vb-close" onclick="this.parentElement.parentElement.classList.remove(\'visible\')">&times;</button></div><ul>' + listHtml + '</ul>';
+    banner.innerHTML = '<div class="vb-title"><span>' + title + '</span><button class="vb-close" data-action="close-banner">&times;</button></div><ul>' + listHtml + '</ul>';
     banner.classList.add('visible');
     setTimeout(function() { banner.classList.remove('visible'); }, 8000);
     banner.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -3068,7 +3068,7 @@ function downloadBlob(blob, filename) {
         var container = document.createElement('div');
         container.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:9999;background:#fff;padding:20px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.3);border-bottom:3px solid #1e3a5f;';
         container.innerHTML = '<a href="' + dataUrl + '" download="' + filename + '" style="padding:12px 24px;background:#1e3a5f;color:white;border-radius:8px;text-decoration:none;font-family:sans-serif;">Pobierz / Download: ' + filename + '</a>' +
-          '<button onclick="this.parentElement.remove()" style="margin-left:16px;padding:8px 16px;border:1px solid #ccc;border-radius:6px;background:#f5f5f5;cursor:pointer;font-family:sans-serif;">✕</button>';
+          '<button data-action="close-dlbar" style="margin-left:16px;padding:8px 16px;border:1px solid #ccc;border-radius:6px;background:#f5f5f5;cursor:pointer;font-family:sans-serif;">✕</button>';
         document.body.appendChild(container);
       }
     };
@@ -3131,7 +3131,7 @@ async function generateAgreementDocx() {
       : 'Please fill in missing fields before generating the agreement:';
     var listHtml = missing.map(function(m) { return '<li>' + m + '</li>'; }).join('');
     var banner = document.getElementById('validationBanner');
-    banner.innerHTML = '<div class="vb-title"><span>' + title + '</span><button class="vb-close" onclick="this.parentElement.parentElement.classList.remove(\'visible\')">&times;</button></div><ul>' + listHtml + '</ul>';
+    banner.innerHTML = '<div class="vb-title"><span>' + title + '</span><button class="vb-close" data-action="close-banner">&times;</button></div><ul>' + listHtml + '</ul>';
     banner.classList.add('visible');
     setTimeout(function() { banner.classList.remove('visible'); }, 8000);
     var firstField = document.getElementById('fullName');
@@ -3996,6 +3996,30 @@ document.addEventListener('DOMContentLoaded', function() {
     if (e.target.name === 'transport') {
       var tg = document.getElementById('transportGroup');
       if (tg) tg.classList.remove('field-error');
+    }
+  });
+
+  // ---- Event listeners (no inline onclick — CSP-safe for iframe) ----
+  document.getElementById('exportBtn').addEventListener('click', function() {
+    exportDocx().catch(function(e) { console.error(e); showToast('Error: ' + e.message); });
+  });
+  document.getElementById('agreementBtn').addEventListener('click', function() {
+    generateAgreementDocx().catch(function(e) { console.error(e); showToast('Error: ' + e.message); });
+  });
+  document.getElementById('clearBtn').addEventListener('click', handleClearClick);
+  document.getElementById('resetRatesBtn').addEventListener('click', resetCustomRates);
+  document.querySelectorAll('.lang-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() { setLang(this.getAttribute('data-lang')); });
+  });
+  document.getElementById('darkToggleBtn').addEventListener('click', toggleDark);
+  // Event delegation for dynamically created close buttons
+  document.addEventListener('click', function(e) {
+    if (e.target.getAttribute('data-action') === 'close-banner') {
+      var banner = e.target.closest('.validation-banner');
+      if (banner) banner.classList.remove('visible');
+    }
+    if (e.target.getAttribute('data-action') === 'close-dlbar') {
+      e.target.parentElement.remove();
     }
   });
   checkRatesFreshness();
