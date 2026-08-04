@@ -15,18 +15,18 @@
   --bg: transparent;
   --surface: #ffffff;
   --surface2: #edf0f5;
-  --border: #c9cdd4;
+  --border: #9aa0a8;
   --text: #1f1f1f;
   --text-dim: #5f6368;
   --accent: #1E3050;
   --accent-dim: #e0e5ed;
   --accent-teal: #3B5088;
   --accent-teal-dim: #e3e8f2;
-  --green: #16a34a;
+  --green: #15803d;
   --green-dim: #16a34a12;
-  --yellow: #ca8a04;
+  --yellow: #a16207;
   --yellow-dim: #ca8a0415;
-  --red: #dc2626;
+  --red: #b91c1c;
   --red-dim: #dc262615;
   --radius: 14px;
 }
@@ -35,14 +35,14 @@
   --bg: #1a1a2e;
   --surface: #16213e;
   --surface2: #0f3460;
-  --border: #2a4a7f;
+  --border: #4a6a9f;
   --text: #e0e0e0;
   --text-dim: #a0a0b0;
-  --accent: #4a7fc1;
+  --accent: #8ab4e8;
   --accent-dim: #1a2a4a;
-  --accent-teal: #5b8ad8;
+  --accent-teal: #93b8ea;
   --accent-teal-dim: #1a2a4a;
-  --green: #22c55e;
+  --green: #16a34a;
   --green-dim: #22c55e20;
   --yellow: #eab308;
   --yellow-dim: #eab30820;
@@ -89,6 +89,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
   margin-bottom: 0.5rem;
 }
 
@@ -625,13 +627,20 @@ textarea {
   .btn { width: 100%; justify-content: center; }
 }
 
-/* Print */
+/* Stan zaznaczonej opcji noclegu */
+.hotel-option:has(input:checked) {
+  border-color: var(--accent) !important;
+  background: var(--accent-dim, rgba(59,130,246,0.06));
+}
+
+/* Wydruk */
 @media print {
   * { color: #000 !important; background: #fff !important; box-shadow: none !important; }
   body { padding: 0; margin: 0; font-size: 11pt; }
-  .hero-controls, .btn-group, .no-print, .hero-lead, .org-badge, .author-line,
-  .version-tag, .howto-section, .form-section.no-print, #ratesWarningBox,
-  .field-hint, .optional-badge, .regulation-line { display: none !important; }
+  .hero-controls, .lang-toggle, .dark-toggle, .btn-group, .no-print, .hero-lead,
+  .org-badge, .author-line, .version-tag, .form-section.no-print, #ratesWarningBox,
+  .field-hint, .help-tip, #helpBubble, #validationBanner, .toast,
+  .cost-remove-btn, #addCostItemBtn, .hero details { display: none !important; }
   .container { max-width: 100%; padding: 0; }
   .hero { box-shadow: none; border: none; margin-bottom: 0; padding: 8px 0; }
   .hero-title { font-size: 16pt; margin-bottom: 4px; }
@@ -642,9 +651,9 @@ textarea {
   .provider-tabs label { font-size: 9pt; padding: 2px 8px; border: 1px solid #999; }
   .provider-tabs input:checked + label { background: #000 !important; color: #fff !important; }
   .checkbox-group label { font-size: 9pt; }
-  .section-title { font-size: 12pt; }
   .calc-table { font-size: 9pt; }
   .calc-table th, .calc-table td { padding: 3px 6px; }
+  .calc-table-wrap { overflow: visible !important; }
   @page { size: A4; margin: 2cm; }
 }
 
@@ -721,7 +730,23 @@ textarea {
   overflow: hidden;
   flex-shrink: 0;
 }
-.yesno-pair input { display: none; }
+.yesno-pair input {
+  position: absolute; opacity: 0; width: 1px; height: 1px;
+  margin: 0; pointer-events: none;
+}
+.yesno-pair input:focus-visible + label {
+  outline: 2px solid var(--accent-teal);
+  outline-offset: 2px;
+}
+.provider-tabs input:focus-visible + label {
+  outline: 2px solid var(--accent-teal);
+  outline-offset: -2px;
+}
+input:focus-visible, select:focus-visible, textarea:focus-visible,
+button:focus-visible, .help-tip:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--accent-teal);
+  outline-offset: 2px;
+}
 .hotel-option:has(input:checked) {
   border-color: var(--accent);
   background: color-mix(in srgb, var(--accent) 6%, transparent);
@@ -884,9 +909,118 @@ textarea {
 }
 
 
+
+.field-hint { font-size: 0.82rem; color: var(--text-dim); font-weight: 400; }
+.info-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 0.88rem; margin-bottom: 10px; }
+.meal-num-label { display:block; font-size:0.85rem; font-weight:600; margin-bottom:4px; }
+.meal-num-input { width: 100%; }
+.meal-num-hint { font-size:0.78rem; color: var(--text-dim); }
+
+/* Pasek sterowania w nagłówku */
+.hero-controls {
+  display: flex; align-items: center; gap: 8px; flex-shrink: 0; flex-wrap: wrap;
+}
+.ctrl-btn {
+  min-width: 104px;               /* stała szerokość — nie skacze po kliknięciu */
+  justify-content: center;
+  white-space: nowrap;
+}
+.ctrl-ico { width: 17px; height: 17px; flex-shrink: 0; }
+@media (max-width: 560px) {
+  .ctrl-btn { min-width: 0; }
+  .ctrl-btn span { display: none; }   /* na wąskim ekranie same ikony */
+  .ctrl-btn { padding: 6px 9px; }
+}
+
+.field-error-group { outline: 2px solid var(--red); outline-offset: 4px; border-radius: 10px; }
+
+/* Wiersz pozycji kosztu */
+.cost-item-row {
+  display: grid; grid-template-columns: 2fr 1fr 1fr auto;
+  gap: 8px; align-items: end; margin-bottom: 8px; padding: 8px 10px;
+  border: 1px solid var(--border); border-radius: 8px; background: var(--surface2);
+}
+.cost-item-label { font-size: 0.82em; color: var(--text-dim); display: block; margin-bottom: 3px; }
+.cost-remove-btn {
+  background: none; border: none; cursor: pointer; color: var(--text-dim);
+  padding: 6px; border-radius: 6px; line-height: 0;
+}
+.cost-remove-btn:hover { background: var(--surface); color: var(--red); }
+
+/* Tabela kalkulatora nie wylewa się na wąskim ekranie */
+.calc-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+#hotelCostInputRow > div { flex-wrap: wrap; }
+
+@media (max-width: 640px) {
+  .cost-item-row { grid-template-columns: 1fr 1fr; }
+  .cost-item-row > div:first-child { grid-column: 1 / -1; }
+  .calc-table { font-size: 12px; }
+  .calc-table th, .calc-table td { padding: 6px 8px; }
+}
+
+/* === HELP TOOLTIPS === */
+.help-tip {
+  padding: 0; appearance: none; -webkit-appearance: none;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 16px; height: 16px; min-width: 16px; border-radius: 50%;
+  background: var(--surface2); color: var(--text-dim);
+  border: 1px solid var(--border);
+  font-size: 10px; font-weight: 700; line-height: 1;
+  cursor: help; margin-left: 4px; vertical-align: middle;
+  user-select: none; flex-shrink: 0;
+  text-transform: none; letter-spacing: 0;
+  font-family: 'Titillium Web', sans-serif;
+  transition: background .15s, color .15s, border-color .15s;
+  position: static;
+}
+.help-tip:hover, .help-tip:focus-visible {
+  background: var(--accent); color: #fff; border-color: var(--accent); outline: none;
+}
+
+/* Pojedynczy dymek — pozycjonowany w JS, nigdy nie wychodzi poza okno */
+#helpBubble {
+  position: fixed; z-index: 9999;
+  max-width: 280px; padding: 8px 11px;
+  background: #1f2937; color: #f9fafb;
+  border-radius: 7px; font-size: 0.78rem; line-height: 1.42;
+  font-weight: 400; font-family: 'Titillium Web', sans-serif;
+  text-align: left; letter-spacing: normal; text-transform: none;
+  box-shadow: 0 6px 20px rgba(0,0,0,.25);
+  pointer-events: none; opacity: 0; visibility: hidden;
+  transition: opacity .14s ease, visibility .14s;
+}
+#helpBubble.visible { opacity: 1; visibility: visible; }
+#helpBubble::after {
+  content: ''; position: absolute; left: var(--arrow-x, 50%);
+  border: 6px solid transparent; margin-left: -6px;
+}
+#helpBubble.below::after { bottom: 100%; border-bottom-color: #1f2937; }
+#helpBubble.above::after { top: 100%; border-top-color: #1f2937; }
+
+/* Konteksty flex — dymek nie może rozpychać układu ani łamać wiersza */
+.form-section h2 .help-tip { margin-left: -4px; align-self: center; }
+.checkbox-item .help-tip   { margin-left: -3px; }
+.hotel-option .help-tip,
+.yesno-label-text .help-tip,
+.form-group label .help-tip { position: relative; top: -1px; }
+
+/* W etykietach form-group dymek dziedziczy uppercase — zerujemy */
+.form-group label .help-tip,
+.checkbox-item .help-tip,
+.form-section h2 .help-tip {
+  text-transform: none; letter-spacing: 0; font-weight: 700;
+}
+
+/* Dymek trzyma się ostatniego słowa — nie zostaje sam w nowym wierszu */
+.help-tip { white-space: nowrap; }
+
+
+@media print { .help-tip, #helpBubble { display: none !important; } }
 </style>
 </head>
 <body>
+<div id="helpBubble" role="tooltip" aria-hidden="true"></div>
 <div class="container">
 
 <!-- HERO -->
@@ -899,9 +1033,13 @@ textarea {
         <button class="lang-btn" data-lang="en">EN</button>
       </div>
     </div>
-    <button class="dark-toggle" id="darkToggleBtn" title="Dark mode">
-      <i data-lucide="moon" style="width:18px;height:18px;"></i> <span data-i18n="darkLabel">Ciemny</span>
-    </button>
+    <div class="hero-controls">
+      <button class="dark-toggle ctrl-btn" id="darkToggleBtn" title="Tryb ciemny">
+        <svg class="ctrl-ico" id="darkIcoMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        <svg class="ctrl-ico" id="darkIcoSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:none;"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M5 5l1.5 1.5M17.5 17.5 19 19M2 12h2M20 12h2M5 19l1.5-1.5M17.5 6.5 19 5"/></svg>
+        <span data-i18n="darkLabel">Ciemny</span>
+      </button>
+    </div>
   </div>
   <h1 class="hero-title"><span data-i18n="heroTitle">Wniosek wyjazdowy</span> <span class="version-tag">v1.1</span></h1>
   <p class="hero-lead" data-i18n="heroLead">Narzędzie do wypełniania wniosków wyjazdowych i automatycznego obliczania diet przysługujących pracownikom, doktorantom i studentom Wydziału Zarządzania UW.</p>
@@ -923,7 +1061,7 @@ textarea {
 </div>
 <div class="hero-bar"></div>
 
-<div id="validationBanner" class="validation-banner"></div>
+<div id="validationBanner" class="validation-banner" role="alert" aria-live="assertive"></div>
 
 <!-- SECTION 1: PERSONAL DATA -->
 <div class="form-section">
@@ -934,18 +1072,18 @@ textarea {
 
   <div class="form-row">
     <div class="form-group">
-      <label data-i18n="fullName">Imię i nazwisko <span class="req-star">*</span></label>
+      <label data-i18n="fullName" for="fullName">Imię i nazwisko <span class="req-star">*</span> <button type="button" class="help-tip" data-tip-pl="Imię i nazwisko zgodne z dokumentem tożsamości — trafi wprost na wniosek i do umowy." data-tip-en="Full name as in your ID document — it goes directly onto the request form and contract." data-tooltip="Imię i nazwisko zgodne z dokumentem tożsamości — trafi wprost na wniosek i do umowy." aria-label="Pomoc">?</button></label>
       <input type="text" id="fullName" required aria-required="true" data-save="fullName">
     </div>
     <div class="form-group">
-      <label data-i18n="email">Email <span class="req-star">*</span></label>
+      <label data-i18n="email" for="email">Email <span class="req-star">*</span> <button type="button" class="help-tip" data-tip-pl="Najlepiej adres służbowy w domenie UW. Na ten adres przyjdzie decyzja o wniosku." data-tip-en="Preferably your UW work address. The decision on your request will be sent here." data-tooltip="Najlepiej adres służbowy w domenie UW. Na ten adres przyjdzie decyzja o wniosku." aria-label="Pomoc">?</button></label>
       <input type="email" id="email" required aria-required="true" data-save="email" pattern="[^\s@]+@[^\s@]+\.[^\s@]+" title="np. jan@uw.edu.pl">
     </div>
   </div>
 
   <div class="form-row">
     <div class="form-group full">
-      <label data-i18n="statusLabel">Status</label>
+      <label data-i18n="statusLabel">Status <button type="button" class="help-tip" data-tip-pl="Status wpływa na tryb rozliczenia. Pracownik — delegacja służbowa; doktorant i student — wyjazd na podstawie skierowania." data-tip-en="Status affects the settlement mode. Employee — business trip; PhD student and student — trip based on a referral." data-tooltip="Status wpływa na tryb rozliczenia. Pracownik — delegacja służbowa; doktorant i student — wyjazd na podstawie skierowania." aria-label="Pomoc">?</button></label>
       <div class="provider-tabs" id="statusTabs">
         <input type="radio" name="status" id="statusPracownik" value="pracownik" data-save="status" checked>
         <label for="statusPracownik" data-i18n="statusEmployee">Pracownik</label>
@@ -966,21 +1104,21 @@ textarea {
     </div>
     <div class="form-row">
       <div class="form-group">
-        <label data-i18n="otherStreet">Ulica i numer <span class="req-star">*</span></label>
+        <label data-i18n="otherStreet" for="otherStreet">Ulica i numer <span class="req-star">*</span></label>
         <input type="text" id="otherStreet" data-save="otherStreet">
       </div>
       <div class="form-group">
-        <label data-i18n="otherPostalCode">Kod pocztowy <span class="req-star">*</span></label>
+        <label data-i18n="otherPostalCode" for="otherPostalCode">Kod pocztowy <span class="req-star">*</span></label>
         <input type="text" id="otherPostalCode" data-save="otherPostalCode" placeholder="00-000" pattern="[0-9]{2}-[0-9]{3}" maxlength="6" title="Format: 00-000">
       </div>
     </div>
     <div class="form-row">
       <div class="form-group">
-        <label data-i18n="otherCity">Miejscowość <span class="req-star">*</span></label>
+        <label data-i18n="otherCity" for="otherCity">Miejscowość <span class="req-star">*</span></label>
         <input type="text" id="otherCity" data-save="otherCity">
       </div>
       <div class="form-group">
-        <label data-i18n="otherCountry">Kraj <span class="req-star">*</span></label>
+        <label data-i18n="otherCountry" for="otherCountry">Kraj <span class="req-star">*</span></label>
         <input type="text" id="otherCountry" data-save="otherCountry" value="Polska">
       </div>
     </div>
@@ -988,25 +1126,25 @@ textarea {
 
   <div class="form-row">
     <div class="form-group full">
-      <label data-i18n="unitName">Nazwa jednostki UW <span class="req-star">*</span></label>
-      <input type="text" id="unitName" data-save="unitName" value="Wydział Zarządzania UW, ul. Szturmowa 1/3, 02-678 Warszawa">
+      <label data-i18n="unitName" for="unitName">Nazwa jednostki UW <span class="req-star">*</span> <button type="button" class="help-tip" data-tip-pl="Katedra, zakład lub centrum, w którym jesteś zatrudniony lub afiliowany (np. Katedra Teorii Organizacji i Zarządzania)." data-tip-en="The department, unit or centre where you are employed or affiliated (e.g. Department of Organisation Theory)." data-tooltip="Katedra, zakład lub centrum, w którym jesteś zatrudniony lub afiliowany (np. Katedra Teorii Organizacji i Zarządzania)." aria-label="Pomoc">?</button></label>
+      <input type="text" id="unitName" aria-required="true" data-save="unitName" value="Wydział Zarządzania UW, ul. Szturmowa 1/3, 02-678 Warszawa">
     </div>
   </div>
 
   <div class="form-row">
     <div class="form-group">
-      <label data-i18n="workPhone">Telefon służbowy</label>
+      <label data-i18n="workPhone" for="workPhone">Telefon służbowy</label>
       <input type="tel" id="workPhone" data-save="workPhone">
     </div>
     <div class="form-group">
-      <label data-i18n="privatePhone">Telefon prywatny</label>
+      <label data-i18n="privatePhone" for="privatePhone">Telefon prywatny</label>
       <input type="tel" id="privatePhone" data-save="privatePhone">
     </div>
   </div>
 
   <div class="form-row">
     <div class="form-group">
-      <label data-i18n="submissionDate">Data złożenia wniosku</label>
+      <label data-i18n="submissionDate" for="submissionDate">Data złożenia wniosku <button type="button" class="help-tip" data-tip-pl="Wniosek należy złożyć przed wyjazdem. Zaliczka wymaga zwykle co najmniej 14 dni wyprzedzenia." data-tip-en="The request must be submitted before departure. An advance payment usually requires at least 14 days' notice." data-tooltip="Wniosek należy złożyć przed wyjazdem. Zaliczka wymaga zwykle co najmniej 14 dni wyprzedzenia." aria-label="Pomoc">?</button></label>
       <input type="date" id="submissionDate" data-save="submissionDate">
     </div>
   </div>
@@ -1044,42 +1182,37 @@ textarea {
 
   <div class="form-row">
     <div class="form-group full">
-      <label data-i18n="hostInstitution">Instytucja przyjmująca <span class="req-star">*</span></label>
+      <label data-i18n="hostInstitution" for="hostInstitution">Instytucja przyjmująca <span class="req-star">*</span> <button type="button" class="help-tip" data-tip-pl="Pełna nazwa uczelni, instytutu lub organizatora konferencji wraz z miastem." data-tip-en="Full name of the university, institute or conference organiser, including the city." data-tooltip="Pełna nazwa uczelni, instytutu lub organizatora konferencji wraz z miastem." aria-label="Pomoc">?</button></label>
       <input type="text" id="hostInstitution" required aria-required="true" data-save="hostInstitution">
     </div>
   </div>
 
   <div class="form-row">
     <div class="form-group full">
-      <label data-i18n="purposeOfTravel">Cel wyjazdu <span class="req-star">*</span></label>
+      <label data-i18n="purposeOfTravel" for="purposeOfTravel">Cel wyjazdu <span class="req-star">*</span> <button type="button" class="help-tip" data-tip-pl="Konkretnie: tytuł konferencji, nazwa projektu, przedmiot kwerendy. Ogólniki typu &quot;współpraca naukowa&quot; bywają odsyłane do uzupełnienia." data-tip-en="Be specific: conference title, project name, subject of the query. Vague entries like &quot;academic cooperation&quot; are often returned for clarification." data-tooltip="Konkretnie: tytuł konferencji, nazwa projektu, przedmiot kwerendy. Ogólniki typu &quot;współpraca naukowa&quot; bywają odsyłane do uzupełnienia." aria-label="Pomoc">?</button></label>
       <textarea id="purposeOfTravel" required aria-required="true" data-save="purposeOfTravel" rows="3"></textarea>
     </div>
   </div>
 
   <div class="form-row">
     <div class="form-group full">
-      <label data-i18n="transport">Środek transportu <span class="req-star">*</span></label>
+      <label data-i18n="transport">Środek transportu <span class="req-star">*</span> <button type="button" class="help-tip" data-tip-pl="Można zaznaczyć kilka, jeśli trasa jest łączona. Samochód prywatny wymaga odrębnej umowy i zgody dziekana." data-tip-en="You may select several if the route is combined. A private car requires a separate contract and the dean's approval." data-tooltip="Można zaznaczyć kilka, jeśli trasa jest łączona. Samochód prywatny wymaga odrębnej umowy i zgody dziekana." aria-label="Pomoc">?</button></label>
       <div class="checkbox-group" id="transportGroup">
         <label class="checkbox-item">
           <input type="checkbox" name="transport" value="samolot" data-save="trPlane">
-          <span data-i18n="trPlane">Samolot</span>
-        </label>
+          <span data-i18n="trPlane">Samolot</span></label>
         <label class="checkbox-item">
           <input type="checkbox" name="transport" value="pociag" data-save="trTrain">
-          <span data-i18n="trTrain">Pociąg</span>
-        </label>
+          <span data-i18n="trTrain">Pociąg</span></label>
         <label class="checkbox-item">
           <input type="checkbox" name="transport" value="autobus" data-save="trBus">
-          <span data-i18n="trBus">Autobus</span>
-        </label>
+          <span data-i18n="trBus">Autobus</span></label>
         <label class="checkbox-item">
           <input type="checkbox" name="transport" value="prom" data-save="trFerry">
-          <span data-i18n="trFerry">Prom</span>
-        </label>
+          <span data-i18n="trFerry">Prom</span></label>
         <label class="checkbox-item">
           <input type="checkbox" name="transport" value="samochod" data-save="trCar">
-          <span data-i18n="trCar">Samochód</span>
-        </label>
+          <span data-i18n="trCar">Samochód</span></label>
       </div>
       <p style="font-size:12px;color:var(--text-dim);margin-top:4px;" data-i18n="carNote">* W przypadku samochodu wymagana jest osobna umowa na korzystanie z pojazdu prywatnego.</p>
     </div>
@@ -1095,22 +1228,22 @@ textarea {
 
   <div class="form-row">
     <div class="form-group">
-      <label data-i18n="departureFrom">Wyjazd z</label>
+      <label data-i18n="departureFrom" for="departureFrom">Wyjazd z</label>
       <input type="text" id="departureFrom" data-save="departureFrom" value="Warszawa, Polska">
     </div>
     <div class="form-group">
-      <label data-i18n="via">Przez <span class="label-hint" data-i18n="optional">(opcjonalnie)</span></label>
+      <label data-i18n="via" for="via">Przez <span class="label-hint" data-i18n="optional">(opcjonalnie)</span></label>
       <input type="text" id="via" data-save="via">
     </div>
   </div>
 
   <div class="form-row">
     <div class="form-group">
-      <label data-i18n="destinationCity">Miejsce docelowe <span class="req-star">*</span></label>
+      <label data-i18n="destinationCity" for="destinationCity">Miejsce docelowe <span class="req-star">*</span> <button type="button" class="help-tip" data-tip-pl="Miasto, w którym odbywa się konferencja lub wizyta. Przy kilku miastach wpisz główne, resztę opisz w polu &quot;Przez&quot;." data-tip-en="The city where the conference or visit takes place. For multiple cities, enter the main one and list the rest under &quot;Via&quot;." data-tooltip="Miasto, w którym odbywa się konferencja lub wizyta. Przy kilku miastach wpisz główne, resztę opisz w polu &quot;Przez&quot;." aria-label="Pomoc">?</button></label>
       <input type="text" id="destinationCity" required aria-required="true" data-save="destinationCity">
     </div>
     <div class="form-group">
-      <label data-i18n="destinationCountry">Kraj docelowy</label>
+      <label data-i18n="destinationCountry">Kraj docelowy <button type="button" class="help-tip" data-tip-pl="Kraj wyznacza stawkę diety i limit noclegowy z rozporządzenia. Zmiana kraju przelicza cały kalkulator." data-tip-en="The country determines the per diem rate and accommodation limit under the regulation. Changing it recalculates everything." data-tooltip="Kraj wyznacza stawkę diety i limit noclegowy z rozporządzenia. Zmiana kraju przelicza cały kalkulator." aria-label="Pomoc">?</button></label>
       <div class="country-search-wrapper">
         <input type="text" id="countrySearch" autocomplete="off" data-i18n-placeholder="searchCountry" placeholder="Wpisz nazwę kraju...">
         <div class="country-dropdown" id="countryDropdown"></div>
@@ -1121,33 +1254,33 @@ textarea {
 
   <div class="form-row" style="grid-template-columns: 2fr 1fr 2fr;">
     <div class="form-group">
-      <label data-i18n="returnFrom">Powrót z <span class="label-hint" data-i18n="autoFilled">(auto)</span></label>
+      <label data-i18n="returnFrom" for="returnFrom">Powrót z <span class="label-hint" data-i18n="autoFilled">(auto)</span></label>
       <input type="text" id="returnFrom" data-save="returnFrom">
     </div>
     <div class="form-group">
-      <label data-i18n="returnVia">Przez</label>
+      <label data-i18n="returnVia" for="returnVia">Przez</label>
       <input type="text" id="returnVia" data-save="returnVia" placeholder="—">
     </div>
     <div class="form-group">
-      <label data-i18n="returnTo">Do <span class="label-hint" data-i18n="autoFilled">(auto)</span></label>
+      <label data-i18n="returnTo" for="returnTo">Do <span class="label-hint" data-i18n="autoFilled">(auto)</span></label>
       <input type="text" id="returnTo" data-save="returnTo">
     </div>
   </div>
 
   <div class="form-row" id="datesRow" style="grid-template-columns: 1fr 1fr;">
     <div class="form-group">
-      <label data-i18n="departureDate">Data wyjazdu <span class="req-star">*</span></label>
+      <label data-i18n="departureDate" for="departureDate">Data wyjazdu <span class="req-star">*</span> <button type="button" class="help-tip" data-tip-pl="Data faktycznego przekroczenia granicy lub opuszczenia miejsca zamieszkania — nie data rozpoczęcia konferencji." data-tip-en="The date you actually cross the border or leave home — not the conference start date." data-tooltip="Data faktycznego przekroczenia granicy lub opuszczenia miejsca zamieszkania — nie data rozpoczęcia konferencji." aria-label="Pomoc">?</button></label>
       <input type="date" id="departureDate" required aria-required="true" data-save="departureDate">
-      <div class="domestic-only-field" style="display:none;margin-top:8px;">
-        <label data-i18n="departureTime" style="font-size:0.82rem;">Godz. wyjazdu <span class="req-star">*</span></label>
+      <div class="trip-time-field" style="margin-top:8px;">
+        <label data-i18n="departureTime" style="font-size:0.82rem;" for="departureTime">Godz. wyjazdu</label>
         <input type="time" id="departureTime" data-save="departureTime">
       </div>
     </div>
     <div class="form-group">
-      <label data-i18n="returnDate">Data powrotu <span class="req-star">*</span></label>
+      <label data-i18n="returnDate" for="returnDate">Data powrotu <span class="req-star">*</span></label>
       <input type="date" id="returnDate" required aria-required="true" data-save="returnDate">
-      <div class="domestic-only-field" style="display:none;margin-top:8px;">
-        <label data-i18n="returnTime" style="font-size:0.82rem;">Godz. powrotu <span class="req-star">*</span></label>
+      <div class="trip-time-field" style="margin-top:8px;">
+        <label data-i18n="returnTime" style="font-size:0.82rem;" for="returnTime">Godz. powrotu</label>
         <input type="time" id="returnTime" data-save="returnTime">
       </div>
     </div>
@@ -1156,7 +1289,7 @@ textarea {
   <!-- PRIVATE DAYS -->
   <div class="yesno-row">
     <div class="yesno-label-text">
-      <span data-i18n="hasPrivateDays">Pobyt obejmuje dni prywatne (na własny koszt)</span>
+      <span data-i18n="hasPrivateDays">Pobyt obejmuje dni prywatne (na własny koszt) </span> <button type="button" class="help-tip" data-tip-pl="Zaznacz, jeśli przedłużasz pobyt o urlop. Diety, noclegi i ryczałt liczone są wtedy tylko za okres służbowy, a bilet nadal podlega zwrotowi." data-tip-en="Tick this if you extend your stay with leave. Per diems, accommodation and the lump sum then cover only the business period, while the ticket is still reimbursed." data-tooltip="Zaznacz, jeśli przedłużasz pobyt o urlop. Diety, noclegi i ryczałt liczone są wtedy tylko za okres służbowy, a bilet nadal podlega zwrotowi." aria-label="Pomoc">?</button>
     </div>
     <div class="yesno-pair">
       <input type="radio" name="privateDaysYN" id="privateDaysNo" value="no" checked>
@@ -1166,16 +1299,16 @@ textarea {
     </div>
   </div>
   <input type="checkbox" id="hasPrivateDays" data-save="hasPrivateDays" style="display:none;">
-  <div id="privateDaysHint" style="display:none; font-size:0.82rem; color:var(--muted); margin:-2px 0 6px 0; padding:0 4px;" data-i18n="privateDaysHint">
+  <div id="privateDaysHint" style="display:none; font-size:0.82rem; color:var(--text-dim); margin:-2px 0 6px 0; padding:0 4px;" data-i18n="privateDaysHint">
     Diety, noclegi i transport lokalny będą liczone tylko za okres delegacji służbowej.
   </div>
   <div id="privateDaysRow" class="form-row" style="display:none;">
     <div class="form-group">
-      <label data-i18n="businessStartDate">Początek delegacji służbowej</label>
+      <label data-i18n="businessStartDate" for="businessStartDate">Początek delegacji służbowej <button type="button" class="help-tip" data-tip-pl="Pierwszy dzień części służbowej wyjazdu. Diety i noclegi liczone są wyłącznie od tego dnia." data-tip-en="First day of the business part of the trip. Per diems and accommodation are counted only from this day." data-tooltip="Pierwszy dzień części służbowej wyjazdu. Diety i noclegi liczone są wyłącznie od tego dnia." aria-label="Pomoc">?</button></label>
       <input type="date" id="businessStartDate" data-save="businessStartDate">
     </div>
     <div class="form-group">
-      <label data-i18n="businessEndDate">Koniec delegacji służbowej</label>
+      <label data-i18n="businessEndDate" for="businessEndDate">Koniec delegacji służbowej <button type="button" class="help-tip" data-tip-pl="Ostatni dzień części służbowej. Dni po tej dacie traktowane są jako prywatne i nie generują świadczeń." data-tip-en="Last day of the business part. Days after this date count as private and generate no entitlements." data-tooltip="Ostatni dzień części służbowej. Dni po tej dacie traktowane są jako prywatne i nie generują świadczeń." aria-label="Pomoc">?</button></label>
       <input type="date" id="businessEndDate" data-save="businessEndDate">
     </div>
   </div>
@@ -1193,60 +1326,50 @@ textarea {
 <div class="form-section">
   <h2>
     <span class="section-icon"><i data-lucide="wallet" style="width:18px;height:18px;"></i></span>
-    <span data-i18n="sec4Title">4. Źródło finansowania</span>
+    <span data-i18n="sec4Title">4. Źródło finansowania</span> <button type="button" class="help-tip" data-tip-pl="Numer projektu jest wymagany — bez niego wniosek nie przejdzie kontroli formalnej w Kwesturze." data-tip-en="The project number is mandatory — without it the request will not pass formal review at the Bursar's Office." data-tooltip="Numer projektu jest wymagany — bez niego wniosek nie przejdzie kontroli formalnej w Kwesturze." aria-label="Pomoc">?</button>
   </h2>
 
   <div class="form-row">
     <div class="form-group full">
-      <label data-i18n="projectNumber">Nr finansowo-księgowy projektu <span class="req-star">*</span></label>
-      <input type="text" id="projectNumber" required aria-required="true" data-save="projectNumber" placeholder="Numer przypisany do projektu/grantu (znajdziesz go w umowie grantowej lub u kierownika projektu)">
+      <label data-i18n="projectNumber" for="projectNumber">Nr finansowo-księgowy projektu <span class="req-star">*</span> <button type="button" class="help-tip" data-tip-pl="Numer księgowy nadany przez Kwesturę UW — nie numer umowy grantowej ani akronim projektu. Znajdziesz go w SAP lub u opiekuna projektu." data-tip-en="The ledger number assigned by the UW Bursar's Office — not the grant agreement number or project acronym. Find it in SAP or ask your project officer." data-tooltip="Numer księgowy nadany przez Kwesturę UW — nie numer umowy grantowej ani akronim projektu. Znajdziesz go w SAP lub u opiekuna projektu." aria-label="Pomoc">?</button></label>
+      <input type="text" id="projectNumber" required aria-required="true" data-save="projectNumber" data-i18n-placeholder="projectNumberPh" placeholder="Numer przypisany do projektu/grantu (znajdziesz go w umowie grantowej lub u kierownika projektu)">
     </div>
   </div>
 
-  <details class="optional-section" id="costsDetails">
-    <summary data-i18n="optionalCostsTitle">Koszty dodatkowe <span class="optional-badge" data-i18n="optionalBadge">(opcjonalne)</span></summary>
-    <p class="field-hint" style="margin:8px 0 12px;" data-i18n="optionalCostsHint">Wypełnij, jeśli znasz koszty biletów, wizy lub chcesz wnioskować o zaliczkę. Możesz uzupełnić później — te pola nie są wymagane do złożenia wniosku.</p>
-
-    <div class="form-row">
-      <div class="form-group">
-        <label data-i18n="ticketCost">Bilety (kwota)</label>
-        <input type="number" id="ticketCost" data-save="ticketCost" step="0.01" min="0" value="0.00" placeholder="0.00">
-        <span class="field-hint" data-i18n="ticketHint">Koszt biletów lotniczych/kolejowych (jeśli znany)</span>
-      </div>
-      <div class="form-group">
-        <label data-i18n="ticketCurrency">Waluta biletów</label>
-        <select id="ticketCurrency" data-save="ticketCurrency"><option value="PLN">PLN</option></select>
-      </div>
+  <div id="costsSection" style="margin-top:16px;">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+      <h3 style="margin:0; font-size:1rem; font-weight:600;" data-i18n="additionalCostsTitle">Koszty dodatkowe</h3>
+      <span class="field-hint" data-i18n="optionalBadge" style="font-size:0.82rem;">(opcjonalne)</span>
     </div>
+    <p class="field-hint" style="margin:0 0 12px;" data-i18n="optionalCostsHint">Wypełnij, jeśli znasz koszty biletów, wizy lub chcesz wnioskować o zaliczkę.</p>
 
-    <div class="form-row">
-      <div class="form-group">
-        <label data-i18n="visaCost">Wiza (kwota)</label>
-        <input type="number" id="visaCost" data-save="visaCost" step="0.01" min="0" value="0.00" placeholder="0.00">
-        <span class="field-hint" data-i18n="visaHint">Opłata wizowa (jeśli dotyczy)</span>
-      </div>
-      <div class="form-group">
-        <label data-i18n="visaCurrency">Waluta wizy</label>
-        <select id="visaCurrency" data-save="visaCurrency"><option value="PLN">PLN</option></select>
-      </div>
+    <div id="costItemsContainer"></div>
+    <div style="margin-top:4px; margin-bottom:12px;">
+      <button type="button" id="addCostItemBtn" class="btn btn-secondary" style="font-size:0.85rem; padding:5px 12px; display:inline-flex; align-items:center; gap:4px;">
+        <span style="font-size:1.1em; line-height:1;">+</span>
+        <span data-i18n="addCostItem">Dodaj koszt</span>
+      </button>
     </div>
-
-  </details>
+    <!-- Hidden legacy inputs for backward compatibility with save/calculate -->
+    <input type="hidden" id="ticketCost" data-save="ticketCost" value="0">
+    <input type="hidden" id="ticketCurrency" data-save="ticketCurrency" value="PLN">
+    <input type="hidden" id="visaCost" data-save="visaCost" value="0">
+    <input type="hidden" id="visaCurrency" data-save="visaCurrency" value="PLN">
+  </div>
 
   <div class="form-row">
     <div class="form-group full">
       <label class="checkbox-item" style="margin-bottom:8px;text-transform:none;letter-spacing:normal;font-size:0.9rem;">
         <input type="checkbox" id="multipleFunding" data-save="multipleFunding">
-        <span data-i18n="multipleFunding">Wyjazd finansowany z kilku źródeł</span>
-      </label>
+        <span data-i18n="multipleFunding">Wyjazd finansowany z kilku źródeł</span> <button type="button" class="help-tip" data-tip-pl="Zaznacz, jeśli koszty dzielą się między projekty (np. grant NCN pokrywa bilet, a środki wydziałowe — konferencję)." data-tip-en="Tick this if costs are split between projects (e.g. an NCN grant covers the ticket and faculty funds cover the conference fee)." data-tooltip="Zaznacz, jeśli koszty dzielą się między projekty (np. grant NCN pokrywa bilet, a środki wydziałowe — konferencję)." aria-label="Pomoc">?</button></label>
       <div id="extraFundingFields" style="display:none;">
         <div class="form-row">
           <div class="form-group">
-            <label data-i18n="additionalSource">Dodatkowe źródło finansowania</label>
+            <label data-i18n="additionalSource" for="additionalSource">Dodatkowe źródło finansowania <button type="button" class="help-tip" data-tip-pl="Drugi numer projektu lub nazwa źródła (np. środki wydziałowe, IDUB, dotacja statutowa)." data-tip-en="The second project number or source name (e.g. faculty funds, IDUB, statutory subsidy)." data-tooltip="Drugi numer projektu lub nazwa źródła (np. środki wydziałowe, IDUB, dotacja statutowa)." aria-label="Pomoc">?</button></label>
             <input type="text" id="additionalSource" data-save="additionalSource">
           </div>
           <div class="form-group">
-            <label data-i18n="additionalAmount">Kwota z dodatkowego źródła</label>
+            <label data-i18n="additionalAmount" for="additionalAmount">Kwota z dodatkowego źródła</label>
             <input type="text" id="additionalAmount" data-save="additionalAmount">
           </div>
         </div>
@@ -1259,7 +1382,7 @@ textarea {
 <div class="form-section">
   <h2>
     <span class="section-icon"><i data-lucide="calculator" style="width:18px;height:18px;"></i></span>
-    <span data-i18n="sec5Title">5. Kalkulator diet</span>
+    <span data-i18n="sec5Title">5. Kalkulator diet</span> <button type="button" class="help-tip" data-tip-pl="Kalkulator liczy diety, noclegi i ryczałty według rozporządzenia MRiPS. Wyniki są szacunkowe — ostateczną kwotę ustala Kwestura przy rozliczeniu." data-tip-en="The calculator computes per diems, accommodation and lump sums under the Ministry regulation. Results are estimates — the final amount is set by the Bursar's Office at settlement." data-tooltip="Kalkulator liczy diety, noclegi i ryczałty według rozporządzenia MRiPS. Wyniki są szacunkowe — ostateczną kwotę ustala Kwestura przy rozliczeniu." aria-label="Pomoc">?</button>
   </h2>
 
   <div id="calcPlaceholder">
@@ -1270,7 +1393,7 @@ textarea {
     <div style="margin-bottom:6px;">
       <div class="yesno-row">
         <div class="yesno-label-text">
-          <span data-i18n="mealsProvided">Mam zapewnione posiłki przez organizatora</span> <span class="field-hint" data-i18n="mealsProvidedHint">(pomniejsza dietę)</span>
+          <span data-i18n="mealsProvided">Mam zapewnione posiłki przez organizatora</span> <button type="button" class="help-tip" data-tip-pl="Posiłki wliczone w opłatę konferencyjną też się liczą. Każdy posiłek obniża dietę: śniadanie o 15%, obiad i kolacja po 30%." data-tip-en="Meals included in the conference fee count too. Each meal reduces the per diem: breakfast by 15%, lunch and dinner by 30% each." data-tooltip="Posiłki wliczone w opłatę konferencyjną też się liczą. Każdy posiłek obniża dietę: śniadanie o 15%, obiad i kolacja po 30%." aria-label="Pomoc">?</button> <span class="field-hint" data-i18n="mealsProvidedHint">(pomniejsza dietę)</span>
         </div>
         <div class="yesno-pair">
           <input type="radio" name="mealsYN" id="mealsNo" value="no" checked>
@@ -1304,45 +1427,46 @@ textarea {
     <div style="margin-bottom:12px;">
       <div class="yesno-row" style="margin-bottom:8px;">
         <div class="yesno-label-text">
-          <span data-i18n="hotelSectionLabel" style="font-weight:500;">Nocleg</span>
+          <span data-i18n="hotelSectionLabel" style="font-weight:500;">Nocleg</span> <button type="button" class="help-tip" data-tip-pl="Trzy tryby: znam koszt (zwrot do limitu za rachunkiem), brak rezerwacji (ryczałt ustawowy bez rachunku), nocleg zapewniony (brak świadczenia)." data-tip-en="Three modes: cost known (reimbursement up to the limit against an invoice), no booking (statutory lump sum, no invoice), accommodation provided (no entitlement)." data-tooltip="Trzy tryby: znam koszt (zwrot do limitu za rachunkiem), brak rezerwacji (ryczałt ustawowy bez rachunku), nocleg zapewniony (brak świadczenia)." aria-label="Pomoc">?</button>
         </div>
       </div>
-      <div style="display:flex; flex-direction:column; gap:4px; margin-left:2px;">
+      <div id="hotelModeGroup" role="radiogroup" aria-required="true" style="display:flex; flex-direction:column; gap:4px; margin-left:2px;">
         <label class="hotel-option" style="display:flex; align-items:center; gap:8px; cursor:pointer; padding:7px 12px; border-radius:8px; border:1.5px solid var(--border); font-size:0.93em; transition:border-color 0.15s, background 0.15s;">
           <input type="radio" name="hotelMode" id="hotelModeReceipt" value="receipt" data-save="hotelMode" checked style="flex-shrink:0;">
           <span style="flex:1;">
-            <span data-i18n="hotelModeReceipt">Znam koszt noclegu</span>
+            <span data-i18n="hotelModeReceipt">Znam koszt noclegu</span> <button type="button" class="help-tip" data-tip-pl="Zwrot do wysokości limitu z rozporządzenia, za okazaniem rachunku. Nadwyżkę ponad limit pokrywasz sam lub potrzebujesz zgody dziekana." data-tip-en="Reimbursement up to the limit set by the regulation, against an invoice. Any excess is at your own cost or requires the dean's approval." data-tooltip="Zwrot do wysokości limitu z rozporządzenia, za okazaniem rachunku. Nadwyżkę ponad limit pokrywasz sam lub potrzebujesz zgody dziekana." aria-label="Pomoc">?</button>
             <span class="field-hint" data-i18n="hotelModeReceiptHint" style="margin-left:4px;">(mam rezerwację lub rachunek)</span>
-          </span>
-        </label>
+          </span></label>
         <label class="hotel-option" style="display:flex; align-items:center; gap:8px; cursor:pointer; padding:7px 12px; border-radius:8px; border:1.5px solid var(--border); font-size:0.93em; transition:border-color 0.15s, background 0.15s;">
           <input type="radio" name="hotelMode" id="hotelModeLumpsum" value="lumpsum" data-save="hotelMode" style="flex-shrink:0;">
           <span style="flex:1;">
-            <span data-i18n="hotelModeLumpsum">Nie mam rezerwacji</span>
+            <span data-i18n="hotelModeLumpsum">Nie mam rezerwacji</span> <button type="button" class="help-tip" data-tip-pl="Ryczałt przysługuje bez rachunku: 150% diety krajowej lub 25% limitu hotelowego za granicą. Wybierz, jeśli nocujesz u znajomych lub jeszcze nie rezerwowałeś." data-tip-en="The lump sum is granted without an invoice: 150% of the domestic per diem or 25% of the foreign accommodation limit. Choose this if you stay with friends or have not booked yet." data-tooltip="Ryczałt przysługuje bez rachunku: 150% diety krajowej lub 25% limitu hotelowego za granicą. Wybierz, jeśli nocujesz u znajomych lub jeszcze nie rezerwowałeś." aria-label="Pomoc">?</button>
             <span class="field-hint" style="margin-left:4px;">(<span data-i18n="hotelModeLumpsumHint">ryczałt ustawowy</span><span id="hotelLumpsumDetail"></span>)</span>
-          </span>
-        </label>
+          </span></label>
         <label class="hotel-option" style="display:flex; align-items:center; gap:8px; cursor:pointer; padding:7px 12px; border-radius:8px; border:1.5px solid var(--border); font-size:0.93em; transition:border-color 0.15s, background 0.15s;">
           <input type="radio" name="hotelMode" id="hotelModeProvided" value="provided" data-save="hotelMode" style="flex-shrink:0;">
           <span style="flex:1;">
-            <span data-i18n="hotelModeProvided">Nocleg zapewniony</span>
+            <span data-i18n="hotelModeProvided">Nocleg zapewniony</span> <button type="button" class="help-tip" data-tip-pl="Organizator lub strona przyjmująca opłaca hotel bezpośrednio. Nie przysługuje wtedy ani zwrot, ani ryczałt." data-tip-en="The organiser or host pays for the hotel directly. Neither reimbursement nor lump sum applies." data-tooltip="Organizator lub strona przyjmująca opłaca hotel bezpośrednio. Nie przysługuje wtedy ani zwrot, ani ryczałt." aria-label="Pomoc">?</button>
             <span class="field-hint" data-i18n="hotelModeProvidedHint" style="margin-left:4px;">(nie wnioskuję o zwrot)</span>
-          </span>
-        </label>
+          </span></label>
       </div>
       <input type="checkbox" id="hotelProvided" data-save="hotelProvided" style="display:none;">
-      <div id="hotelCostInputRow" style="margin-top:8px; display:flex; align-items:center; gap:8px; margin-left:14px;">
-        <label for="hotelCostPerNight" style="font-size:0.92em; white-space:nowrap;" data-i18n="hotelCostPerNight">Kwota za dobę</label>
-        <input type="number" id="hotelCostPerNight" data-save="hotelCostPerNight" min="0" step="0.01" style="width:110px;" placeholder="0.00">
-        <span id="hotelCostCurrency" style="font-size:0.9em;">PLN</span>
-        <span id="hotelCostLimit" class="field-hint"></span>
-        <span id="hotelCostWarn" class="hotel-cost-hint-warn" style="display:none;"></span>
+      <div id="hotelCostInputRow" style="margin-top:8px; margin-left:14px;">
+        <label for="hotelCostPerNight" style="display:block; font-size:0.85em; color:var(--text-dim); margin-bottom:5px; text-transform:none; letter-spacing:normal; font-weight:600;">
+          <span data-i18n="hotelCostTotalLabel">Łączny koszt noclegu za cały pobyt</span> <span class="req-star">*</span> <button type="button" class="help-tip" data-tip-pl="Wpisz kwotę z rachunku lub rezerwacji za całość — tak jak jest na dokumencie. Nie przeliczaj na doby: ceny poszczególnych nocy bywają różne, a dzielenie wprowadza błędy zaokrągleń." data-tip-en="Enter the amount from the invoice or booking for the whole stay, exactly as it appears on the document. Do not convert it to a nightly rate: individual nights often differ in price and dividing introduces rounding errors." data-tooltip="Wpisz kwotę z rachunku lub rezerwacji za całość — tak jak jest na dokumencie. Nie przeliczaj na doby: ceny poszczególnych nocy bywają różne, a dzielenie wprowadza błędy zaokrągleń." aria-label="Pomoc">?</button>
+        </label>
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+          <input type="number" id="hotelCostPerNight" data-save="hotelCostPerNight" min="0" step="0.01" style="width:150px;" placeholder="0.00">
+          <span id="hotelCostCurrency" style="font-size:0.9em;">PLN</span>
+          <span id="hotelCostLimit" class="field-hint"></span>
+          <span id="hotelCostWarn" class="hotel-cost-hint-warn" role="status" aria-live="polite" style="display:none;"></span>
+        </div>
       </div>
     </div>
     <div style="margin-bottom:16px;">
       <div class="yesno-row">
         <div class="yesno-label-text">
-          <span data-i18n="localTransportLabelForeign">Chcę ryczałt na komunikację miejscową</span> <span class="field-hint" data-i18n="localTransportHint">(10% diety/dzień — zagraniczne, 20% — krajowe)</span>
+          <span data-i18n="localTransportLabelForeign">Chcę ryczałt na komunikację miejscową</span> <button type="button" class="help-tip" data-tip-pl="Ryczałt na dojazdy miejscowe wypłacany bez biletów: 10% diety dziennie za granicą, 20% w kraju. Nie łączy się ze zwrotem biletów komunikacji miejskiej." data-tip-en="A lump sum for local travel paid without tickets: 10% of the daily per diem abroad, 20% domestically. It cannot be combined with reimbursement of public transport tickets." data-tooltip="Ryczałt na dojazdy miejscowe wypłacany bez biletów: 10% diety dziennie za granicą, 20% w kraju. Nie łączy się ze zwrotem biletów komunikacji miejskiej." aria-label="Pomoc">?</button> <span class="field-hint" data-i18n="localTransportHint">(10% diety/dzień — zagraniczne, 20% — krajowe)</span>
         </div>
         <div class="yesno-pair">
           <input type="radio" name="ltYN" id="ltNo" value="no">
@@ -1354,7 +1478,7 @@ textarea {
       <input type="checkbox" id="localTransportIncluded" data-save="localTransportIncluded" style="display:none;" checked>
     </div>
 
-    <table class="calc-table" id="calcTable">
+    <div class="calc-table-wrap"><table class="calc-table" id="calcTable">
       <thead>
         <tr>
           <th data-i18n="colItem">Pozycja</th>
@@ -1365,7 +1489,7 @@ textarea {
         </tr>
       </thead>
       <tbody id="calcBody"></tbody>
-    </table>
+    </table></div>
 
     <div class="info-badge" style="margin-top:16px;">
       <i data-lucide="scale" style="width:14px;height:14px;"></i>
@@ -1380,25 +1504,24 @@ textarea {
 <div class="form-section">
   <h2>
     <span class="section-icon"><i data-lucide="banknote" style="width:18px;height:18px;"></i></span>
-    <span data-i18n="sec6Title">6. Zaliczka</span>
+    <span data-i18n="sec6Title">6. Zaliczka</span> <button type="button" class="help-tip" data-tip-pl="Sekcja opcjonalna. Wypełnij tylko, jeśli potrzebujesz środków przed wyjazdem — w przeciwnym razie rozliczysz koszty po powrocie." data-tip-en="Optional section. Fill it in only if you need funds before departure — otherwise you settle costs after returning." data-tooltip="Sekcja opcjonalna. Wypełnij tylko, jeśli potrzebujesz środków przed wyjazdem — w przeciwnym razie rozliczysz koszty po powrocie." aria-label="Pomoc">?</button>
   </h2>
   <div style="margin-bottom:12px;">
     <label class="checkbox-item" style="text-transform:none;letter-spacing:normal;font-size:0.9rem;">
       <input type="checkbox" id="requestAdvance" data-save="requestAdvance">
-      <span data-i18n="requestAdvance" style="font-weight:600;">Wnioskuję o wypłatę zaliczki</span> <span class="field-hint" style="font-weight:400;font-size:0.82rem;" data-i18n="advanceHintInline">(opcjonalne — wypełnij jeśli potrzebujesz środków przed wyjazdem)</span>
-    </label>
+      <span data-i18n="requestAdvance" style="font-weight:600;">Wnioskuję o wypłatę zaliczki</span> <button type="button" class="help-tip" data-tip-pl="Zaliczka to wypłata przed wyjazdem na poczet przyszłych kosztów. Rozliczasz ją w ciągu 14 dni po powrocie — niewykorzystaną część zwracasz." data-tip-en="An advance is a payment before departure against future costs. You settle it within 14 days of return and repay any unused part." data-tooltip="Zaliczka to wypłata przed wyjazdem na poczet przyszłych kosztów. Rozliczasz ją w ciągu 14 dni po powrocie — niewykorzystaną część zwracasz." aria-label="Pomoc">?</button> <span class="field-hint" style="font-weight:400;font-size:0.82rem;" data-i18n="advanceHintInline">(opcjonalne — wypełnij jeśli potrzebujesz środków przed wyjazdem)</span></label>
   </div>
 
   <div id="advanceDetailsBlock" style="display:none;">
     <div class="info-badge" style="margin-bottom:12px;padding:10px 14px;font-size:0.92rem;">
       <i data-lucide="calculator" style="width:14px;height:14px;"></i>
       <span data-i18n="advanceSumLabel">Szacowana kwota zaliczki:</span>
-      <strong id="advanceSumDisplay" style="margin-left:6px;">—</strong>
+      <strong id="advanceSumDisplay" role="status" aria-live="polite" style="margin-left:6px;">—</strong>
     </div>
 
     <div class="form-row">
       <div class="form-group" style="max-width:280px;">
-        <label data-i18n="advanceCurrencyLabel">Waluta wypłaty zaliczki</label>
+        <label data-i18n="advanceCurrencyLabel" for="advanceCurrency">Waluta wypłaty zaliczki <button type="button" class="help-tip" data-tip-pl="Zaliczkę w walucie obcej wypłaca się tylko na konto walutowe. W kasie UW dostępny jest wyłącznie PLN." data-tip-en="A foreign-currency advance can only be paid to a foreign-currency account. Only PLN is available at the UW cash desk." data-tooltip="Zaliczkę w walucie obcej wypłaca się tylko na konto walutowe. W kasie UW dostępny jest wyłącznie PLN." aria-label="Pomoc">?</button></label>
         <select id="advanceCurrency" data-save="advanceCurrency" class="styled-select">
           <option value="PLN">PLN</option>
           <option value="EUR">EUR</option>
@@ -1408,7 +1531,7 @@ textarea {
     </div>
     <div class="form-row">
       <div class="form-group full">
-        <label data-i18n="advanceMethod">Sposób wypłaty zaliczki</label>
+        <label data-i18n="advanceMethod">Sposób wypłaty zaliczki <button type="button" class="help-tip" data-tip-pl="Przelew na konto jest szybszy i nie wymaga wizyty w kasie. Kasa główna UW — Krakowskie Przedmieście 26/28." data-tip-en="A bank transfer is faster and requires no visit to the cash desk. The UW main cash desk is at Krakowskie Przedmieście 26/28." data-tooltip="Przelew na konto jest szybszy i nie wymaga wizyty w kasie. Kasa główna UW — Krakowskie Przedmieście 26/28." aria-label="Pomoc">?</button></label>
         <div class="provider-tabs" id="advanceMethodTabs" style="max-width:500px;">
           <input type="radio" name="advanceMethod" id="advMethodCash" value="kasa" data-save="advanceMethod">
           <label for="advMethodCash" data-i18n="advCash">a) w kasie głównej UW</label>
@@ -1421,23 +1544,40 @@ textarea {
     <div id="bankDetailsBlock">
       <div class="form-row">
         <div class="form-group">
-          <label data-i18n="bankName">Nazwa banku <span class="req-star">*</span></label>
-          <input type="text" id="bankName" data-save="bankName" placeholder="np. mBank">
+          <label data-i18n="bankName" for="bankName">Nazwa banku <span class="req-star">*</span> <button type="button" class="help-tip" data-tip-pl="Wybór banku z listy uzupełnia kod SWIFT automatycznie. Jeśli Twojego banku nie ma — wybierz &quot;Inny&quot; i wpisz nazwę ręcznie." data-tip-en="Selecting a bank from the list fills in the SWIFT code automatically. If your bank is missing, choose &quot;Other&quot; and type the name." data-tooltip="Wybór banku z listy uzupełnia kod SWIFT automatycznie. Jeśli Twojego banku nie ma — wybierz &quot;Inny&quot; i wpisz nazwę ręcznie." aria-label="Pomoc">?</button></label>
+          <select id="bankName" aria-required="true" data-save="bankName" class="styled-select">
+            <option value="" data-i18n="bankSelectPrompt">— wybierz bank —</option>
+            <option value="PKO BP">PKO BP</option>
+            <option value="mBank">mBank</option>
+            <option value="ING Bank Śląski">ING Bank Śląski</option>
+            <option value="Bank Millennium">Bank Millennium</option>
+            <option value="Santander Bank Polska">Santander Bank Polska</option>
+            <option value="Bank Pekao S.A.">Bank Pekao S.A.</option>
+            <option value="BNP Paribas">BNP Paribas</option>
+            <option value="Alior Bank">Alior Bank</option>
+            <option value="Credit Agricole">Credit Agricole</option>
+            <option value="Nest Bank">Nest Bank</option>
+            <option value="Citi Handlowy">Citi Handlowy</option>
+            <option value="Revolut">Revolut</option>
+            <option value="Wise">Wise</option>
+            <option value="__other__" data-i18n="bankOther">Inny…</option>
+          </select>
+          <input type="text" id="bankNameOther" data-save="bankNameOther" data-i18n-placeholder="bankNameOtherPh" placeholder="Wpisz nazwę banku" style="display:none; margin-top:4px;">
         </div>
         <div class="form-group">
-          <label data-i18n="bankSwift">SWIFT/BIC banku</label>
+          <label data-i18n="bankSwift" for="bankSwift">SWIFT/BIC banku <button type="button" class="help-tip" data-tip-pl="Uzupełniany automatycznie po wyborze banku. Wymagany tylko przy przelewie na konto zagraniczne lub walutowe." data-tip-en="Filled in automatically once you select a bank. Required only for transfers to a foreign or foreign-currency account." data-tooltip="Uzupełniany automatycznie po wyborze banku. Wymagany tylko przy przelewie na konto zagraniczne lub walutowe." aria-label="Pomoc">?</button></label>
           <input type="text" id="bankSwift" data-save="bankSwift" placeholder="np. BREXPLPW" maxlength="11" style="text-transform:uppercase;">
           <span class="field-hint" data-i18n="swiftHint">Opcjonalne — tylko przy zagranicznym koncie bankowym</span>
         </div>
         <div class="form-group">
-          <label data-i18n="bankOwner">Właściciel konta <span class="req-star">*</span></label>
-          <input type="text" id="bankOwner" data-save="bankOwner">
+          <label data-i18n="bankOwner" for="bankOwner">Właściciel konta <span class="req-star">*</span> <button type="button" class="help-tip" data-tip-pl="Konto musi należeć do wnioskodawcy. Przelewy na konta osób trzecich nie są realizowane." data-tip-en="The account must belong to the applicant. Transfers to third-party accounts are not processed." data-tooltip="Konto musi należeć do wnioskodawcy. Przelewy na konta osób trzecich nie są realizowane." aria-label="Pomoc">?</button></label>
+          <input type="text" id="bankOwner" aria-required="true" data-save="bankOwner">
         </div>
       </div>
       <div class="form-row">
         <div class="form-group full">
-          <label data-i18n="bankAccount">Numer konta <span class="req-star">*</span></label>
-          <input type="text" id="bankAccount" data-save="bankAccount" placeholder="PL00 0000 0000 0000 0000 0000 0000">
+          <label data-i18n="bankAccount" for="bankAccount">Numer konta <span class="req-star">*</span> <button type="button" class="help-tip" data-tip-pl="Format IBAN — dla Polski 26 cyfr po prefiksie PL. Przy koncie zagranicznym podaj pełny IBAN z kodem kraju." data-tip-en="IBAN format — for Poland, 26 digits after the PL prefix. For a foreign account, provide the full IBAN with country code." data-tooltip="Format IBAN — dla Polski 26 cyfr po prefiksie PL. Przy koncie zagranicznym podaj pełny IBAN z kodem kraju." aria-label="Pomoc">?</button></label>
+          <input type="text" id="bankAccount" aria-required="true" data-save="bankAccount" placeholder="PL00 0000 0000 0000 0000 0000 0000">
         </div>
       </div>
     </div>
@@ -1589,7 +1729,6 @@ const TRANSLATIONS = {
     hotelModeLumpsumHint: "ryczałt ustawowy",
     hotelModeProvided: "Nocleg zapewniony",
     hotelModeProvidedHint: "(nie wnioskuję o zwrot)",
-    hotelCostPerNight: "Kwota za dobę",
     hotelLumpsum: "ryczałt",
     hotelLumpsumDomesticHint: "150% diety = 67,50 PLN/nocleg",
     hotelLumpsumForeignHint: "25% limitu hotelowego",
@@ -1615,7 +1754,16 @@ const TRANSLATIONS = {
     advanceMethod: "Sposób wypłaty zaliczki",
     advCash: "a) w kasie głównej UW",
     advBank: "b) na konto",
+    additionalCostsTitle: "Koszty dodatkowe",
+    addCostItem: "Dodaj koszt",
+    hotelCostTotalLabel: "Łączny koszt noclegu za cały pobyt",
+    costItemsHint: "Kliknij przycisk poniżej, aby dodać pozycje kosztów (bilety, wiza, opłaty konferencyjne itp.).",
+    helpLabel: "Pomoc",
     bankName: "Nazwa banku",
+    bankSelectPrompt: "— wybierz bank —",
+    bankOther: "Inny…",
+    projectNumberPh: "Numer przypisany do projektu/grantu (znajdziesz go w umowie grantowej lub u kierownika projektu)",
+    bankNameOtherPh: "Wpisz nazwę banku",
     bankSwift: "SWIFT/BIC banku",
     swiftHint: "Opcjonalne — tylko przy zagranicznym koncie bankowym",
     bankOwner: "Właściciel konta",
@@ -1627,8 +1775,8 @@ const TRANSLATIONS = {
     colAmount: "Kwota",
     colCurrency: "Waluta",
     regulationLabel: "Podstawa prawna:",
-    regulationForeign: "(zagraniczne)",
-    regulationDomestic: "(krajowe)",
+    regulationForeign: "(zagraniczne — tekst jednolity)",
+    regulationDomestic: "(krajowe i zagraniczne — nowelizacja)",
     customRatesTitle: "Upload własnych stawek (zaawansowane)",
     customRatesDesc: "Wgraj plik CSV lub JSON z własnymi stawkami diet. Format CSV: kraj,waluta,dieta,hotel. Format JSON: obiekt z kluczami = nazwa kraju.",
     resetRates: "Przywróć domyślne stawki",
@@ -1642,7 +1790,7 @@ const TRANSLATIONS = {
     rowHotel: "Ryczałt hotelowy",
     hotelProvidedShort: "nocleg zapewniony we własnym zakresie",
     ltNotRequested: "nie wnioskowano",
-    rowLocalTransport: "Ryczałt na komunikację miejską",
+    rowLocalTransport: "Ryczałt na komunikację miejscową",
     rowLocalTransportDomestic: "Ryczałt za dojazdy lokalne",
     rowTotal: "ŁĄCZNIE",
     days: "dni",
@@ -1658,7 +1806,7 @@ const TRANSLATIONS = {
   en: {
     darkLabel: "Dark",
     heroTitle: "Travel Request Form",
-    heroLead: "A tool for filling out travel request forms and auto-calculating per diem allowances for employees, PhD students, and students of the Centre for Socially Responsible Innovations (CSRI).",
+    heroLead: "Tool for completing travel request forms and automatically calculating per diems for staff, doctoral candidates and students of the Faculty of Management, University of Warsaw.",
     howToUse: "How to use this tool",
     howtoHide: "(click to hide)",
     step1: "Fill in your personal data in Section 1.",
@@ -1736,7 +1884,6 @@ const TRANSLATIONS = {
     lunch: "Lunch",
     dinner: "Dinner",
     mealsCount: "pcs",
-    mealsOptionalNote: "optional — can be completed after the trip",
     deductionsLabel: "Include in calculation:",
     mealsProvidedHint: "(reduces per diem)",
     yes: "Yes",
@@ -1749,7 +1896,6 @@ const TRANSLATIONS = {
     hotelModeLumpsumHint: "statutory lump sum",
     hotelModeProvided: "Accommodation provided",
     hotelModeProvidedHint: "(no reimbursement needed)",
-    hotelCostPerNight: "Cost per night",
     hotelLumpsum: "lump sum",
     hotelLumpsumDomesticHint: "150% of per diem = 67.50 PLN/night",
     hotelLumpsumForeignHint: "25% of hotel limit",
@@ -1775,7 +1921,16 @@ const TRANSLATIONS = {
     advanceMethod: "Advance payment method",
     advCash: "a) at UW main cashier",
     advBank: "b) to bank account",
+    additionalCostsTitle: "Additional costs",
+    addCostItem: "Add cost",
+    hotelCostTotalLabel: "Total accommodation cost for the whole stay",
+    costItemsHint: "Click the button below to add cost items (tickets, visa, conference fees, etc.).",
+    helpLabel: "Help",
     bankName: "Bank name",
+    bankSelectPrompt: "— select bank —",
+    bankOther: "Other…",
+    projectNumberPh: "Ledger number assigned to the project/grant (check the grant agreement or ask the project manager)",
+    bankNameOtherPh: "Enter the bank name",
     bankSwift: "Bank SWIFT/BIC",
     swiftHint: "Optional — only for foreign bank accounts",
     bankOwner: "Account holder",
@@ -1853,17 +2008,145 @@ function setLang(lang) {
     var r = RATES[selCountry];
     countrySearchInput.value = lang === 'en' ? (r.en || selCountry) : selCountry;
   }
+  document.documentElement.lang = lang;
+  applyTooltipLang(lang);
+  // Odśwież język w już utworzonych wierszach kosztów
+  document.querySelectorAll('.cost-item-row').forEach(function(row) {
+    var labs = row.querySelectorAll('.cost-item-label');
+    var names = (lang === 'en') ? ['Type','Amount','Currency'] : ['Rodzaj','Kwota','Waluta'];
+    labs.forEach(function(l, i) { if (names[i]) l.textContent = names[i]; });
+    row.querySelectorAll('.cost-type option').forEach(function(o) {
+      var ct = COST_TYPES.filter(function(x){ return x.value === o.value; })[0];
+      if (ct) o.textContent = (lang === 'en') ? ct.labelEn : ct.label;
+    });
+    var rm = row.querySelector('.cost-remove-btn');
+    if (rm) { var t = (lang === 'en') ? 'Remove cost item' : 'Usuń pozycję kosztu'; rm.setAttribute('aria-label', t); rm.title = t; }
+    var oth = row.querySelector('.cost-other-label');
+    if (oth) oth.placeholder = (lang === 'en') ? 'Describe' : 'Opisz';
+  });
+  var hintEl = document.getElementById('costItemsHint');
+  if (hintEl) hintEl.textContent = TRANSLATIONS[lang].costItemsHint;
   recalculate();
   sessionStorage.setItem('ww_lang', lang);
 }
 
 // ============================================================
-// DARK MODE
+// TRYB CIEMNY
 // ============================================================
 function toggleDark() {
-  document.documentElement.classList.toggle('dark-mode');
-  var isDark = document.documentElement.classList.contains('dark-mode');
-  sessionStorage.setItem('ww_dark', isDark ? '1' : '0');
+  var on = document.documentElement.classList.toggle('dark-mode');
+  try { sessionStorage.setItem('ww_dark', on ? '1' : '0'); } catch(e) {}
+  var moon = document.getElementById('darkIcoMoon');
+  var sun = document.getElementById('darkIcoSun');
+  if (moon && sun) {
+    moon.style.display = on ? 'none' : '';
+    sun.style.display = on ? '' : 'none';
+  }
+  var btn = document.getElementById('darkToggleBtn');
+  if (btn) btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+}
+
+// ============================================================
+// DYMKI POMOCY — i18n, pozycjonowanie w oknie, przełącznik
+// ============================================================
+var helpBubbleEl = null;
+var helpActiveTip = null;
+
+function getHelpBubble() {
+  if (!helpBubbleEl) helpBubbleEl = document.getElementById('helpBubble');
+  return helpBubbleEl;
+}
+
+function showHelpBubble(tip) {
+  var b = getHelpBubble();
+  if (!b) return;
+  var txt = tip.getAttribute('data-tooltip');
+  if (!txt) return;
+
+  helpActiveTip = tip;
+  b.textContent = txt;
+  b.classList.remove('above', 'below');
+  b.style.visibility = 'hidden';
+  b.classList.add('visible');
+
+  var r = tip.getBoundingClientRect();
+  var bw = b.offsetWidth, bh = b.offsetHeight;
+  var vw = document.documentElement.clientWidth;
+  var vh = document.documentElement.clientHeight;
+  var pad = 8, gap = 9;
+
+  // pion: nad ikoną, a jeśli brak miejsca — pod
+  var top, placeAbove = (r.top - bh - gap) >= pad;
+  if (placeAbove) { top = r.top - bh - gap; b.classList.add('above'); }
+  else            { top = r.bottom + gap;   b.classList.add('below'); }
+  if (top + bh > vh - pad) top = Math.max(pad, vh - bh - pad);
+
+  // poziom: wyśrodkowany, przycięty do okna
+  var cx = r.left + r.width / 2;
+  var left = cx - bw / 2;
+  if (left < pad) left = pad;
+  if (left + bw > vw - pad) left = Math.max(pad, vw - bw - pad);
+
+  // strzałka celuje w ikonę
+  var arrow = cx - left;
+  arrow = Math.max(12, Math.min(bw - 12, arrow));
+  b.style.setProperty('--arrow-x', arrow + 'px');
+
+  b.style.left = Math.round(left) + 'px';
+  b.style.top = Math.round(top) + 'px';
+  b.style.visibility = '';
+  b.setAttribute('aria-hidden', 'false');
+  tip.setAttribute('aria-describedby', 'helpBubble');
+}
+
+function hideHelpBubble() {
+  var b = getHelpBubble();
+  if (!b) return;
+  b.classList.remove('visible');
+  b.setAttribute('aria-hidden', 'true');
+  if (helpActiveTip) helpActiveTip.removeAttribute('aria-describedby');
+  helpActiveTip = null;
+}
+
+function applyTooltipLang(lang) {
+  document.querySelectorAll('.help-tip').forEach(function(t) {
+    var txt = (lang === 'en') ? t.getAttribute('data-tip-en') : t.getAttribute('data-tip-pl');
+    if (txt) t.setAttribute('data-tooltip', txt);
+    t.setAttribute('aria-label', (lang === 'en') ? 'Help' : 'Pomoc');
+  });
+  if (helpActiveTip) showHelpBubble(helpActiveTip);
+}
+
+function initHelpTips() {
+  applyTooltipLang(currentLang);
+
+  // delegacja — działa też dla dymków dodanych później
+  document.addEventListener('mouseover', function(e) {
+    var t = e.target.closest && e.target.closest('.help-tip');
+    if (t && t !== helpActiveTip) showHelpBubble(t);
+  });
+  document.addEventListener('mouseout', function(e) {
+    var t = e.target.closest && e.target.closest('.help-tip');
+    if (t && !(e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('.help-tip'))) hideHelpBubble();
+  });
+  document.addEventListener('focusin', function(e) {
+    var t = e.target.closest && e.target.closest('.help-tip');
+    if (t) showHelpBubble(t); else if (helpActiveTip) hideHelpBubble();
+  });
+  document.addEventListener('focusout', function(e) {
+    if (e.target.closest && e.target.closest('.help-tip')) hideHelpBubble();
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') hideHelpBubble();
+  });
+  // dotyk — tap pokazuje, tap gdzie indziej chowa
+  document.addEventListener('click', function(e) {
+    var t = e.target.closest && e.target.closest('.help-tip');
+    if (t) { e.preventDefault(); (helpActiveTip === t) ? hideHelpBubble() : showHelpBubble(t); }
+    else if (helpActiveTip) hideHelpBubble();
+  });
+  window.addEventListener('scroll', function() { if (helpActiveTip) hideHelpBubble(); }, true);
+  window.addEventListener('resize', function() { if (helpActiveTip) hideHelpBubble(); });
 }
 
 // ============================================================
@@ -2064,13 +2347,12 @@ function updateCostCurrencyOptions() {
       currencies.push('EUR');
     }
   }
-  ['ticketCurrency', 'visaCurrency'].forEach(function(id) {
-    var sel = document.getElementById(id);
+  // Update dynamic cost item currency dropdowns
+  document.querySelectorAll('.cost-item-row .cost-currency').forEach(function(sel) {
     var prev = sel.value || 'PLN';
     sel.innerHTML = currencies.map(function(c) {
       return '<option value="' + c + '">' + c + '</option>';
     }).join('');
-    // Restore previous selection if still available
     if (currencies.indexOf(prev) >= 0) sel.value = prev;
     else sel.value = 'PLN';
   });
@@ -2134,6 +2416,8 @@ document.addEventListener('click', function(e) {
 // Returns { ratePerNight, total, label } based on hotel settings
 function getHotelCalc(nights, maxRate, currency, isDomestic) {
   var mode = getHotelMode();
+  // Brak wyboru — nic nie zakładamy, kalkulator czeka na decyzję
+  if (mode === null) return { ratePerNight: null, total: 0, label: 'none', isProvided: false, notChosen: true };
   if (mode === 'provided') return { ratePerNight: 0, total: 0, label: 'provided', isProvided: true };
 
   if (mode === 'lumpsum') {
@@ -2142,10 +2426,22 @@ function getHotelCalc(nights, maxRate, currency, isDomestic) {
     return { ratePerNight: lumpRate, total: roundCurr(nights * lumpRate), label: 'lumpsum', isProvided: false };
   }
 
-  // Receipt mode: user-entered cost, capped at maxRate
-  var userCost = parseFloat(document.getElementById('hotelCostPerNight').value) || 0;
-  var capped = Math.min(userCost, maxRate);
-  return { ratePerNight: capped, total: roundCurr(nights * capped), label: 'receipt', isProvided: false };
+  // Tryb rachunku: użytkownik podaje ŁĄCZNY koszt noclegu za cały pobyt.
+  // Nie dzielimy przez doby — ceny poszczególnych nocy bywają różne,
+  // a dzielenie wprowadzało błędy zaokrągleń wymagające ręcznej korekty.
+  // Limit z rozporządzenia jest dobowy, więc porównujemy z limitem × liczba nocy.
+  var userTotal = Math.max(0, parseFloat(document.getElementById('hotelCostPerNight').value) || 0);
+  var totalLimit = maxRate * Math.max(nights, 1);
+  var cappedTotal = Math.min(userTotal, totalLimit);
+  return {
+    ratePerNight: null,          // nie podajemy stawki dobowej — koszt jest łączny
+    total: roundCurr(cappedTotal),
+    userTotal: roundCurr(userTotal),
+    totalLimit: roundCurr(totalLimit),
+    overLimit: userTotal > totalLimit,
+    label: 'receipt',
+    isProvided: false
+  };
 }
 
 
@@ -2161,13 +2457,11 @@ function calculateCosts() {
   if (!isDomestic && (!country || !RATES[country])) return null;
 
   var dep = new Date(depDate), ret = new Date(retDate);
-  // Add time component for domestic trips
-  if (isDomestic) {
-    var depTime = document.getElementById('departureTime').value;
-    var retTime = document.getElementById('returnTime').value;
-    if (depTime) { var dp = depTime.split(':'); dep.setHours(parseInt(dp[0]), parseInt(dp[1])); }
-    if (retTime) { var rp = retTime.split(':'); ret.setHours(parseInt(rp[0]), parseInt(rp[1])); }
-  }
+  // Add time component for trips (required domestic, optional international)
+  var depTime = document.getElementById('departureTime').value;
+  var retTime = document.getElementById('returnTime').value;
+  if (depTime) { var dp = depTime.split(':'); dep.setHours(parseInt(dp[0]), parseInt(dp[1])); }
+  if (retTime) { var rp = retTime.split(':'); ret.setHours(parseInt(rp[0]), parseInt(rp[1])); }
   if (ret <= dep) return null;
 
   // Private days: use business dates for per diem/hotel/transport
@@ -2180,10 +2474,14 @@ function calculateCosts() {
     bizDep = new Date(bsVal);
     bizRet = new Date(beVal);
     if (bizRet <= bizDep) return null;
+    // Okres służbowy musi mieścić się w ramach całego wyjazdu
+    var tripFrom = new Date(depDate), tripTo = new Date(retDate);
+    tripTo.setHours(23, 59, 59);
+    if (bizDep < tripFrom || bizRet > tripTo) return null;
   }
 
-  // For domestic with times: also add time to biz dates
-  if (isDomestic && !hasPrivate) {
+  // Add time to biz dates when times are specified
+  if (!hasPrivate) {
     var depTimeVal = document.getElementById('departureTime').value;
     var retTimeVal = document.getElementById('returnTime').value;
     if (depTimeVal) { var dtp = depTimeVal.split(':'); bizDep = new Date(bizDep); bizDep.setHours(parseInt(dtp[0]), parseInt(dtp[1])); }
@@ -2195,29 +2493,58 @@ function calculateCosts() {
   var fullDays = Math.floor(totalHours / 24);
   var remainingHours = totalHours - (fullDays * 24);
 
-  // Domestic per diem rules (Dz.U. 2022 poz. 2302 §7):
-  // Full day (24h) = 1 dieta; partial last day: <8h = 0.5, 8-12h = 1, >12h = 1.5
-  var effectiveDays, domesticDietMultiplier;
-  if (isDomestic && totalHours > 0) {
+  // ── Mnożnik diety wg rozporządzenia ──────────────────────────
+  // KRAJOWE (Dz.U. 2022 poz. 2302 §7 ust. 2):
+  //   podróż do doby:  <8h = 0 | 8–12h = 50% | >12h = 100%
+  //   podróż > doby:   każda pełna doba = 100%,
+  //                    niepełna rozpoczęta doba: do 8h = 50% | ponad 8h = 100%
+  // ZAGRANICZNE (Dz.U. 2023 poz. 2190 §13 ust. 4):
+  //   każda pełna doba = 100%
+  //   niepełna doba:   do 8h = 1/3 | ponad 8 do 12h = 50% | ponad 12h = 100%
+  var effectiveDays;
+  var hasTimes = !!(depTime && retTime);
+
+  if (totalHours <= 0) {
+    effectiveDays = 0;
+  } else if (isDomestic) {
     if (totalHours <= 24) {
-      // Single-day trip (§7 ust. 2 Dz.U. 2022 poz. 2302)
-      if (totalHours <= 8) domesticDietMultiplier = 0.5;
-      else if (totalHours <= 12) domesticDietMultiplier = 1;
-      else domesticDietMultiplier = 1.5;
-      effectiveDays = domesticDietMultiplier;
+      if (totalHours < 8) effectiveDays = 0;
+      else if (totalHours <= 12) effectiveDays = 0.5;
+      else effectiveDays = 1;
     } else {
-      // Multi-day: full days + partial last day
       var partialMult = 0;
-      if (remainingHours > 0 && remainingHours < 8) partialMult = 0.5;
-      else if (remainingHours >= 8 && remainingHours <= 12) partialMult = 1;
-      else if (remainingHours > 12) partialMult = 1.5;
-      else if (remainingHours === 0) partialMult = 0;
+      if (remainingHours > 0 && remainingHours <= 8) partialMult = 0.5;
+      else if (remainingHours > 8) partialMult = 1;
       effectiveDays = fullDays + partialMult;
     }
   } else {
-    effectiveDays = fullDays + 1;
+    // Zagraniczne. Bez podanych godzin traktujemy dni kalendarzowe włącznie
+    // (szacunek), z godzinami liczymy dokładnie wg §13 ust. 4.
+    if (!hasTimes) {
+      effectiveDays = fullDays + 1;
+    } else if (totalHours <= 24 && fullDays === 0) {
+      if (totalHours <= 8) effectiveDays = 1/3;
+      else if (totalHours <= 12) effectiveDays = 0.5;
+      else effectiveDays = 1;
+    } else {
+      var partialF = 0;
+      if (remainingHours > 0 && remainingHours <= 8) partialF = 1/3;
+      else if (remainingHours > 8 && remainingHours <= 12) partialF = 0.5;
+      else if (remainingHours > 12) partialF = 1;
+      effectiveDays = fullDays + partialF;
+    }
   }
-  var nights = fullDays;
+
+  // Liczba nocy = liczba przekroczonych granic kalendarzowych między datami
+  var nights = Math.round(
+    (new Date(bizRet.getFullYear(), bizRet.getMonth(), bizRet.getDate()) -
+     new Date(bizDep.getFullYear(), bizDep.getMonth(), bizDep.getDate())) / 86400000
+  );
+  if (nights < 0) nights = 0;
+
+  // Rozpoczęte doby — podstawa ryczałtu na komunikację miejscową
+  // (§9 ust. 1 krajowe, §17 ust. 3 zagraniczne)
+  var startedDays = Math.max(1, Math.ceil(totalHours / 24));
 
 
   var DOMESTIC_RATE = 45, DOMESTIC_HOTEL = 900, DOMESTIC_TRANSPORT = 9;
@@ -2229,9 +2556,9 @@ function calculateCosts() {
   var mealReductionTotal = 0;
   var mealsProvided = document.getElementById('mealsProvided').checked;
   if (mealsProvided) {
-    var numB = parseInt(document.getElementById('mealBreakfast').value) || 0;
-    var numL = parseInt(document.getElementById('mealLunch').value) || 0;
-    var numD = parseInt(document.getElementById('mealDinner').value) || 0;
+    var numB = Math.max(0, parseInt(document.getElementById('mealBreakfast').value) || 0);
+    var numL = Math.max(0, parseInt(document.getElementById('mealLunch').value) || 0);
+    var numD = Math.max(0, parseInt(document.getElementById('mealDinner').value) || 0);
     if (isDomestic) {
       mealReductionTotal = roundCurr(numB * 0.25 * DOMESTIC_RATE + numL * 0.50 * DOMESTIC_RATE + numD * 0.25 * DOMESTIC_RATE);
     } else {
@@ -2240,18 +2567,21 @@ function calculateCosts() {
   }
 
   var perDiemGross = roundCurr(effectiveDays * perDiemRate);
+  // Potrącenie nie może przekroczyć naliczonej diety (§7 ust. 4 / §14 ust. 2)
+  if (mealReductionTotal > perDiemGross) mealReductionTotal = perDiemGross;
   var perDiemTotal = roundCurr(perDiemGross - mealReductionTotal);
   var hotel = getHotelCalc(nights, hotelLimit, curr, isDomestic);
   var travelAllowance = isDomestic ? 0 : roundCurr(perDiemRate);
   var ltIncluded = document.getElementById('localTransportIncluded').checked;
   var ltRate = isDomestic ? DOMESTIC_TRANSPORT : roundCurr(perDiemRate * 0.10);
-  var localTransport = ltIncluded ? roundCurr(effectiveDays * ltRate) : 0;
+  var localTransport = ltIncluded ? roundCurr(startedDays * ltRate) : 0;
   var grandTotal = roundCurr(perDiemTotal + travelAllowance + hotel.total + localTransport);
 
   var ticketCost = parseFloat(document.getElementById('ticketCost').value) || 0;
   var ticketCurr = document.getElementById('ticketCurrency').value || 'PLN';
   var visaCost = parseFloat(document.getElementById('visaCost').value) || 0;
   var visaCurr = document.getElementById('visaCurrency').value || 'PLN';
+  var extraCostItems = (typeof getAllCostItems === 'function') ? getAllCostItems() : [];
 
   return {
     isDomestic: isDomestic,
@@ -2259,6 +2589,7 @@ function calculateCosts() {
     curr: curr,
     perDiemRate: perDiemRate,
     effectiveDays: effectiveDays,
+    startedDays: startedDays,
     nights: nights,
     perDiemGross: perDiemGross,
     mealReductionTotal: mealReductionTotal,
@@ -2274,11 +2605,12 @@ function calculateCosts() {
     ticketCurr: ticketCurr,
     visaCost: visaCost,
     visaCurr: visaCurr,
+    extraCostItems: extraCostItems,
     hasPrivateDays: hasPrivate,
     depDate: depDate,
     retDate: retDate,
-    depTime: isDomestic ? (document.getElementById('departureTime').value || '') : '',
-    retTime: isDomestic ? (document.getElementById('returnTime').value || '') : '',
+    depTime: document.getElementById('departureTime').value || '',
+    retTime: document.getElementById('returnTime').value || '',
     totalHours: totalHours,
     businessStartDate: hasPrivate ? document.getElementById('businessStartDate').value : depDate,
     businessEndDate: hasPrivate ? document.getElementById('businessEndDate').value : retDate
@@ -2300,8 +2632,21 @@ function recalculate() {
   var hotel = c.hotel;
 
   var tbody = document.getElementById('calcBody');
-  var ticketRow = c.ticketCost > 0 ? '<tr><td>' + t.rowTickets + '</td><td></td><td></td><td><strong>' + formatNum(c.ticketCost) + ' ' + c.ticketCurr + '</strong></td><td>' + c.ticketCurr + '</td></tr>' : '';
-  var visaRow = c.visaCost > 0 ? '<tr><td>' + t.rowVisa + '</td><td></td><td></td><td><strong>' + formatNum(c.visaCost) + ' ' + c.visaCurr + '</strong></td><td>' + c.visaCurr + '</td></tr>' : '';
+  // Build rows for all extra cost items
+  var extraCostRows = '';
+  if (c.extraCostItems && c.extraCostItems.length > 0) {
+    c.extraCostItems.forEach(function(item) {
+      var typeLabel = item.type;
+      COST_TYPES.forEach(function(ct) {
+        if (ct.value === item.type) typeLabel = currentLang === 'en' ? ct.labelEn : ct.label;
+      });
+      if (item.type === 'inne' && item.otherLabel) typeLabel = item.otherLabel;
+      extraCostRows += '<tr><td>' + typeLabel + '</td><td></td><td></td><td><strong>' + formatNum(item.amount) + ' ' + item.currency + '</strong></td><td>' + item.currency + '</td></tr>';
+    });
+  }
+  // Legacy fallback for old saved data
+  var ticketRow = (!c.extraCostItems || c.extraCostItems.length === 0) && c.ticketCost > 0 ? '<tr><td>' + t.rowTickets + '</td><td></td><td></td><td><strong>' + formatNum(c.ticketCost) + ' ' + c.ticketCurr + '</strong></td><td>' + c.ticketCurr + '</td></tr>' : '';
+  var visaRow = (!c.extraCostItems || c.extraCostItems.length === 0) && c.visaCost > 0 ? '<tr><td>' + t.rowVisa + '</td><td></td><td></td><td><strong>' + formatNum(c.visaCost) + ' ' + c.visaCurr + '</strong></td><td>' + c.visaCurr + '</td></tr>' : '';
 
   var ltLabel = c.isDomestic ? (t.rowLocalTransportDomestic + ' (20%)') : t.rowLocalTransport;
   var travelRow = c.isDomestic ? '' :
@@ -2314,7 +2659,7 @@ function recalculate() {
     '</tr>';
 
   tbody.innerHTML =
-    ticketRow + visaRow +
+    extraCostRows + ticketRow + visaRow +
     '<tr>' +
       '<td>' + t.rowPerDiem + '</td>' +
       '<td>' + displayDays + ' ' + t.days + '</td>' +
@@ -2331,10 +2676,10 @@ function recalculate() {
     '</tr>' : '') +
     travelRow +
     '<tr>' +
-      '<td>' + t.rowHotel + (hotel.isProvided ? ' <em style="font-size:0.85em;color:var(--text-dim)">(' + t.hotelProvidedShort + ')</em>' : hotel.label === 'lumpsum' ? ' (' + t.hotelLumpsum + ')' : '') + '</td>' +
-      '<td>' + (hotel.isProvided ? '—' : c.nights + ' ' + t.nights) + '</td>' +
-      '<td>' + (hotel.isProvided ? '—' : formatNum(hotel.ratePerNight) + ' ' + curr) + '</td>' +
-      '<td><strong>' + (hotel.isProvided ? '—' : formatNum(hotel.total) + ' ' + curr) + '</strong></td>' +
+      '<td>' + t.rowHotel + (hotel.notChosen ? ' <em style="font-size:0.85em;color:var(--red)">(' + (currentLang === 'en' ? 'choose an option above' : 'wybierz opcje powyzej') + ')</em>' : hotel.isProvided ? ' <em style="font-size:0.85em;color:var(--text-dim)">(' + t.hotelProvidedShort + ')</em>' : hotel.label === 'lumpsum' ? ' (' + t.hotelLumpsum + ')' : '') + '</td>' +
+      '<td>' + (hotel.isProvided || hotel.notChosen ? '—' : c.nights + ' ' + t.nights) + '</td>' +
+      '<td>' + (hotel.isProvided || hotel.notChosen || hotel.ratePerNight === null ? '—' : formatNum(hotel.ratePerNight) + ' ' + curr) + '</td>' +
+      '<td><strong>' + (hotel.isProvided || hotel.notChosen ? '—' : formatNum(hotel.total) + ' ' + curr) + '</strong></td>' +
       '<td>' + curr + '</td>' +
     '</tr>' +
     '<tr>' +
@@ -2349,11 +2694,18 @@ function recalculate() {
       // Group all costs by currency
       var totals = {};
       totals[curr] = c.grandTotal;
-      if (c.ticketCost > 0) {
-        totals[c.ticketCurr] = roundCurr((totals[c.ticketCurr] || 0) + c.ticketCost);
-      }
-      if (c.visaCost > 0) {
-        totals[c.visaCurr] = roundCurr((totals[c.visaCurr] || 0) + c.visaCost);
+      if (c.extraCostItems && c.extraCostItems.length > 0) {
+        c.extraCostItems.forEach(function(item) {
+          totals[item.currency] = roundCurr((totals[item.currency] || 0) + item.amount);
+        });
+      } else {
+        // Legacy fallback
+        if (c.ticketCost > 0) {
+          totals[c.ticketCurr] = roundCurr((totals[c.ticketCurr] || 0) + c.ticketCost);
+        }
+        if (c.visaCost > 0) {
+          totals[c.visaCurr] = roundCurr((totals[c.visaCurr] || 0) + c.visaCost);
+        }
       }
       var keys = Object.keys(totals);
       var rows = '';
@@ -2385,9 +2737,217 @@ function formatInt(n) {
   return Number.isInteger(n) ? '' + n : n.toFixed(1);
 }
 
+// ============================================================
+// DYNAMIC COST ITEMS (B+H)
+// ============================================================
+var COST_TYPES = [
+  { value: 'bilety', label: 'Bilety', labelEn: 'Tickets' },
+  { value: 'wiza', label: 'Wiza', labelEn: 'Visa' },
+  { value: 'oplata_konf', label: 'Opłata konferencyjna', labelEn: 'Conference fee' },
+  { value: 'dojazd_lokalny', label: 'Dojazd lokalny', labelEn: 'Local transport' },
+  { value: 'materialy', label: 'Materiały', labelEn: 'Materials' },
+  { value: 'ubezpieczenie', label: 'Ubezpieczenie', labelEn: 'Insurance' },
+  { value: 'inne', label: 'Inne', labelEn: 'Other' }
+];
+var costItemCounter = 0;
+
+function getCostCurrencies() {
+  var country = document.getElementById('selectedCountry').value;
+  var isDomestic = document.getElementById('tripTypeDomestic').checked;
+  var currencies = ['PLN'];
+  if (!isDomestic && country && RATES[country]) {
+    var cc = RATES[country].currency;
+    if (cc && cc !== 'PLN') {
+      if (cc !== 'EUR') currencies.push('EUR');
+      currencies.push(cc);
+    } else if (cc !== 'PLN') {
+      currencies.push('EUR');
+    }
+  }
+  return currencies;
+}
+
+function showCostItemsHint() {
+  var cont = document.getElementById('costItemsContainer');
+  if (!cont || cont.querySelector('.cost-item-row')) return;
+  if (document.getElementById('costItemsHint')) return;
+  var p = document.createElement('p');
+  p.id = 'costItemsHint';
+  p.className = 'field-hint';
+  p.style.cssText = 'margin:4px 0 8px 2px; font-size:0.82rem;';
+  p.setAttribute('data-i18n', 'costItemsHint');
+  p.textContent = TRANSLATIONS[currentLang].costItemsHint;
+  cont.appendChild(p);
+}
+
+function addCostItem(prefill) {
+  var hint = document.getElementById('costItemsHint'); if (hint) hint.remove();
+  prefill = prefill || {};
+  costItemCounter++;
+  var id = costItemCounter;
+  var currencies = getCostCurrencies();
+
+  var row = document.createElement('div');
+  row.className = 'cost-item-row';
+  row.dataset.costId = id;
+  // styl w klasie .cost-item-row (patrz <style>) — responsywny
+
+  var typeOpts = COST_TYPES.map(function(ct) {
+    var lbl = currentLang === 'en' ? ct.labelEn : ct.label;
+    var sel = (prefill.type === ct.value) ? ' selected' : '';
+    return '<option value="' + ct.value + '"' + sel + '>' + lbl + '</option>';
+  }).join('');
+
+  var currOpts = currencies.map(function(c) {
+    var sel = (prefill.currency === c) ? ' selected' : '';
+    return '<option value="' + c + '"' + sel + '>' + c + '</option>';
+  }).join('');
+
+  var en = currentLang === 'en';
+  var removeLbl = en ? 'Remove cost item' : 'Usuń pozycję kosztu';
+  row.innerHTML =
+    '<div>' +
+      '<label class="cost-item-label" for="costType' + id + '">' + (en ? 'Type' : 'Rodzaj') + '</label>' +
+      '<select id="costType' + id + '" class="cost-type styled-select" style="width:100%;">' + typeOpts + '</select>' +
+      '<input type="text" id="costOther' + id + '" class="cost-other-label" aria-label="' + (en ? 'Cost description' : 'Opis kosztu') + '" placeholder="' + (en ? 'Describe' : 'Opisz') + '" style="display:none; margin-top:4px; font-size:0.9em;" value="' + (prefill.otherLabel || '') + '">' +
+    '</div>' +
+    '<div>' +
+      '<label class="cost-item-label" for="costAmount' + id + '">' + (en ? 'Amount' : 'Kwota') + '</label>' +
+      '<input type="number" id="costAmount' + id + '" class="cost-amount" min="0" step="0.01" placeholder="0.00" value="' + (prefill.amount || '') + '">' +
+    '</div>' +
+    '<div>' +
+      '<label class="cost-item-label" for="costCurr' + id + '">' + (en ? 'Currency' : 'Waluta') + '</label>' +
+      '<select id="costCurr' + id + '" class="cost-currency styled-select" style="width:100%;">' + currOpts + '</select>' +
+    '</div>' +
+    '<div style="padding-bottom:2px;">' +
+      '<button type="button" class="cost-remove-btn" aria-label="' + removeLbl + '" title="' + removeLbl + '">' +
+        '<i data-lucide="x" style="width:16px;height:16px;"></i>' +
+      '</button>' +
+    '</div>';
+
+  document.getElementById('costItemsContainer').appendChild(row);
+
+  // Show/hide "inne" text input
+  var typeSelect = row.querySelector('.cost-type');
+  var otherInput = row.querySelector('.cost-other-label');
+  typeSelect.addEventListener('change', function() {
+    otherInput.style.display = (this.value === 'inne') ? '' : 'none';
+    syncCostItemsToLegacy();
+    recalculate();
+    saveFormData();
+  });
+  if (prefill.type === 'inne') otherInput.style.display = '';
+
+  // Amount change
+  row.querySelector('.cost-amount').addEventListener('change', function() {
+    syncCostItemsToLegacy();
+    recalculate();
+    saveFormData();
+  });
+  row.querySelector('.cost-amount').addEventListener('input', function() {
+    syncCostItemsToLegacy();
+  });
+  row.querySelector('.cost-currency').addEventListener('change', function() {
+    syncCostItemsToLegacy();
+    recalculate();
+    saveFormData();
+  });
+
+  // Remove button
+  row.querySelector('.cost-remove-btn').addEventListener('click', function() {
+    row.remove();
+    showCostItemsHint();
+    var addBtn = document.getElementById('addCostItemBtn');
+    if (addBtn) addBtn.focus();
+    syncCostItemsToLegacy();
+    recalculate();
+    saveFormData();
+  });
+
+  // Re-init lucide icons in the new row
+  if (typeof lucide !== 'undefined') lucide.createIcons({nodes: [row]});
+
+  return row;
+}
+
+function getAllCostItems(includeEmpty) {
+  var items = [];
+  document.querySelectorAll('.cost-item-row').forEach(function(row) {
+    var type = row.querySelector('.cost-type').value;
+    var amount = parseFloat(row.querySelector('.cost-amount').value) || 0;
+    var currency = row.querySelector('.cost-currency').value;
+    var otherLabel = row.querySelector('.cost-other-label').value || '';
+    if (amount > 0 || includeEmpty) {
+      items.push({ type: type, amount: amount, currency: currency, otherLabel: otherLabel });
+    }
+  });
+  return items;
+}
+
+function syncCostItemsToLegacy() {
+  // Sync first "bilety" item to legacy ticketCost/ticketCurrency
+  // and first "wiza" item to visaCost/visaCurrency for backward compat
+  var items = getAllCostItems();
+  var ticket = items.find(function(i) { return i.type === 'bilety'; });
+  var visa = items.find(function(i) { return i.type === 'wiza'; });
+  document.getElementById('ticketCost').value = ticket ? ticket.amount : 0;
+  document.getElementById('ticketCurrency').value = ticket ? ticket.currency : 'PLN';
+  document.getElementById('visaCost').value = visa ? visa.amount : 0;
+  document.getElementById('visaCurrency').value = visa ? visa.currency : 'PLN';
+}
+
+document.getElementById('addCostItemBtn').addEventListener('click', function() {
+  addCostItem();
+});
+
+// ============================================================
+// BANK NAME DROPDOWN (F)
+// ============================================================
+var BANK_SWIFT = {
+  'PKO BP': 'BPKOPLPW',
+  'mBank': 'BREXPLPW',
+  'ING Bank Śląski': 'INGBPLPW',
+  'Bank Millennium': 'BIGBPLPW',
+  'Santander Bank Polska': 'WBKPPLPP',
+  'Bank Pekao S.A.': 'PKOPPLPW',
+  'BNP Paribas': 'PPABPLPK',
+  'Alior Bank': 'ALBPPLPW',
+  'Credit Agricole': 'AGRIPLPR',
+  'Nest Bank': 'NESBPLPW',
+  'Citi Handlowy': 'CITIPLPX',
+  'Revolut': 'REVOGB21',
+  'Wise': 'TRWIGB22'
+};
+
+function getBankName() {
+  var sel = document.getElementById('bankName');
+  if (sel.value === '__other__') return document.getElementById('bankNameOther').value || '';
+  return sel.value || '';
+}
+
+document.getElementById('bankName').addEventListener('change', function() {
+  var otherInput = document.getElementById('bankNameOther');
+  otherInput.style.display = (this.value === '__other__') ? '' : 'none';
+  if (this.value !== '__other__') otherInput.value = '';
+  // Auto-fill SWIFT
+  var swiftInput = document.getElementById('bankSwift');
+  if (swiftInput && BANK_SWIFT[this.value]) {
+    swiftInput.value = BANK_SWIFT[this.value];
+  } else if (this.value === '__other__' || !this.value) {
+    swiftInput.value = '';
+  }
+  recalculate();
+  saveFormData();
+});
+document.getElementById('bankNameOther').addEventListener('input', function() { saveFormData(); });
+
+// ============================================================
+// KOSZT NOCLEGU — zawsze kwota łączna za cały pobyt
+// ============================================================
+
 // Recalc triggers
-['departureDate', 'departureTime', 'returnDate', 'returnTime', 'hasPrivateDays', 'businessStartDate', 'businessEndDate', 'mealsProvided', 'mealBreakfast', 'mealLunch', 'mealDinner', 'hotelProvided', 'hotelCostPerNight', 'localTransportIncluded', 'ticketCost', 'ticketCurrency', 'visaCost', 'visaCurrency', 'requestAdvance', 'advanceCurrency', 'bankName', 'bankSwift', 'bankOwner', 'bankAccount'].forEach(function(id) {
-  document.getElementById(id).addEventListener('change', function() { recalculate(); saveFormData(); });
+['departureDate', 'departureTime', 'returnDate', 'returnTime', 'hasPrivateDays', 'businessStartDate', 'businessEndDate', 'mealsProvided', 'mealBreakfast', 'mealLunch', 'mealDinner', 'hotelProvided', 'hotelCostPerNight', 'localTransportIncluded', 'requestAdvance', 'advanceCurrency', 'bankSwift', 'bankOwner', 'bankAccount'].forEach(function(id) {
+  document.getElementById(id).addEventListener('change', function() { updateTimeRequiredMark(); recalculate(); saveFormData(); });
 });
 
 
@@ -2395,9 +2955,10 @@ function formatInt(n) {
 document.getElementById('departureDate').addEventListener('change', function() {
   var ret = document.getElementById('returnDate');
   if (this.value) {
+    var domestic = document.getElementById('tripTypeDomestic').checked;
     ret.min = this.value;
-    if (ret.value && ret.value <= this.value) {
-      // Bump return date to departure + 1 day
+    // Przy krajowej delegacja jednodniowa jest dopuszczalna — nie przesuwamy daty
+    if (!domestic && ret.value && ret.value <= this.value) {
       var d = new Date(this.value);
       d.setDate(d.getDate() + 1);
       ret.value = d.toISOString().split('T')[0];
@@ -2487,6 +3048,8 @@ document.querySelectorAll('input[name="hotelMode"]').forEach(function(r) {
     var mode = this.value;
     document.getElementById('hotelProvided').checked = (mode === 'provided');
     document.getElementById('hotelCostInputRow').style.display = (mode === 'receipt') ? '' : 'none';
+    var hg = document.getElementById('hotelModeGroup');
+    if (hg) hg.classList.remove('field-error-group');
     updateHotelCostHint();
     recalculate();
     saveFormData();
@@ -2500,7 +3063,20 @@ document.getElementById('hotelCostPerNight').addEventListener('input', function(
 
 function getHotelMode() {
   var el = document.querySelector('input[name="hotelMode"]:checked');
-  return el ? el.value : 'receipt';
+  return el ? el.value : 'receipt';   // domyślnie: znam koszt noclegu
+}
+
+// Podpowiedź o limicie: dobowy oraz łączny dla liczby nocy w tym wyjeździe
+function hotelLimitText(limitPerNight, curr) {
+  var cc = calculateCosts();
+  var n = (cc && cc.nights > 0) ? cc.nights : 0;
+  var en = currentLang === 'en';
+  if (n > 0) {
+    return (en ? 'limit ' : 'limit ') + formatNum(roundCurr(limitPerNight * n)) + ' ' + curr +
+           (en ? ' (' + formatNum(limitPerNight) + '/night × ' + n + ')'
+               : ' (' + formatNum(limitPerNight) + '/dobę × ' + n + ')');
+  }
+  return (en ? 'limit ' : 'limit ') + formatNum(limitPerNight) + ' ' + curr + (en ? '/night' : '/dobę');
 }
 
 function updateHotelCostHint() {
@@ -2515,8 +3091,8 @@ function updateHotelCostHint() {
   if (isDomestic) {
     currEl.textContent = 'PLN';
     if (mode === 'receipt') {
-      hintEl.textContent = t.hotelLimitHint.replace('{limit}', '900,00').replace('{curr}', 'PLN');
-      costInput.max = 900;
+      hintEl.textContent = hotelLimitText(900, 'PLN');
+      costInput.max = hotelMaxAttr(900);
     } else {
       hintEl.textContent = '';
       costInput.removeAttribute('max');
@@ -2529,8 +3105,8 @@ function updateHotelCostHint() {
       var curr = rate.currency || 'EUR';
       currEl.textContent = curr;
       if (mode === 'receipt') {
-        hintEl.textContent = t.hotelLimitHint.replace('{limit}', formatNum(rate.hotel)).replace('{curr}', curr);
-        costInput.max = rate.hotel;
+        hintEl.textContent = hotelLimitText(rate.hotel, curr);
+        costInput.max = hotelMaxAttr(rate.hotel);
       } else {
         hintEl.textContent = '';
         costInput.removeAttribute('max');
@@ -2544,6 +3120,33 @@ function updateHotelCostHint() {
   }
 }
 // Show warning if receipt mode: no cost or exceeds limit
+// Limit dobowy z rozporządzenia × liczba nocy = maksimum dla kwoty łącznej
+function hotelMaxAttr(limit) {
+  var cc = calculateCosts();
+  var n = (cc && cc.nights > 0) ? cc.nights : 1;
+  return roundCurr(limit * n);
+}
+
+// Gwiazdka przy godzinach tylko wtedy, gdy są naprawdę wymagane
+// (delegacja jednodniowa). W pozostałych przypadkach godziny są opcjonalne.
+function updateTimeRequiredMark() {
+  var dep = document.getElementById('departureDate').value;
+  var ret = document.getElementById('returnDate').value;
+  var needed = !!(dep && ret && dep === ret);
+  document.querySelectorAll('.trip-time-field').forEach(function(el) {
+    var lbl = el.querySelector('label');
+    if (!lbl) return;
+    var star = lbl.querySelector('.req-star');
+    if (needed && !star) {
+      var s = document.createElement('span'); s.className = 'req-star'; s.textContent = ' *';
+      var tip = lbl.querySelector('.help-tip');
+      if (tip) lbl.insertBefore(s, tip); else lbl.appendChild(s);
+    } else if (!needed && star) {
+      star.remove();
+    }
+  });
+}
+
 function updateHotelCostWarn() {
   var warnEl = document.getElementById('hotelCostWarn');
   if (!warnEl) return;
@@ -2552,6 +3155,8 @@ function updateHotelCostWarn() {
   var cost = parseFloat(costEl.value) || 0;
   var calcActive = document.getElementById('calcResults').style.display !== 'none';
   if (mode !== 'receipt' || !calcActive) { warnEl.style.display = 'none'; return; }
+  var cw = calculateCosts();
+  var nightsW = (cw && cw.nights > 0) ? cw.nights : 1;
   // Get current limit
   var isDomestic = document.getElementById('tripTypeDomestic').checked;
   var limit = 0;
@@ -2562,19 +3167,19 @@ function updateHotelCostWarn() {
     if (country && RATES[country]) limit = RATES[country].hotel;
   }
   if (cost === 0) {
-    warnEl.textContent = currentLang === 'pl' ? '← wpisz kwotę' : '← enter amount';
+    warnEl.textContent = currentLang === 'pl'
+      ? '← wpisz kwotę z rachunku (albo wybierz opcję wyżej, jeśli nie masz rezerwacji)'
+      : '← enter the amount from the invoice (or choose an option above if you have no booking)';
     warnEl.style.color = '';
     warnEl.style.display = '';
-  } else if (limit > 0 && cost > limit) {
+  } else if (limit > 0 && cost > roundCurr(limit * nightsW)) {
+    var effLimit = roundCurr(limit * nightsW);
     warnEl.textContent = currentLang === 'pl'
-      ? '⚠ przekracza limit — rozliczenie do ' + formatNum(limit)
-      : '⚠ exceeds limit — reimbursed up to ' + formatNum(limit);
+      ? '⚠ przekracza limit — rozliczenie do ' + formatNum(effLimit)
+      : '⚠ exceeds limit — reimbursed up to ' + formatNum(effLimit);
     warnEl.style.color = 'var(--red)';
     warnEl.style.display = '';
-    // Cap the input value to the limit
-    costEl.value = limit;
-    recalculate();
-    saveFormData();
+    // Nie nadpisujemy tego, co wpisał użytkownik — ograniczenie stosuje getHotelCalc
   } else {
     warnEl.style.display = 'none';
   }
@@ -2616,7 +3221,7 @@ document.querySelectorAll('input[name="tripType"]').forEach(function(radio) {
     var isDomestic = this.value === 'domestic';
     document.getElementById('domesticInfoBox').style.display = isDomestic ? 'block' : 'none';
     // Show/hide domestic-only time fields
-    document.querySelectorAll('.domestic-only-field').forEach(function(el) { el.style.display = isDomestic ? '' : 'none'; });
+    updateTimeRequiredMark();
     // datesRow always 1fr 1fr — times are nested inside date groups
     // Hide/show country selector and foreign-specific fields
     var countryWrapper = document.querySelector('.country-search-wrapper');
@@ -2697,7 +3302,11 @@ function saveFormData() {
   });
   data._countrySearch = countrySearchInput.value;
   data._lang = currentLang;
-  data._version = 3;
+  data._version = 4;
+  // Save dynamic cost items
+  data._costItems = (typeof getAllCostItems === 'function') ? getAllCostItems(true) : [];
+  // Save bankNameOther
+  data._bankNameOther = document.getElementById('bankNameOther') ? document.getElementById('bankNameOther').value : '';
   localStorage.setItem('ww_formData', JSON.stringify(data));
 }
 
@@ -2740,9 +3349,7 @@ function restoreFormData() {
     document.getElementById('bankDetailsBlock').style.display = (advMethodR && advMethodR.value === 'konto') ? 'block' : 'none';
     setTimeout(function() { updateAdvanceSum(); updateMealMax(); }, 100);
     document.getElementById('extraFundingFields').style.display = document.getElementById('multipleFunding').checked ? 'block' : 'none';
-    // Restore domestic time fields visibility
-    var isDomesticRestore = document.getElementById('tripTypeDomestic').checked;
-    document.querySelectorAll('.domestic-only-field').forEach(function(el) { el.style.display = isDomesticRestore ? '' : 'none'; });
+    // Godziny zawsze widoczne — nic do przywracania
     // datesRow always 1fr 1fr — times are nested inside date groups
     // Restore private days visibility + sync radios
     var hasPriv = document.getElementById('hasPrivateDays').checked;
@@ -2772,6 +3379,23 @@ function restoreFormData() {
       }
     }
 
+    // Restore dynamic cost items
+    if (data._costItems && data._costItems.length > 0) {
+      data._costItems.forEach(function(item) {
+        addCostItem(item);
+      });
+    }
+    // Restore bank dropdown "Inny" state
+    var bankSel = document.getElementById('bankName');
+    var bankOther = document.getElementById('bankNameOther');
+    if (bankSel && bankSel.value === '__other__') {
+      bankOther.style.display = '';
+      if (data._bankNameOther) bankOther.value = data._bankNameOther;
+    }
+    // Restore hotel cost mode radio
+    // Tryb kosztu noclegu nie istnieje — zawsze kwota łączna
+
+    updateMealReductionLabels();
     recalculate();
   } catch(e) { /* ignore */ }
 }
@@ -2908,13 +3532,24 @@ function clearForm() {
   document.getElementById('otherPersonSection').style.display = 'none';
   var agrBtn = document.getElementById('agreementBtn');
   if (agrBtn) agrBtn.style.display = 'none';
-  document.querySelectorAll('.domestic-only-field').forEach(function(el) { el.style.display = 'none'; });
+  // Godziny zawsze widoczne
   document.getElementById('domesticInfoBox').style.display = 'none';
   var cw = document.querySelector('.country-search-wrapper');
   if (cw) cw.parentElement.style.display = '';
   // Reset extra funding
   document.getElementById('multipleFunding').checked = false;
   document.getElementById('extraFundingFields').style.display = 'none';
+  // Reset dynamic cost items
+  document.getElementById('costItemsContainer').innerHTML = ''; showCostItemsHint();
+  costItemCounter = 0;
+  document.getElementById('ticketCost').value = 0;
+  document.getElementById('visaCost').value = 0;
+  // Reset bank dropdown
+  document.getElementById('bankName').value = '';
+  document.getElementById('bankNameOther').value = '';
+  document.getElementById('bankNameOther').style.display = 'none';
+  // Reset hotel cost mode
+  // Brak trybów kosztu noclegu — zawsze kwota łączna
   // Reset calculator
   document.getElementById('calcPlaceholder').style.display = 'block';
   document.getElementById('calcResults').style.display = 'none';
@@ -2967,12 +3602,29 @@ function validateFormFields() {
   }
   var advanceChecked = document.getElementById('requestAdvance').checked;
   var advMethodBank = document.getElementById('advMethodBank').checked;
+  if (!(advanceChecked && advMethodBank)) {
+    ['bankName','bankOwner','bankAccount','bankNameOther'].forEach(function(id) {
+      var e = document.getElementById(id); if (e) e.classList.remove('field-error');
+    });
+  }
   if (advanceChecked && advMethodBank) {
     ['bankName', 'bankOwner', 'bankAccount'].forEach(function(id) {
       var el = document.getElementById(id);
-      if (el && !el.value.trim()) {
+      var val = el ? el.value.trim() : '';
+      // For bankName dropdown: if "Inny" selected, check bankNameOther
+      if (id === 'bankName' && val === '__other__') {
+        var otherEl = document.getElementById('bankNameOther');
+        val = otherEl ? otherEl.value.trim() : '';
+        if (!val) {
+          missing.push(id);
+          if (otherEl) otherEl.classList.add('field-error');
+          if (!firstMissingEl) firstMissingEl = otherEl || el;
+        } else {
+          if (otherEl) otherEl.classList.remove('field-error');
+        }
+      } else if (!val) {
         missing.push(id);
-        el.classList.add('field-error');
+        if (el) el.classList.add('field-error');
         if (!firstMissingEl) firstMissingEl = el;
       } else if (el) {
         el.classList.remove('field-error');
@@ -2982,11 +3634,32 @@ function validateFormFields() {
   // Date order check
   var depDateVal = document.getElementById('departureDate').value;
   var retDateVal = document.getElementById('returnDate').value;
-  if (depDateVal && retDateVal && retDateVal <= depDateVal) {
+  var isDomTrip = document.getElementById('tripTypeDomestic').checked;
+  var sameDayOk = isDomTrip && depDateVal && retDateVal === depDateVal;
+  if (depDateVal && retDateVal && retDateVal < depDateVal) {
     missing.push('returnDate_order');
     var retEl = document.getElementById('returnDate');
     retEl.classList.add('field-error');
     if (!firstMissingEl) firstMissingEl = retEl;
+  } else if (sameDayOk) {
+    // Delegacja jednodniowa — godziny muszą być podane i powrót po wyjeździe
+    var dT = document.getElementById('departureTime').value;
+    var rT = document.getElementById('returnTime').value;
+    var retEl2 = document.getElementById('returnTime');
+    document.getElementById('returnDate').classList.remove('field-error');
+    if (!dT || !rT) {
+      missing.push('sameDayTimes');
+      if (!dT) document.getElementById('departureTime').classList.add('field-error');
+      if (!rT) retEl2.classList.add('field-error');
+      if (!firstMissingEl) firstMissingEl = dT ? retEl2 : document.getElementById('departureTime');
+    } else if (rT <= dT) {
+      missing.push('sameDayTimeOrder');
+      retEl2.classList.add('field-error');
+      if (!firstMissingEl) firstMissingEl = retEl2;
+    } else {
+      document.getElementById('departureTime').classList.remove('field-error');
+      retEl2.classList.remove('field-error');
+    }
   }
   var anyTransport = document.querySelectorAll('input[name="transport"]:checked').length > 0;
   if (!anyTransport) {
@@ -3005,20 +3678,51 @@ function validateFormFields() {
     else bsEl.classList.remove('field-error');
     if (!beEl.value) { missing.push('businessEndDate'); beEl.classList.add('field-error'); if (!firstMissingEl) firstMissingEl = beEl; }
     else beEl.classList.remove('field-error');
+    // Kolejność i zakres okresu służbowego
+    if (bsEl.value && beEl.value) {
+      if (beEl.value < bsEl.value) {
+        missing.push('businessDateOrder');
+        beEl.classList.add('field-error');
+        if (!firstMissingEl) firstMissingEl = beEl;
+      } else if (depDateVal && retDateVal && (bsEl.value < depDateVal || beEl.value > retDateVal)) {
+        missing.push('businessDateRange');
+        bsEl.classList.add('field-error'); beEl.classList.add('field-error');
+        if (!firstMissingEl) firstMissingEl = bsEl;
+      }
+    }
+  } else {
+    document.getElementById('businessStartDate').classList.remove('field-error');
+    document.getElementById('businessEndDate').classList.remove('field-error');
   }
   // Domestic trip: departure/return times required
   var isDomesticVal = document.getElementById('tripTypeDomestic').checked;
-  if (isDomesticVal) {
-    var depTimeEl = document.getElementById('departureTime');
-    var retTimeEl = document.getElementById('returnTime');
-    if (!depTimeEl.value) { missing.push('departureTime'); depTimeEl.classList.add('field-error'); if (!firstMissingEl) firstMissingEl = depTimeEl; }
-    else depTimeEl.classList.remove('field-error');
-    if (!retTimeEl.value) { missing.push('returnTime'); retTimeEl.classList.add('field-error'); if (!firstMissingEl) firstMissingEl = retTimeEl; }
-    else retTimeEl.classList.remove('field-error');
+  if (!isDomesticVal) {
+    document.getElementById('departureTime').classList.remove('field-error');
+    document.getElementById('returnTime').classList.remove('field-error');
   }
-  // Hotel cost check: if receipt mode selected, cost must be > 0
+  // Godziny są opcjonalne — wymagane tylko przy delegacji jednodniowej,
+  // bo bez nich nie da się ustalić, czy dieta w ogóle przysługuje.
+  // Obsługa tego przypadku jest wyżej (sameDayOk); tu tylko czyścimy oznaczenia.
+  if (isDomesticVal && depDateVal && retDateVal && retDateVal !== depDateVal) {
+    document.getElementById('departureTime').classList.remove('field-error');
+    document.getElementById('returnTime').classList.remove('field-error');
+  }
+  // Wybor sposobu rozliczenia noclegu jest obowiazkowy - swiadoma decyzja,
+  // bo domyslne zaznaczenie powodowalo, ze nikt tego nie klikal
   var hotelModeEl = document.querySelector('input[name="hotelMode"]:checked');
-  var hotelMode = hotelModeEl ? hotelModeEl.value : 'receipt';
+  var calcOn = document.getElementById('calcResults').style.display !== 'none';
+  var hotelGroup = document.getElementById('hotelModeGroup');
+  // Domyslnie zaznaczone jest 'Znam koszt noclegu', a kwota jest wymagana —
+  // kto nie ma rezerwacji, nie wpisze kwoty i musi przelaczyc sie na ryczalt
+  // albo nocleg zapewniony. Ten warunek to tylko zabezpieczenie.
+  if (calcOn && !hotelModeEl) {
+    missing.push('hotelMode');
+    if (hotelGroup) hotelGroup.classList.add('field-error-group');
+    if (!firstMissingEl) firstMissingEl = document.getElementById('hotelModeReceipt');
+  } else if (hotelGroup) {
+    hotelGroup.classList.remove('field-error-group');
+  }
+  var hotelMode = hotelModeEl ? hotelModeEl.value : null;
   var hotelCostEl = document.getElementById('hotelCostPerNight');
   if (hotelMode === 'receipt' && hotelCostEl) {
     var hotelCost = parseFloat(hotelCostEl.value) || 0;
@@ -3041,7 +3745,12 @@ function validateFormFields() {
         destinationCity: 'Miejsce docelowe', purposeOfTravel: 'Cel wyjazdu',
         hostInstitution: 'Instytucja przyjmująca', selectedCountry: 'Kraj (wybierz z listy)',
         transport: 'Środek transportu', returnDate_order: 'Data powrotu musi być późniejsza niż wyjazdu',
-        hotelCostPerNight: 'Kwota za dobę noclegu (tryb "wg rachunku")',
+        hotelMode: 'Nocleg — wybierz sposób rozliczenia',
+        hotelCostPerNight: 'Łączny koszt noclegu — wpisz kwotę albo wybierz „Nie mam rezerwacji” lub „Nocleg zapewniony”',
+        sameDayTimes: 'Godziny wyjazdu i powrotu (wyjazd jednodniowy)',
+        sameDayTimeOrder: 'Godzina powrotu musi być późniejsza niż wyjazdu',
+        businessDateOrder: 'Koniec delegacji służbowej musi być po jej początku',
+        businessDateRange: 'Okres służbowy musi mieścić się w datach wyjazdu',
         bankName: 'Nazwa banku',
         bankOwner: 'Właściciel konta', bankAccount: 'Numer konta'
       },
@@ -3052,7 +3761,12 @@ function validateFormFields() {
         destinationCity: 'Destination', purposeOfTravel: 'Purpose of travel',
         hostInstitution: 'Host institution', selectedCountry: 'Country (select from list)',
         transport: 'Transport mode', returnDate_order: 'Return date must be after departure date',
-        hotelCostPerNight: 'Hotel cost per night (receipt mode)',
+        hotelMode: 'Accommodation — choose a settlement method',
+        hotelCostPerNight: 'Total accommodation cost — enter the amount or select „No booking” or „Accommodation provided”',
+        sameDayTimes: 'Departure and return times (same-day trip)',
+        sameDayTimeOrder: 'Return time must be after departure time',
+        businessDateOrder: 'Business period end must be after its start',
+        businessDateRange: 'Business period must fall within the trip dates',
         bankName: 'Bank name',
         bankOwner: 'Account owner', bankAccount: 'Account number'
       }
@@ -3063,12 +3777,13 @@ function validateFormFields() {
       : 'Please fill in missing fields before export:';
     var listHtml = missing.map(function(id) { return '<li>' + (names[id] || id) + '</li>'; }).join('');
     var banner = document.getElementById('validationBanner');
-    banner.innerHTML = '<div class="vb-title"><span>' + title + '</span><button class="vb-close" data-action="close-banner">&times;</button></div><ul>' + listHtml + '</ul>';
+    banner.innerHTML = '<div class="vb-title"><span>' + title + '</span><button class="vb-close" data-action="close-banner" aria-label="Zamknij komunikat">&times;</button></div><ul>' + listHtml + '</ul>';
     banner.classList.add('visible');
-    setTimeout(function() { banner.classList.remove('visible'); }, 8000);
+    // Baner zostaje na ekranie — użytkownik zamyka go przyciskiem
     banner.scrollIntoView({ behavior: 'smooth', block: 'start' });
     if (firstMissingEl) {
-      setTimeout(function() { firstMissingEl.focus({ preventScroll: true }); }, 400);
+      setTimeout(function() { firstMissingEl.focus({ preventScroll: true });
+      try { firstMissingEl.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch(e) { firstMissingEl.scrollIntoView(); } }, 400);
     }
     return false;
   }
@@ -3145,9 +3860,9 @@ async function generateAgreementDocx() {
       : 'Please fill in missing fields before generating the agreement:';
     var listHtml = missing.map(function(m) { return '<li>' + m + '</li>'; }).join('');
     var banner = document.getElementById('validationBanner');
-    banner.innerHTML = '<div class="vb-title"><span>' + title + '</span><button class="vb-close" data-action="close-banner">&times;</button></div><ul>' + listHtml + '</ul>';
+    banner.innerHTML = '<div class="vb-title"><span>' + title + '</span><button class="vb-close" data-action="close-banner" aria-label="Zamknij komunikat">&times;</button></div><ul>' + listHtml + '</ul>';
     banner.classList.add('visible');
-    setTimeout(function() { banner.classList.remove('visible'); }, 8000);
+    // Baner zostaje na ekranie — użytkownik zamyka go przyciskiem
     var firstField = document.getElementById('fullName');
     if (!firstField.value.trim()) { firstField.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
     return;
@@ -3498,29 +4213,37 @@ async function exportDocx() {
   setCellText(r12[0], departureFrom, { size: 22 });
   setCellText(r12[1], via, { size: 22 });
   setCellText(r12[2], destDisplay, { size: 22 });
-  setCellText(r12[3], fmtDate(depDate), { size: 22 });
+  var depTimeDocx = document.getElementById('departureTime').value;
+  setCellText(r12[3], fmtDate(depDate) + (depTimeDocx ? ', godz. ' + depTimeDocx : ''), { size: 22 });
 
   // Row 14: Return (cells 0-3)
   var r14 = getCells(trs[14]);
   setCellText(r14[0], returnFrom || destDisplay, { size: 22 });
   setCellText(r14[1], returnVia, { size: 22 });
   setCellText(r14[2], returnTo || departureFrom, { size: 22 });
-  setCellText(r14[3], fmtDate(retDate), { size: 22 });
+  var retTimeDocx = document.getElementById('returnTime').value;
+  setCellText(r14[3], fmtDate(retDate) + (retTimeDocx ? ', godz. ' + retTimeDocx : ''), { size: 22 });
 
   // === COST ROWS (18-24) ===
   if (_c) {
-    // Row 18: Bilety
-    if (_c.ticketCost > 0) {
+    // Row 18: Bilety (from legacy or dynamic cost items)
+    var docxTicket = _c.extraCostItems && _c.extraCostItems.length > 0
+      ? _c.extraCostItems.find(function(i) { return i.type === 'bilety'; })
+      : (_c.ticketCost > 0 ? { amount: _c.ticketCost, currency: _c.ticketCurr } : null);
+    if (docxTicket) {
       var r18 = getCells(trs[18]);
-      setCellText(r18[4], formatNum(_c.ticketCost), { size: 22 });
-      setCellText(r18[5], _c.ticketCurr, { size: 22 });
+      setCellText(r18[4], formatNum(docxTicket.amount), { size: 22 });
+      setCellText(r18[5], docxTicket.currency, { size: 22 });
     }
 
     // Row 19: Wiza
-    if (_c.visaCost > 0) {
+    var docxVisa = _c.extraCostItems && _c.extraCostItems.length > 0
+      ? _c.extraCostItems.find(function(i) { return i.type === 'wiza'; })
+      : (_c.visaCost > 0 ? { amount: _c.visaCost, currency: _c.visaCurr } : null);
+    if (docxVisa) {
       var r19 = getCells(trs[19]);
-      setCellText(r19[4], formatNum(_c.visaCost), { size: 22 });
-      setCellText(r19[5], _c.visaCurr, { size: 22 });
+      setCellText(r19[4], formatNum(docxVisa.amount), { size: 22 });
+      setCellText(r19[5], docxVisa.currency, { size: 22 });
     }
 
     // Row 20: Dieta dojazdowa (foreign only)
@@ -3543,22 +4266,45 @@ async function exportDocx() {
     var r22 = getCells(trs[22]);
     if (!_c.hotel.isProvided) {
       setCellText(r22[2], String(_c.nights), { size: 22 });
-      setCellText(r22[3], formatNum(_c.hotel.ratePerNight), { size: 22 });
+      // Stawkę dobową podajemy tylko przy ryczałcie; przy rachunku koszt jest łączny
+      if (_c.hotel.ratePerNight !== null && _c.hotel.ratePerNight !== undefined) {
+        setCellText(r22[3], formatNum(_c.hotel.ratePerNight), { size: 22 });
+      }
     }
     setCellText(r22[4], formatNum(_c.hotel.total), { size: 22 });
     setCellText(r22[5], curr, { size: 22 });
 
-    // Row 23: Inne koszty — clear multi-paragraph label, fill data
+    // Row 23: Inne koszty — local transport + extra items
+    var inneLines = [];
     if (_c.localTransport > 0) {
+      inneLines.push(_c.isDomestic ? 'Ryczałt za dojazdy lokalne' : 'Ryczałt na komunikację miejscową');
+    }
+    // Add non-ticket, non-visa extra cost items
+    var extraForInne = (_c.extraCostItems || []).filter(function(i) {
+      return i.type !== 'bilety' && i.type !== 'wiza';
+    });
+    extraForInne.forEach(function(item) {
+      var lbl = item.type;
+      COST_TYPES.forEach(function(ct) { if (ct.value === item.type) lbl = ct.label; });
+      if (item.type === 'inne' && item.otherLabel) lbl = item.otherLabel;
+      inneLines.push(lbl + ': ' + formatNum(item.amount) + ' ' + item.currency);
+    });
+    if (_c.localTransport > 0 || inneLines.length > 0) {
       var r23 = getCells(trs[23]);
-      var lbl23 = _c.isDomestic
-        ? 'Inne koszty:\nRyczałt za dojazdy lokalne'
-        : 'Inne koszty:\nRyczałt za komunikację miejską';
+      var lbl23 = 'Inne koszty:';
+      if (inneLines.length > 0) lbl23 += '\n' + inneLines.join('\n');
       var p23 = clearAllParas(r23[0]);
       if (p23) addRun(p23, lbl23, { size: 20 });
-      setCellText(r23[2], formatInt(_c.effectiveDays), { size: 22 });
-      setCellText(r23[3], formatNum(_c.ltRate), { size: 22 });
-      setCellText(r23[4], formatNum(_c.localTransport), { size: 22 });
+      if (_c.localTransport > 0) {
+        setCellText(r23[2], formatInt(_c.effectiveDays), { size: 22 });
+        setCellText(r23[3], formatNum(_c.ltRate), { size: 22 });
+      }
+      // Sum local transport + extra items in main currency
+      var inneTotal = _c.localTransport;
+      extraForInne.forEach(function(item) {
+        if (item.currency === curr) inneTotal = roundCurr(inneTotal + item.amount);
+      });
+      setCellText(r23[4], formatNum(inneTotal), { size: 22 });
       setCellText(r23[5], curr, { size: 22 });
     }
 
@@ -3566,9 +4312,42 @@ async function exportDocx() {
     var r24 = getCells(trs[24]);
     if (projectNumber) setCellText(r24[1], projectNumber, { size: 22 });
     if (advanceAmt > 0) {
-      setCellText(r24[2], formatNum(advanceAmt) + ' ' + advanceCurr, { bold: true, size: 22 });
+      var advText = formatNum(advanceAmt) + ' ' + advanceCurr;
+      // Pozostałe waluty zaliczki
+      var advBy = _adv.byCurrency || {};
+      Object.keys(advBy).sort().forEach(function(cu) {
+        if (cu !== advanceCurr && advBy[cu] > 0) advText += ' + ' + formatNum(advBy[cu]) + ' ' + cu;
+      });
+      // Sposób wypłaty i dane przelewu
+      var advBank = document.getElementById('advMethodBank').checked;
+      if (advBank) {
+        var bn = getBankName();
+        var bo = (document.getElementById('bankOwner').value || '').trim();
+        var ba = (document.getElementById('bankAccount').value || '').trim();
+        var bs = (document.getElementById('bankSwift').value || '').trim();
+        var bankLines = [];
+        if (bn) bankLines.push(bn);
+        if (ba) bankLines.push(ba);
+        if (bs) bankLines.push('SWIFT: ' + bs);
+        if (bo) bankLines.push(bo);
+        if (bankLines.length) advText += '\nprzelew: ' + bankLines.join(', ');
+      } else {
+        advText += '\nkasa główna UW';
+      }
+      setCellText(r24[2], advText, { bold: true, size: 20 });
     }
-    setCellText(r24[4], formatNum(_c.grandTotal), { bold: true, size: 22 });
+    // Suma główna w walucie kraju + osobno pozostałe waluty
+    var docxGrandTotal = _c.grandTotal;
+    var otherCurr = {};
+    (_c.extraCostItems || []).forEach(function(item) {
+      if (!item.amount || item.amount <= 0) return;
+      if (item.currency === curr) docxGrandTotal = roundCurr(docxGrandTotal + item.amount);
+      else otherCurr[item.currency] = roundCurr((otherCurr[item.currency] || 0) + item.amount);
+    });
+    var otherCurrSuffix = Object.keys(otherCurr).sort().map(function(cu) {
+      return ' + ' + formatNum(otherCurr[cu]) + ' ' + cu;
+    }).join('');
+    setCellText(r24[4], formatNum(docxGrandTotal) + otherCurrSuffix, { bold: true, size: 22 });
     setCellText(r24[5], curr, { bold: true, size: 22 });
   }
 
@@ -3600,13 +4379,11 @@ function updateMealMax() {
   var maxMeals = 90; // default fallback
   if (depDate && retDate) {
     var dep = new Date(depDate), ret = new Date(retDate);
-  // Add time component for domestic trips
-  if (isDomestic) {
-    var depTime = document.getElementById('departureTime').value;
-    var retTime = document.getElementById('returnTime').value;
-    if (depTime) { var dp = depTime.split(':'); dep.setHours(parseInt(dp[0]), parseInt(dp[1])); }
-    if (retTime) { var rp = retTime.split(':'); ret.setHours(parseInt(rp[0]), parseInt(rp[1])); }
-  }
+  // Add time component for trips (required domestic, optional international)
+  var depTime = document.getElementById('departureTime').value;
+  var retTime = document.getElementById('returnTime').value;
+  if (depTime) { var dp = depTime.split(':'); dep.setHours(parseInt(dp[0]), parseInt(dp[1])); }
+  if (retTime) { var rp = retTime.split(':'); ret.setHours(parseInt(rp[0]), parseInt(rp[1])); }
     var diffMs = ret.getTime() - dep.getTime();
     var fullDays = Math.floor(diffMs / (1000*60*60*24));
     maxMeals = fullDays + 1; // effectiveDays
@@ -3625,18 +4402,28 @@ function updateMealMax() {
 // ============================================================
 function getAdvanceAmount() {
   var c = calculateCosts();
-  if (!c) return { amount: 0, currency: 'PLN' };
+  if (!c) return { amount: 0, currency: 'PLN', byCurrency: {} };
 
   var countryCurr = c.curr;
-  var sum = c.grandTotal;
+  // Świadczenia z kalkulatora są zawsze w walucie kraju
+  var byCurrency = {};
+  byCurrency[countryCurr] = c.grandTotal;
 
-  // Add tickets & visa if same currency
-  if (c.ticketCost > 0 && c.ticketCurr === countryCurr) sum = roundCurr(sum + c.ticketCost);
-  if (c.visaCost > 0 && c.visaCurr === countryCurr) sum = roundCurr(sum + c.visaCost);
+  // Wszystkie pozycje kosztów — każda w swojej walucie
+  (c.extraCostItems || []).forEach(function(item) {
+    if (!item.amount || item.amount <= 0) return;
+    var cu = item.currency || 'PLN';
+    byCurrency[cu] = roundCurr((byCurrency[cu] || 0) + item.amount);
+  });
 
   var selCurr = document.getElementById('advanceCurrency').value;
   var displayCurr = (selCurr === 'AUTO') ? countryCurr : selCurr;
-  return { amount: sum, currency: displayCurr, countryCurrency: countryCurr };
+  return {
+    amount: byCurrency[displayCurr] || 0,
+    currency: displayCurr,
+    countryCurrency: countryCurr,
+    byCurrency: byCurrency
+  };
 }
 
 function updateAdvanceSum() {
@@ -3652,16 +4439,14 @@ function updateAdvanceSum() {
   var adv = getAdvanceAmount();
   var countryCurr = adv.countryCurrency;
 
-  // Check for extras in different currencies
-  var extras = '';
-  var ticketCost = parseFloat(document.getElementById('ticketCost').value) || 0;
-  var ticketCurr = document.getElementById('ticketCurrency').value || 'PLN';
-  var visaCost = parseFloat(document.getElementById('visaCost').value) || 0;
-  var visaCurr = document.getElementById('visaCurrency').value || 'PLN';
-  if (ticketCost > 0 && ticketCurr !== countryCurr) extras += ' + ' + formatNum(ticketCost) + ' ' + ticketCurr;
-  if (visaCost > 0 && visaCurr !== countryCurr) extras += ' + ' + formatNum(visaCost) + ' ' + visaCurr;
-
-  var display = formatNum(adv.amount) + ' ' + countryCurr + extras;
+  // Wszystkie waluty, w których powstają koszty
+  var by = adv.byCurrency || {};
+  var parts = [];
+  if (by[countryCurr] !== undefined) parts.push(formatNum(by[countryCurr]) + ' ' + countryCurr);
+  Object.keys(by).sort().forEach(function(cu) {
+    if (cu !== countryCurr && by[cu] > 0) parts.push(formatNum(by[cu]) + ' ' + cu);
+  });
+  var display = parts.length ? parts.join(' + ') : '\u2014';
   document.getElementById('advanceSumDisplay').textContent = display;
 
   // Dynamically manage country currency option in dropdown
@@ -3742,6 +4527,10 @@ document.addEventListener('DOMContentLoaded', function() {
     btn.addEventListener('click', function() { setLang(this.getAttribute('data-lang')); });
   });
   document.getElementById('darkToggleBtn').addEventListener('click', toggleDark);
+  initHelpTips();
+  updateTimeRequiredMark();
+  updateMealReductionLabels();
+  showCostItemsHint();
   // Event delegation for dynamically created close buttons
   document.addEventListener('click', function(e) {
     if (e.target.getAttribute('data-action') === 'close-banner') {
@@ -3786,6 +4575,8 @@ document.addEventListener('DOMContentLoaded', function() {
   // Restore dark mode
   if (sessionStorage.getItem('ww_dark') === '1') {
     document.documentElement.classList.add('dark-mode');
+    var _m = document.getElementById('darkIcoMoon'), _s = document.getElementById('darkIcoSun');
+    if (_m && _s) { _m.style.display = 'none'; _s.style.display = ''; }
   }
 
   // Restore language
