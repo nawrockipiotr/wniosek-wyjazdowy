@@ -1041,19 +1041,29 @@ button:focus-visible, .help-tip:focus-visible, [tabindex]:focus-visible {
       </button>
     </div>
   </div>
-  <h1 class="hero-title"><span data-i18n="heroTitle">Wniosek wyjazdowy</span> <span class="version-tag">v1.1</span></h1>
+  <h1 class="hero-title"><span data-i18n="heroTitle">Wniosek wyjazdowy</span> <span class="version-tag">v1.2</span></h1>
   <p class="hero-lead" data-i18n="heroLead">Narzędzie do wypełniania wniosków wyjazdowych i automatycznego obliczania diet przysługujących pracownikom, doktorantom i studentom Wydziału Zarządzania UW.</p>
 
   <details>
     <summary><span data-i18n="howToUse">Jak korzystać z narzędzia</span></summary>
     <div class="details-content">
       <ol>
-        <li data-i18n="step1">Wypełnij dane osobowe w sekcji 1.</li>
-        <li data-i18n="step2">Podaj szczegóły wyjazdu: cel, instytucję, środek transportu.</li>
-        <li data-i18n="step3">Wprowadź trasę i daty — kalkulator diet obliczy się automatycznie po wybraniu kraju (zagraniczna) lub typu podróży (krajowa).</li>
-        <li data-i18n="step4">Jeśli posiłki są zapewnione, zaznacz odpowiednie opcje w kalkulatorze.</li>
-        <li data-i18n="step5">Eksportuj wniosek do DOCX lub wydrukuj jako PDF.</li>
+        <li data-i18n="step1">Wypełnij dane osobowe (sekcja 1). Status — pracownik, doktorant, student — decyduje o trybie rozliczenia.</li>
+        <li data-i18n="step2">Podaj cel wyjazdu, instytucję przyjmującą i środek transportu (sekcja 2).</li>
+        <li data-i18n="step3">Wprowadź trasę i daty (sekcja 3). Godziny są opcjonalne — podaj je, jeśli znasz, a kalkulator dokładnie policzy niepełną dobę. Przy wyjeździe i powrocie tego samego dnia są wymagane.</li>
+        <li data-i18n="step4">Jeśli część pobytu jest prywatna, zaznacz to i podaj okres służbowy — diety, noclegi i ryczałt policzą się tylko za ten okres.</li>
+        <li data-i18n="step5">Dodaj koszty przyciskiem „Dodaj koszt" (sekcja 4): bilety, wiza, opłata konferencyjna, ubezpieczenie. Każda pozycja może być w innej walucie. Podaj też numer finansowo-księgowy projektu.</li>
+        <li data-i18n="step6">W kalkulatorze (sekcja 5) wybierz sposób rozliczenia noclegu. Przy rachunku wpisz łączny koszt za cały pobyt — nie przeliczaj na doby. Zaznacz posiłki zapewnione przez organizatora, jeśli takie były.</li>
+        <li data-i18n="step7">Wypełnij sekcję 6 tylko wtedy, gdy potrzebujesz zaliczki przed wyjazdem.</li>
+        <li data-i18n="step8">Eksportuj wniosek do DOCX lub wydrukuj jako PDF.</li>
       </ol>
+      <p data-i18n="helpTipsNote" style="margin:10px 0 0; font-size:0.86rem; color:var(--text-dim);">
+        Znaki zapytania przy polach pokazują podpowiedź — najedź na nie kursorem lub przejdź klawiszem Tab.
+      </p>
+      <div style="margin-top:14px; padding:10px 12px; border-radius:8px; background:var(--surface2); border:1px solid var(--border); font-size:0.86rem; line-height:1.5;">
+        <strong data-i18n="privacyTitle">Prywatność</strong><br>
+        <span data-i18n="privacyBody">Narzędzie działa w całości w Twojej przeglądarce. Wpisane dane nie są nigdzie wysyłane — nie ma serwera, który by je odbierał. Wersja robocza zapisuje się wyłącznie w pamięci tej przeglądarki, na tym komputerze, i czyści ją przycisk „Wyczyść formularz". Dokument DOCX powstaje lokalnie. Narzędzie nie korzysta ze sztucznej inteligencji, nie zbiera statystyk i nikogo nie śledzi. Z sieci pobierane są tylko kroje pisma i biblioteki potrzebne do wygenerowania dokumentu — bez żadnych danych z formularza.</span>
+      </div>
     </div>
   </details>
 
@@ -1636,11 +1646,17 @@ const TRANSLATIONS = {
     heroLead: "Narzędzie do wypełniania wniosków wyjazdowych i automatycznego obliczania diet przysługujących pracownikom, doktorantom i studentom Wydziału Zarządzania UW.",
     howToUse: "Jak korzystać z narzędzia",
     howtoHide: "(kliknij, by ukryć)",
-    step1: "Wypełnij dane osobowe w sekcji 1.",
-    step2: "Podaj szczegóły wyjazdu: cel, instytucję, środek transportu.",
-    step3: "Wprowadź trasę i daty — kalkulator diet obliczy się automatycznie po wybraniu kraju (zagraniczna) lub typu podróży (krajowa).",
-    step4: "Jeśli posiłki są zapewnione, zaznacz odpowiednie opcje w kalkulatorze.",
-    step5: "Eksportuj wniosek do DOCX lub wydrukuj jako PDF.",
+    step1: "Wypełnij dane osobowe (sekcja 1). Status — pracownik, doktorant, student — decyduje o trybie rozliczenia.",
+    step2: "Podaj cel wyjazdu, instytucję przyjmującą i środek transportu (sekcja 2).",
+    step3: "Wprowadź trasę i daty (sekcja 3). Godziny są opcjonalne — podaj je, jeśli znasz, a kalkulator dokładnie policzy niepełną dobę. Przy wyjeździe i powrocie tego samego dnia są wymagane.",
+    step4: "Jeśli część pobytu jest prywatna, zaznacz to i podaj okres służbowy — diety, noclegi i ryczałt policzą się tylko za ten okres.",
+    step5: "Dodaj koszty przyciskiem „Dodaj koszt” (sekcja 4): bilety, wiza, opłata konferencyjna, ubezpieczenie. Każda pozycja może być w innej walucie. Podaj też numer finansowo-księgowy projektu.",
+    step6: "W kalkulatorze (sekcja 5) wybierz sposób rozliczenia noclegu. Przy rachunku wpisz łączny koszt za cały pobyt — nie przeliczaj na doby. Zaznacz posiłki zapewnione przez organizatora, jeśli takie były.",
+    step7: "Wypełnij sekcję 6 tylko wtedy, gdy potrzebujesz zaliczki przed wyjazdem.",
+    step8: "Eksportuj wniosek do DOCX lub wydrukuj jako PDF.",
+    helpTipsNote: "Znaki zapytania przy polach pokazują podpowiedź — najedź na nie kursorem lub przejdź klawiszem Tab.",
+    privacyTitle: "Prywatność",
+    privacyBody: "Narzędzie działa w całości w Twojej przeglądarce. Wpisane dane nie są nigdzie wysyłane — nie ma serwera, który by je odbierał. Wersja robocza zapisuje się wyłącznie w pamięci tej przeglądarki, na tym komputerze, i czyści ją przycisk „Wyczyść formularz”. Dokument DOCX powstaje lokalnie. Narzędzie nie korzysta ze sztucznej inteligencji, nie zbiera statystyk i nikogo nie śledzi. Z sieci pobierane są tylko kroje pisma i biblioteki potrzebne do wygenerowania dokumentu — bez żadnych danych z formularza.",
     orgBadge: "Centrum Innowacji Odpowiedzialnych Społecznie (CSRI)",
     authorLine: "Wniosek wyjazdowy Wydział Zarządzania UW · autor: Piotr Nawrocki",
     author: "by Piotr Nawrocki",
@@ -1809,11 +1825,17 @@ const TRANSLATIONS = {
     heroLead: "Tool for completing travel request forms and automatically calculating per diems for staff, doctoral candidates and students of the Faculty of Management, University of Warsaw.",
     howToUse: "How to use this tool",
     howtoHide: "(click to hide)",
-    step1: "Fill in your personal data in Section 1.",
-    step2: "Provide trip details: purpose, host institution, means of transport.",
-    step3: "Enter route and dates — the per diem calculator will update automatically after selecting a country (foreign) or trip type (domestic).",
-    step4: "If meals are provided, check the appropriate options in the calculator.",
-    step5: "Export the form to DOCX or print as PDF.",
+    step1: "Fill in your personal data (Section 1). Your status — employee, doctoral candidate, student — determines the settlement mode.",
+    step2: "State the purpose of the trip, the host institution and the means of transport (Section 2).",
+    step3: "Enter the route and dates (Section 3). Times are optional — provide them if known and the calculator will compute partial days precisely. They are required when departure and return fall on the same day.",
+    step4: "If part of the stay is private, tick this and give the business period — per diems, accommodation and lump sums will cover that period only.",
+    step5: "Add costs with the „Add cost” button (Section 4): tickets, visa, conference fee, insurance. Each item can use a different currency. Also enter the financial project number.",
+    step6: "In the calculator (Section 5) choose how accommodation is settled. For an invoice, enter the total cost for the whole stay — do not convert it to a nightly rate. Tick any meals provided by the organiser.",
+    step7: "Fill in Section 6 only if you need an advance payment before departure.",
+    step8: "Export the form to DOCX or print it as PDF.",
+    helpTipsNote: "The question marks next to fields show a hint — hover over them or reach them with the Tab key.",
+    privacyTitle: "Privacy",
+    privacyBody: "This tool runs entirely in your browser. The data you enter is never sent anywhere — there is no server to receive it. The draft is stored only in this browser on this computer, and the „Clear form” button erases it. The DOCX document is generated locally. The tool uses no artificial intelligence, collects no analytics and tracks nobody. The only things fetched from the network are the typefaces and the libraries needed to generate the document — with no form data attached.",
     orgBadge: "Centre for Socially Responsible Innovations (CSRI)",
     authorLine: "Travel Request Faculty of Management UW · by Piotr Nawrocki",
     author: "by Piotr Nawrocki",
