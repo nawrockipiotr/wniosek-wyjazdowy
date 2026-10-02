@@ -943,6 +943,10 @@ button:focus-visible, .help-tip:focus-visible, [tabindex]:focus-visible {
 .changelog-body p { margin: 8px 0 2px; }
 .changelog-body ul { margin: 0 0 4px 18px; padding: 0; }
 
+/* Panele opcji w sekcji trasy — żeby podróż łączona i dni prywatne się nie zlewały */
+.subpanel { border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px 4px; margin: 14px 0; background: var(--surface); }
+.subpanel .yesno-row { margin-bottom: 6px; }
+
 /* Etapy podróży łączonej */
 .leg-row {
   border: 1px solid var(--border); border-radius: 8px; background: var(--surface2);
@@ -950,7 +954,11 @@ button:focus-visible, .help-tip:focus-visible, [tabindex]:focus-visible {
 }
 .leg-main { display: grid; grid-template-columns: auto 1.3fr 1.5fr 1fr 1.3fr auto; gap: 8px; align-items: end; }
 .leg-num { font-weight: 700; font-size: 0.85rem; color: var(--text-dim); padding-bottom: 9px; }
-.leg-extra { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center; margin-top: 6px; font-size: 0.82rem; }
+.leg-extra { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--border); font-size: 0.84rem; }
+.leg-opt { display: flex; flex-direction: column; gap: 2px; }
+.leg-opt small { color: var(--text-dim); font-size: 0.78rem; line-height: 1.35; margin-left: 22px; }
+.leg-hotel-wrap small, .leg-meals small { margin-left: 0; }
+.leg-meals { flex-direction: row; flex-wrap: wrap; gap: 6px 12px; align-items: center; }
 .leg-extra label { display: inline-flex; align-items: center; gap: 5px; cursor: pointer; }
 .leg-extra input[type=number] { width: 110px; }
 .leg-meals input { width: 52px; }
@@ -1067,7 +1075,7 @@ button:focus-visible, .help-tip:focus-visible, [tabindex]:focus-visible {
       </button>
     </div>
   </div>
-  <h1 class="hero-title"><span data-i18n="heroTitle">Wniosek wyjazdowy</span> <span class="version-tag">v1.5</span></h1>
+  <h1 class="hero-title"><span data-i18n="heroTitle">Wniosek wyjazdowy</span> <span class="version-tag">v1.6</span></h1>
   <p class="hero-lead" data-i18n="heroLead">Narzędzie do wypełniania wniosków wyjazdowych i automatycznego obliczania diet przysługujących pracownikom, doktorantom i studentom Wydziału Zarządzania UW.</p>
 
   <details>
@@ -1289,7 +1297,7 @@ button:focus-visible, .help-tip:focus-visible, [tabindex]:focus-visible {
   </div>
 
   <!-- PODRÓŻ ŁĄCZONA — kilka krajów lub miast w jednej delegacji -->
-  <div id="combinedTripBlock">
+  <div id="combinedTripBlock" class="subpanel">
     <div class="yesno-row">
       <div class="yesno-label-text">
         <span data-i18n="combinedTrip">Podróż łączona (kilka krajów lub miast)</span> <button type="button" class="help-tip" data-tip-pl="Zaznacz, jeśli w jednej delegacji odwiedzasz kilka krajów albo kilka miast. Etap 1 to miejsce docelowe podane wyżej — kolejne dodajesz poniżej. Każdy etap liczy się w walucie i według stawek swojego kraju." data-tip-en="Tick this if one trip covers several countries or cities. Stage 1 is the destination given above — add further stages below. Each stage is calculated in the currency and rates of its country." data-tooltip="Zaznacz, jeśli w jednej delegacji odwiedzasz kilka krajów albo kilka miast. Etap 1 to miejsce docelowe podane wyżej — kolejne dodajesz poniżej. Każdy etap liczy się w walucie i według stawek swojego kraju." aria-label="Pomoc">?</button>
@@ -1303,7 +1311,7 @@ button:focus-visible, .help-tip:focus-visible, [tabindex]:focus-visible {
     </div>
     <input type="checkbox" id="combinedTrip" data-save="combinedTrip" style="display:none;">
     <div id="legsSection" style="display:none;">
-      <p class="field-hint" data-i18n="legsHint" style="margin:0 0 8px;">Etap 1 to miejsce docelowe podane wyżej. Dodaj kolejne kraje lub miasta z datą przyjazdu — dzień przejazdu liczy się do kraju, do którego przylatujesz.</p>
+      <p class="field-hint" data-i18n="legsHint" style="margin:0 0 8px;">Pierwszym przystankiem jest miejsce docelowe wpisane wyżej. Poniżej dodaj każde kolejne miasto lub kraj i datę, kiedy tam przyjeżdżasz. Dzień przelotu liczy się już do nowego miejsca — np. lecisz z Kuala Lumpur do Singapuru 28 września, więc od 28 września należy Ci dieta singapurska.</p>
       <div id="legsContainer"></div>
       <button type="button" id="addLegBtn" class="btn btn-secondary" style="font-size:0.85rem; padding:5px 12px; display:inline-flex; align-items:center; gap:4px; margin-bottom:12px;">
         <span aria-hidden="true">+</span> <span data-i18n="addLeg">Dodaj kolejny etap</span>
@@ -1346,6 +1354,7 @@ button:focus-visible, .help-tip:focus-visible, [tabindex]:focus-visible {
   </div>
 
   <!-- PRIVATE DAYS -->
+  <div class="subpanel" id="privateDaysPanel">
   <div class="yesno-row">
     <div class="yesno-label-text">
       <span data-i18n="hasPrivateDays">Pobyt obejmuje dni prywatne (na własny koszt) </span> <button type="button" class="help-tip" data-tip-pl="Zaznacz, jeśli przedłużasz pobyt o urlop. Diety, noclegi i ryczałt liczone są wtedy tylko za okres służbowy, a bilet nadal podlega zwrotowi." data-tip-en="Tick this if you extend your stay with leave. Per diems, accommodation and the lump sum then cover only the business period, while the ticket is still reimbursed." data-tooltip="Zaznacz, jeśli przedłużasz pobyt o urlop. Diety, noclegi i ryczałt liczone są wtedy tylko za okres służbowy, a bilet nadal podlega zwrotowi." aria-label="Pomoc">?</button>
@@ -1371,7 +1380,7 @@ button:focus-visible, .help-tip:focus-visible, [tabindex]:focus-visible {
       <input type="date" id="businessEndDate" data-save="businessEndDate">
     </div>
   </div>
-
+  </div><!-- /privateDaysPanel -->
 
   <div id="rateInfoBox" style="display:none;">
     <div class="info-badge">
@@ -1680,8 +1689,12 @@ button:focus-visible, .help-tip:focus-visible, [tabindex]:focus-visible {
   </div>
   <!-- Historia zmian — dyskretnie, pod przyciskami -->
   <details class="changelog">
-    <summary><span data-i18n="changelogTitle">Co nowego w wersji 1.5</span></summary>
+    <summary><span data-i18n="changelogTitle">Co nowego w wersji 1.6</span></summary>
     <div class="changelog-body" data-lang-block="pl">
+      <p><strong>1.6</strong> · październik 2026</p>
+      <ul>
+        <li>Prostsze opisy w podróży łączonej (z przykładami) i wyraźnie oddzielone opcje: podróż łączona oraz dni prywatne.</li>
+      </ul>
       <p><strong>1.5</strong> · październik 2026</p>
       <ul>
         <li>Wniosek mieści się na jednej stronie razem z podpisami — przy dłuższych wnioskach tabela kosztów zagęszcza się automatycznie.</li>
@@ -1703,6 +1716,10 @@ button:focus-visible, .help-tip:focus-visible, [tabindex]:focus-visible {
       <p><strong>1.2</strong> · sierpień 2026 — instrukcja „Jak korzystać z narzędzia" i informacja o prywatności.</p>
     </div>
     <div class="changelog-body" data-lang-block="en" style="display:none;">
+      <p><strong>1.6</strong> · October 2026</p>
+      <ul>
+        <li>Plainer descriptions for combined trips (with examples) and clearly separated options: combined trip and private days.</li>
+      </ul>
       <p><strong>1.5</strong> · October 2026</p>
       <ul>
         <li>The form fits on one page including signatures — for longer requests the cost table is compacted automatically.</li>
@@ -1874,8 +1891,8 @@ const TRANSLATIONS = {
     helpLabel: "Pomoc",
     bankName: "Nazwa banku",
     combinedTrip: "Podróż łączona (kilka krajów lub miast)",
-    changelogTitle: "Co nowego w wersji 1.5",
-    legsHint: "Etap 1 to miejsce docelowe podane wyżej. Dodaj kolejne kraje lub miasta z datą przyjazdu — dzień przejazdu liczy się do kraju, do którego przylatujesz.",
+    changelogTitle: "Co nowego w wersji 1.6",
+    legsHint: "Pierwszym przystankiem jest miejsce docelowe wpisane wyżej. Poniżej dodaj każde kolejne miasto lub kraj i datę, kiedy tam przyjeżdżasz. Dzień przelotu liczy się już do nowego miejsca — np. lecisz z Kuala Lumpur do Singapuru 28 września, więc od 28 września należy Ci dieta singapurska.",
     addLeg: "Dodaj kolejny etap",
     bankSelectPrompt: "— wybierz bank —",
     bankOther: "Inny…",
@@ -2053,8 +2070,8 @@ const TRANSLATIONS = {
     helpLabel: "Help",
     bankName: "Bank name",
     combinedTrip: "Combined trip (several countries or cities)",
-    changelogTitle: "What's new in version 1.5",
-    legsHint: "Stage 1 is the destination given above. Add further countries or cities with the arrival date — the travel day counts towards the country you fly to.",
+    changelogTitle: "What's new in version 1.6",
+    legsHint: "Your first stop is the destination entered above. Below, add every further city or country and the date you arrive there. The travel day already counts towards the new place — e.g. you fly from Kuala Lumpur to Singapore on 28 September, so from 28 September the Singapore per diem applies.",
     addLeg: "Add another stage",
     bankSelectPrompt: "— select bank —",
     bankOther: "Other…",
@@ -3047,16 +3064,21 @@ function addLeg(prefill) {
       '<div style="padding-bottom:2px;"><button type="button" class="cost-remove-btn leg-remove-btn" aria-label="' + (en ? 'Remove stage' : 'Usuń etap') + '" title="' + (en ? 'Remove stage' : 'Usuń etap') + '">✕</button></div>' +
     '</div>' +
     '<div class="leg-extra">' +
-      '<label><input type="checkbox" class="leg-cont"' + (prefill.cont ? ' checked' : '') + '> ' + (en ? 'same stay, different funding source only' : 'ten sam pobyt — zmienia się tylko źródło finansowania') + '</label>' +
-      '<button type="button" class="help-tip" data-tip-pl="Zaznacz, gdy część tego samego pobytu finansuje inny projekt. Etap nie dostaje wtedy osobnego ryczałtu dojazdowego — to nie jest nowa miejscowość." data-tip-en="Tick when part of the same stay is paid from another project. No separate arrival lump sum is granted — it is not a new location." data-tooltip="Zaznacz, gdy część tego samego pobytu finansuje inny projekt. Etap nie dostaje wtedy osobnego ryczałtu dojazdowego — to nie jest nowa miejscowość." aria-label="Pomoc">?</button>' +
-      '<label><input type="checkbox" class="leg-oneway"' + (prefill.oneWay ? ' checked' : '') + '> ' + (en ? 'transfer one way only (50%)' : 'dojazd z/na lotnisko tylko w jedną stronę (50%)') + '</label>' +
-      '<button type="button" class="help-tip" data-tip-pl="Ryczałt na dojazd z i do dworca lub lotniska to jedna dieta w każdej miejscowości, w której nocujesz. Gdy ponosisz koszt dojazdu tylko w jedną stronę, przysługuje 50% diety — tak stanowi rozporządzenie (§17 ust. 1–2)." data-tip-en="The lump sum for transfers to and from the station or airport is one per diem in every place where you stay overnight. If you bear the transfer cost one way only, 50% applies — as set out in the regulation (§17 (1)–(2))." data-tooltip="Ryczałt na dojazd z i do dworca lub lotniska to jedna dieta w każdej miejscowości, w której nocujesz. Gdy ponosisz koszt dojazdu tylko w jedną stronę, przysługuje 50% diety — tak stanowi rozporządzenie (§17 ust. 1–2)." aria-label="Pomoc">?</button>' +
-      '<span class="leg-hotel-wrap"><label>' + (en ? 'Accommodation total' : 'Nocleg łącznie') + ' <input type="number" class="leg-hotel" min="0" step="0.01" placeholder="0.00" value="' + escAttr(prefill.hotelCost) + '"></label> <span class="leg-curr"></span></span>' +
-      '<span class="leg-meals"><span>' + (en ? 'Meals:' : 'Posiłki:') + '</span> ' +
-        '<label title="' + (en ? 'breakfasts' : 'śniadania') + '">' + (en ? 'B' : 'ś') + ' <input type="number" class="leg-mb" min="0" value="' + (prefill.mb || 0) + '"></label>' +
-        '<label title="' + (en ? 'lunches' : 'obiady') + '">' + (en ? 'L' : 'o') + ' <input type="number" class="leg-ml" min="0" value="' + (prefill.ml || 0) + '"></label>' +
-        '<label title="' + (en ? 'dinners' : 'kolacje') + '">' + (en ? 'D' : 'k') + ' <input type="number" class="leg-md" min="0" value="' + (prefill.md || 0) + '"></label>' +
+      '<span class="leg-hotel-wrap leg-opt"><label>' + (en ? 'Accommodation cost here' : 'Koszt noclegu w tym miejscu') + ' <input type="number" class="leg-hotel" min="0" step="0.01" placeholder="' + (en ? 'amount' : 'kwota') + '" value="' + escAttr(prefill.hotelCost) + '"> <span class="leg-curr"></span></label>' +
+        '<small>' + (en ? 'Total from the invoice or booking for all nights in this place — do not divide by nights.' : 'Kwota z rachunku lub rezerwacji za wszystkie noce w tym miejscu — łącznie, nie za dobę.') + '</small></span>' +
+      '<span class="leg-meals leg-opt"><span>' + (en ? 'Meals provided here:' : 'Posiłki zapewnione w tym miejscu:') + '</span> ' +
+        '<label>' + (en ? 'breakfasts' : 'śniadania') + ' <input type="number" class="leg-mb" min="0" value="' + (prefill.mb || 0) + '"></label>' +
+        '<label>' + (en ? 'lunches' : 'obiady') + ' <input type="number" class="leg-ml" min="0" value="' + (prefill.ml || 0) + '"></label>' +
+        '<label>' + (en ? 'dinners' : 'kolacje') + ' <input type="number" class="leg-md" min="0" value="' + (prefill.md || 0) + '"></label>' +
       '</span>' +
+      '<span class="leg-opt"><label><input type="checkbox" class="leg-cont"' + (prefill.cont ? ' checked' : '') + '> ' +
+        (en ? 'This is the same stay — only the project paying for it changes' : 'To ten sam pobyt — zmienia się tylko projekt, który za niego płaci') + '</label>' +
+        '<small>' + (en ? 'E.g. one of the days in Singapore is paid from another grant. Enter that project’s PSP and the date from which it pays. No second arrival lump sum is added.'
+                        : 'Np. jeden z dni w Singapurze opłaca inny grant. Wpisz numer PSP tego projektu i datę, od której on płaci. Nie dolicza się wtedy drugiej diety dojazdowej.') + '</small></span>' +
+      '<span class="leg-opt"><label><input type="checkbox" class="leg-oneway"' + (prefill.oneWay ? ' checked' : '') + '> ' +
+        (en ? 'I pay the airport/station transfer only one way here' : 'Dojazd z lotniska lub dworca opłacam tu tylko w jedną stronę') + '</label>' +
+        '<small>' + (en ? 'E.g. the organiser picks you up from the airport but you get back on your own. The arrival lump sum is then halved (50%), as set out in the regulation (§17).'
+                        : 'Np. organizator odbiera Cię z lotniska, ale z powrotem jedziesz sam. Dieta dojazdowa jest wtedy o połowę niższa (50%) — tak stanowi rozporządzenie (§17).') + '</small></span>' +
     '</div>';
   document.getElementById('legsContainer').appendChild(row);
   row.querySelector('.leg-remove-btn').addEventListener('click', function() {
