@@ -934,6 +934,15 @@ button:focus-visible, .help-tip:focus-visible, [tabindex]:focus-visible {
 
 .field-error-group { outline: 2px solid var(--red); outline-offset: 4px; border-radius: 10px; }
 
+/* Historia zmian — dyskretna, pod przyciskami */
+.changelog { margin-top: 14px; text-align: center; font-size: 0.8rem; color: var(--text-dim); }
+.changelog summary { cursor: pointer; display: inline-block; list-style: none; text-decoration: underline; text-underline-offset: 3px; opacity: .8; }
+.changelog summary::-webkit-details-marker { display: none; }
+.changelog summary:hover { opacity: 1; }
+.changelog-body { text-align: left; max-width: 640px; margin: 10px auto 0; line-height: 1.5; }
+.changelog-body p { margin: 8px 0 2px; }
+.changelog-body ul { margin: 0 0 4px 18px; padding: 0; }
+
 /* Etapy podróży łączonej */
 .leg-row {
   border: 1px solid var(--border); border-radius: 8px; background: var(--surface2);
@@ -1058,7 +1067,7 @@ button:focus-visible, .help-tip:focus-visible, [tabindex]:focus-visible {
       </button>
     </div>
   </div>
-  <h1 class="hero-title"><span data-i18n="heroTitle">Wniosek wyjazdowy</span> <span class="version-tag">v1.4</span></h1>
+  <h1 class="hero-title"><span data-i18n="heroTitle">Wniosek wyjazdowy</span> <span class="version-tag">v1.5</span></h1>
   <p class="hero-lead" data-i18n="heroLead">Narzędzie do wypełniania wniosków wyjazdowych i automatycznego obliczania diet przysługujących pracownikom, doktorantom i studentom Wydziału Zarządzania UW.</p>
 
   <details>
@@ -1669,6 +1678,52 @@ button:focus-visible, .help-tip:focus-visible, [tabindex]:focus-visible {
       <span data-i18n="clearForm">Wyczyść formularz</span>
     </button>
   </div>
+  <!-- Historia zmian — dyskretnie, pod przyciskami -->
+  <details class="changelog">
+    <summary><span data-i18n="changelogTitle">Co nowego w wersji 1.5</span></summary>
+    <div class="changelog-body" data-lang-block="pl">
+      <p><strong>1.5</strong> · październik 2026</p>
+      <ul>
+        <li>Wniosek mieści się na jednej stronie razem z podpisami — przy dłuższych wnioskach tabela kosztów zagęszcza się automatycznie.</li>
+        <li>W tabeli kosztów sekcje (dieta dojazdowa, diety pobytowe, diety hotelowe, inne koszty) są wyraźnie od siebie oddzielone.</li>
+      </ul>
+      <p><strong>1.4</strong> · październik 2026</p>
+      <ul>
+        <li>Podróż łączona: kilka krajów lub miast w jednej delegacji. Każdy etap liczony w walucie i według stawek swojego kraju; dzień przejazdu liczy się do kraju docelowego.</li>
+        <li>Ryczałt dojazdowy w każdej miejscowości z noclegiem; 50% przy dojeździe tylko w jedną stronę (rozporządzenie, §17).</li>
+        <li>Osobne źródło finansowania (PSP) dla każdego etapu.</li>
+        <li>Stawki dla USA – Nowy Jork i USA – Waszyngton.</li>
+        <li>Zaliczka: kwoty zawsze w walutach kosztów, do wyboru wypłata „w walucie" albo „w PLN".</li>
+      </ul>
+      <p><strong>1.3</strong> · sierpień 2026</p>
+      <ul>
+        <li>Liczba dni w ułamkach (np. 6 1/3), ryczałt komunikacyjny za każdą rozpoczętą dobę.</li>
+        <li>Opłata konferencyjna i potrącenie za posiłki w osobnych wierszach, waluty w osobnych liniach, bez wyszarzeń, dane przelewu w sekcji zaliczki.</li>
+      </ul>
+      <p><strong>1.2</strong> · sierpień 2026 — instrukcja „Jak korzystać z narzędzia" i informacja o prywatności.</p>
+    </div>
+    <div class="changelog-body" data-lang-block="en" style="display:none;">
+      <p><strong>1.5</strong> · October 2026</p>
+      <ul>
+        <li>The form fits on one page including signatures — for longer requests the cost table is compacted automatically.</li>
+        <li>Sections of the cost table (arrival lump sum, per diems, accommodation, other costs) are clearly separated.</li>
+      </ul>
+      <p><strong>1.4</strong> · October 2026</p>
+      <ul>
+        <li>Combined trips: several countries or cities in one trip. Each stage is calculated in its own currency and rates; the travel day counts towards the destination country.</li>
+        <li>Arrival lump sum in every place with an overnight stay; 50% for a one-way transfer (regulation, §17).</li>
+        <li>A separate funding source (PSP) for each stage.</li>
+        <li>Rates for USA – New York and USA – Washington.</li>
+        <li>Advance: amounts always in the cost currencies, paid out “in currency” or “in PLN”.</li>
+      </ul>
+      <p><strong>1.3</strong> · August 2026</p>
+      <ul>
+        <li>Days shown as fractions (e.g. 6 1/3); local transport lump sum for every started day.</li>
+        <li>Conference fee and meal deduction on separate lines, currencies on separate lines, no greyed-out cells, bank details in the advance section.</li>
+      </ul>
+      <p><strong>1.2</strong> · August 2026 — “How to use” guide and privacy note.</p>
+    </div>
+  </details>
 </div>
 
 </div><!-- /container -->
@@ -1819,6 +1874,7 @@ const TRANSLATIONS = {
     helpLabel: "Pomoc",
     bankName: "Nazwa banku",
     combinedTrip: "Podróż łączona (kilka krajów lub miast)",
+    changelogTitle: "Co nowego w wersji 1.5",
     legsHint: "Etap 1 to miejsce docelowe podane wyżej. Dodaj kolejne kraje lub miasta z datą przyjazdu — dzień przejazdu liczy się do kraju, do którego przylatujesz.",
     addLeg: "Dodaj kolejny etap",
     bankSelectPrompt: "— wybierz bank —",
@@ -1997,6 +2053,7 @@ const TRANSLATIONS = {
     helpLabel: "Help",
     bankName: "Bank name",
     combinedTrip: "Combined trip (several countries or cities)",
+    changelogTitle: "What's new in version 1.5",
     legsHint: "Stage 1 is the destination given above. Add further countries or cities with the arrival date — the travel day counts towards the country you fly to.",
     addLeg: "Add another stage",
     bankSelectPrompt: "— select bank —",
@@ -2081,6 +2138,7 @@ function setLang(lang) {
     countrySearchInput.value = lang === 'en' ? (r.en || selCountry) : selCountry;
   }
   document.documentElement.lang = lang;
+  document.querySelectorAll('[data-lang-block]').forEach(function(b) { b.style.display = (b.getAttribute('data-lang-block') === lang) ? '' : 'none'; });
   applyTooltipLang(lang);
   // Odśwież język w już utworzonych wierszach kosztów
   document.querySelectorAll('.cost-item-row').forEach(function(row) {
@@ -2947,6 +3005,8 @@ function getCostCurrencies() {
 //  • każdy etap może mieć własne źródło finansowania (PSP).
 // ============================================================
 var legCounter = 0;
+// Progi kompaktowania tabeli kosztów w DOCX (liczba dopisanych wierszy)
+var COMPACT_FROM = 0, COMPACT_L2_FROM = 3, COMPACT_L3_FROM = 5, COMPACT_L4_FROM = 9;
 
 function isCombinedTrip() {
   var cb = document.getElementById('combinedTrip');
@@ -4610,6 +4670,82 @@ async function exportDocx() {
     });
   }
 
+  // Wstawia element we właściwe miejsce rodzica wg kolejności ze schematu OOXML
+  function putInOrder(parent, el, order) {
+    var myIdx = order.indexOf(el.localName);
+    for (var n = parent.firstChild; n; n = n.nextSibling) {
+      if (n.nodeType === 1 && order.indexOf(n.localName) > myIdx) { parent.insertBefore(el, n); return el; }
+    }
+    parent.appendChild(el); return el;
+  }
+  function childNS(parent, name) {
+    for (var n = parent.firstChild; n; n = n.nextSibling) if (n.nodeType === 1 && n.localName === name) return n;
+    return null;
+  }
+  var TCPR_ORDER = ['cnfStyle','tcW','gridSpan','hMerge','vMerge','tcBorders','shd','noWrap','tcMar','textDirection','tcFitText','vAlign','hideMark'];
+  var PPR_ORDER = ['pStyle','keepNext','keepLines','pageBreakBefore','framePr','widowControl','numPr','suppressLineNumbers','pBdr','shd','tabs','suppressAutoHyphens','kinsoku','wordWrap','overflowPunct','topLinePunct','autoSpaceDE','autoSpaceDN','bidi','adjustRightInd','snapToGrid','spacing','ind','contextualSpacing','mirrorIndents','suppressOverlap','jc','textDirection','textAlignment','textboxTightWrap','outlineLvl','divId','cnfStyle','rPr','sectPr','pPrChange'];
+  function tcPrOf(tc) {
+    var p = childNS(tc, 'tcPr');
+    if (!p) { p = xmlDoc.createElementNS(W, 'w:tcPr'); tc.insertBefore(p, tc.firstChild); }
+    return p;
+  }
+  // Scalanie pionowe: nazwa sekcji ("Diety pobytowe") w jednej komórce, bez kresek
+  function setVMerge(tc, restart) {
+    var pr = tcPrOf(tc);
+    var vm = childNS(pr, 'vMerge');
+    if (!vm) vm = putInOrder(pr, xmlDoc.createElementNS(W, 'w:vMerge'), TCPR_ORDER);
+    if (restart) vm.setAttributeNS(W, 'w:val', 'restart'); else vm.removeAttributeNS(W, 'val');
+  }
+  // Grubsza linia oddzielająca sekcje
+  function setTopBorder(tc, sz) {
+    var pr = tcPrOf(tc);
+    var b = childNS(pr, 'tcBorders');
+    if (!b) b = putInOrder(pr, xmlDoc.createElementNS(W, 'w:tcBorders'), TCPR_ORDER);
+    var top = childNS(b, 'top');
+    if (!top) { top = xmlDoc.createElementNS(W, 'w:top'); b.insertBefore(top, b.firstChild); }
+    top.setAttributeNS(W, 'w:val', 'single'); top.setAttributeNS(W, 'w:sz', String(sz));
+    top.setAttributeNS(W, 'w:space', '0'); top.setAttributeNS(W, 'w:color', 'auto');
+  }
+  function markSection(rows) {
+    if (!rows || !rows.length) return;
+    getCells(rows[0]).forEach(function(tc) { setTopBorder(tc, 12); });
+    if (rows.length > 1) {
+      setVMerge(getCells(rows[0])[0], true);
+      for (var i = 1; i < rows.length; i++) setVMerge(getCells(rows[i])[0], false);
+    }
+  }
+  // Kompaktowanie tabeli kosztów, gdy dopisane wiersze spychają podpisy na 2. stronę
+  function compactRows(rows, level) {
+    rows.forEach(function(tr) {
+      var trPr = childNS(tr, 'trPr');
+      if (trPr) { var th = childNS(trPr, 'trHeight'); if (th) th.setAttributeNS(W, 'w:val', level >= 4 ? '170' : level >= 3 ? '200' : level >= 2 ? '230' : '260'); }
+      var ps = tr.getElementsByTagNameNS(W, 'p');
+      for (var i = 0; i < ps.length; i++) {
+        var p = ps[i], pPr = childNS(p, 'pPr');
+        if (!pPr) { pPr = xmlDoc.createElementNS(W, 'w:pPr'); p.insertBefore(pPr, p.firstChild); }
+        var sp = childNS(pPr, 'spacing');
+        if (!sp) sp = putInOrder(pPr, xmlDoc.createElementNS(W, 'w:spacing'), PPR_ORDER);
+        sp.setAttributeNS(W, 'w:before', '0'); sp.setAttributeNS(W, 'w:after', '0');
+        sp.setAttributeNS(W, 'w:line', '240'); sp.setAttributeNS(W, 'w:lineRule', 'auto');
+      }
+      if (level >= 2) {
+        var cap = level >= 3 ? 16 : 18;   // 9 pt, przy poziomie 3+ — 8 pt
+        // Poziom 4: kolumny opisowe (nazwa sekcji, źródło) 7 pt, żeby się nie zawijały
+        var cellsL = getCells(tr);
+        cellsL.forEach(function(tc, ci) {
+          var capC = (level >= 4 && ci <= 1) ? 14 : cap;
+          ['sz', 'szCs'].forEach(function(tag) {
+            var els = tc.getElementsByTagNameNS(W, tag);
+            for (var j = 0; j < els.length; j++) {
+              var v = parseInt(els[j].getAttributeNS(W, 'val') || els[j].getAttribute('w:val'), 10);
+              if (v > capC) els[j].setAttributeNS(W, 'w:val', String(capC));
+            }
+          });
+        });
+      }
+    });
+  }
+
   function unshadeRow(tr) {
     getCells(tr).forEach(unshade);
   }
@@ -4805,7 +4941,7 @@ async function exportDocx() {
       return placeName(nm, l.city) + (suffix || '') + (l.psp ? ' — PSP ' + l.psp : '');
     }
     function fillLegSection(templateRow, items) {
-      var last = templateRow;
+      var last = templateRow, out = [];
       items.forEach(function(it, k) {
         var row = (k === 0) ? templateRow : blankRowAfter(last, trs[18]);
         var cc = getCells(row);
@@ -4815,20 +4951,22 @@ async function exportDocx() {
         if (it.rate) setCellText(cc[3], it.rate, { size: 22 });
         setCellText(cc[4], it.amount, { size: 22 });
         setCellText(cc[5], it.curr, { size: 22 });
-        last = row;
+        last = row; out.push(row);
       });
+      return out;
     }
+    var legSections = [];
     if (_c.legs) {
       var travelItems = [], dietItems = [], hotelItems = [];
       _c.legs.forEach(function(l) {
         if (l.travel > 0) travelItems.push({ src: legSrc(l, l.oneWay ? ' (50%)' : ''), count: l.oneWay ? '1/2' : '1', rate: formatNum(l.rate), amount: formatNum(l.travel), curr: l.curr });
         dietItems.push({ src: legSrc(l), count: formatDays(l.days), rate: formatNum(l.rate), amount: formatNum(l.gross), curr: l.curr });
-        if (l.meal > 0) dietItems.push({ label: 'Potrącenie za wyżywienie', src: legSrc(l), amount: '-' + formatNum(l.meal), curr: l.curr });
+        if (l.meal > 0) dietItems.push({ src: 'Potrącenie za wyżywienie — ' + legSrc(l), amount: '-' + formatNum(l.meal), curr: l.curr });
         if (!l.hotel.isProvided && (l.nights > 0 || l.hotel.total > 0)) hotelItems.push({ src: legSrc(l, l.hotel.label === 'lumpsum' ? ' (ryczałt)' : ''), count: String(l.nights), rate: l.hotel.ratePerNight ? formatNum(l.hotel.ratePerNight) : '', amount: formatNum(l.hotel.total), curr: l.curr });
       });
-      fillLegSection(trs[20], travelItems);
-      fillLegSection(trs[21], dietItems);
-      if (hotelItems.length) fillLegSection(trs[22], hotelItems);
+      legSections.push(fillLegSection(trs[20], travelItems));
+      legSections.push(fillLegSection(trs[21], dietItems));
+      if (hotelItems.length) legSections.push(fillLegSection(trs[22], hotelItems));
       else { var rh = getCells(trs[22]); setCellText(rh[4], formatNum(0), { size: 22 }); setCellText(rh[5], _c.legs[0].curr, { size: 22 }); }
     } else {
 
@@ -4907,8 +5045,12 @@ async function exportDocx() {
     // "Inne koszty:"), kolejne dostają własne wiersze
     var r23 = getCells(trs[23]);
     var lastRow = trs[23];
+    var inneGroups = [], groupNo = 0, prevLabel = null;
     inneItems.forEach(function(it, idx) {
       var cells, isFirst = (idx === 0);
+      // Przy podróży łączonej kolejne ryczałty (po jednym na etap) to jedna pozycja
+      var sameGroup = !!_c.legs && !isFirst && it.label === prevLabel;
+      if (!sameGroup) groupNo++;
       if (isFirst) {
         cells = r23;
         var p23 = clearAllParas(cells[0]);
@@ -4916,12 +5058,15 @@ async function exportDocx() {
           addRun(p23, 'Inne koszty:', { size: 20, bold: true });
           addRun(p23, '\n1. ' + it.label, { size: 20 });
         }
+        inneGroups.push([trs[23]]);
       } else {
         var nr = blankRowAfter(lastRow, trs[18]);
         cells = getCells(nr);
-        setCellText(cells[0], (idx + 1) + '. ' + it.label, { size: 20 });
+        if (!sameGroup) { setCellText(cells[0], groupNo + '. ' + it.label, { size: 20 }); inneGroups.push([nr]); }
+        else inneGroups[inneGroups.length - 1].push(nr);
         lastRow = nr;
       }
+      prevLabel = it.label;
       if (it.src) setCellText(cells[1], it.src, { size: 18 });
       if (it.count) setCellText(cells[2], it.count, { size: 22 });
       if (it.rate) setCellText(cells[3], it.rate, { size: 22 });
@@ -5003,6 +5148,40 @@ async function exportDocx() {
     [18, 19, 20, 21, 22, 23, 24].forEach(function(ri) {
       if (trs[ri]) unshadeRow(trs[ri]);
     });
+
+    // Podróż łączona: scalone nazwy sekcji i grubsze linie między sekcjami
+    if (_c.legs) {
+      legSections.forEach(markSection);
+      inneGroups.forEach(markSection);
+      getCells(trs[24]).forEach(function(tc) { setTopBorder(tc, 12); });
+    }
+
+    // Jedna strona: puste akapity poza tabelą (na górze i obowiązkowy akapit
+    // pod tabelą) ściskamy do 2 pt — bez tego linia podpisu spadała na 2. stronę.
+    (function() {
+      var bodyEl = xmlDoc.getElementsByTagNameNS(W, 'body')[0];
+      for (var bn = bodyEl.firstChild; bn; bn = bn.nextSibling) {
+        if (bn.nodeType !== 1 || bn.localName !== 'p') continue;
+        if (bn.getElementsByTagNameNS(W, 't').length) continue;
+        var bp = childNS(bn, 'pPr');
+        if (!bp) { bp = xmlDoc.createElementNS(W, 'w:pPr'); bn.insertBefore(bp, bn.firstChild); }
+        var bs = childNS(bp, 'spacing');
+        if (!bs) bs = putInOrder(bp, xmlDoc.createElementNS(W, 'w:spacing'), PPR_ORDER);
+        bs.setAttributeNS(W, 'w:before', '0'); bs.setAttributeNS(W, 'w:after', '0');
+        bs.setAttributeNS(W, 'w:line', '40'); bs.setAttributeNS(W, 'w:lineRule', 'exact');
+      }
+    })();
+
+    // Jedna strona: jeśli tabela kosztów urosła, zagęszczamy ją.
+    // Zwykły wniosek (do 3 dopisanych wierszy) zostaje bez zmian.
+    var costRows = [];
+    for (var cr = trs[17]; cr; cr = cr.nextSibling) {
+      if (cr.nodeType === 1 && cr.localName === 'tr') { costRows.push(cr); if (cr === trs[24]) break; }
+    }
+    var addedRows = costRows.length - 8;
+    var cLevel = addedRows >= COMPACT_L4_FROM ? 4 : addedRows >= COMPACT_L3_FROM ? 3 : addedRows >= COMPACT_L2_FROM ? 2 : addedRows >= COMPACT_FROM ? 1 : 0;
+    if (typeof window.__FORCE_COMPACT === 'number') cLevel = window.__FORCE_COMPACT;   // tylko do testów
+    if (cLevel > 0) compactRows(costRows, cLevel);
 
     // Suma końcowa: świadczenia (po walutach) + pozycje kosztów.
     // Kolejność walut wspólna dla zaliczki, sumy i kolumny "waluta".
