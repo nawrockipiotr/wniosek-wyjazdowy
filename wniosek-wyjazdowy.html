@@ -1075,7 +1075,7 @@ button:focus-visible, .help-tip:focus-visible, [tabindex]:focus-visible {
       </button>
     </div>
   </div>
-  <h1 class="hero-title"><span data-i18n="heroTitle">Wniosek wyjazdowy</span> <span class="version-tag">v1.7</span></h1>
+  <h1 class="hero-title"><span data-i18n="heroTitle">Wniosek wyjazdowy</span> <span class="version-tag">v1.8</span></h1>
   <p class="hero-lead" data-i18n="heroLead">Narzędzie do wypełniania wniosków wyjazdowych i automatycznego obliczania diet przysługujących pracownikom, doktorantom i studentom Wydziału Zarządzania UW.</p>
 
   <details>
@@ -1086,7 +1086,7 @@ button:focus-visible, .help-tip:focus-visible, [tabindex]:focus-visible {
         <li data-i18n="step2">Podaj cel wyjazdu, instytucję przyjmującą i środek transportu (sekcja 2).</li>
         <li data-i18n="step3">Wprowadź trasę i daty (sekcja 3). Godziny są opcjonalne — podaj je, jeśli znasz, a kalkulator dokładnie policzy niepełną dobę. Przy wyjeździe i powrocie tego samego dnia są wymagane.</li>
         <li data-i18n="step4">Jeśli część pobytu jest prywatna, zaznacz to i podaj okres służbowy — diety, noclegi i ryczałt policzą się tylko za ten okres.</li>
-        <li data-i18n="step5">Dodaj koszty przyciskiem „Dodaj koszt" (sekcja 4): bilety, wiza, opłata konferencyjna, ubezpieczenie. Każda pozycja może być w innej walucie. Jeśli znasz numer finansowo-księgowy projektu (PSP), wpisz go — jeśli nie, uzupełni go sekcja.</li>
+        <li data-i18n="step5">Dodaj koszty przyciskiem „Dodaj koszt" (sekcja 4): bilety, wiza, opłata konferencyjna, ubezpieczenie. Każda pozycja może być w innej walucie. Podaj też numer finansowo-księgowy projektu (PSP) — znajdziesz go w umowie grantowej lub u kierownika projektu.</li>
         <li data-i18n="step6">W kalkulatorze (sekcja 5) wybierz sposób rozliczenia noclegu. Przy rachunku wpisz łączny koszt za cały pobyt — nie przeliczaj na doby. Zaznacz posiłki zapewnione przez organizatora, jeśli takie były.</li>
         <li data-i18n="step7">Wypełnij sekcję 6 tylko wtedy, gdy potrzebujesz zaliczki przed wyjazdem.</li>
         <li data-i18n="step8">Eksportuj wniosek do DOCX lub wydrukuj jako PDF.</li>
@@ -1394,13 +1394,13 @@ button:focus-visible, .help-tip:focus-visible, [tabindex]:focus-visible {
 <div class="form-section">
   <h2>
     <span class="section-icon"><i data-lucide="wallet" style="width:18px;height:18px;"></i></span>
-    <span data-i18n="sec4Title">4. Źródło finansowania</span> <button type="button" class="help-tip" data-tip-pl="Jeśli znasz numer PSP projektu, wpisz go. Jeśli nie — zostaw puste, sekcja uzupełni go przy rozliczeniu." data-tip-en="If you know the project PSP number, enter it. If not, leave it blank — the section will fill it in later." data-tooltip="Jeśli znasz numer PSP projektu, wpisz go. Jeśli nie — zostaw puste, sekcja uzupełni go przy rozliczeniu." aria-label="Pomoc">?</button>
+    <span data-i18n="sec4Title">4. Źródło finansowania</span> <button type="button" class="help-tip" data-tip-pl="Wpisz numer PSP projektu, z którego finansowany jest wyjazd — znajdziesz go w umowie grantowej lub u kierownika projektu." data-tip-en="Enter the PSP number of the project funding the trip — you will find it in the grant agreement or can ask the project manager." data-tooltip="Wpisz numer PSP projektu, z którego finansowany jest wyjazd — znajdziesz go w umowie grantowej lub u kierownika projektu." aria-label="Pomoc">?</button>
   </h2>
 
   <div class="form-row">
     <div class="form-group full">
       <label data-i18n="projectNumber" for="projectNumber">Nr finansowo-księgowy projektu <span class="label-hint">(opcjonalnie)</span> <button type="button" class="help-tip" data-tip-pl="Numer księgowy nadany przez Kwesturę UW — nie numer umowy grantowej ani akronim projektu. Znajdziesz go w SAP lub u opiekuna projektu." data-tip-en="The ledger number assigned by the UW Bursar's Office — not the grant agreement number or project acronym. Find it in SAP or ask your project officer." data-tooltip="Numer księgowy nadany przez Kwesturę UW — nie numer umowy grantowej ani akronim projektu. Znajdziesz go w SAP lub u opiekuna projektu." aria-label="Pomoc">?</button></label>
-      <input type="text" id="projectNumber" data-save="projectNumber" data-i18n-placeholder="projectNumberPh" placeholder="Jeśli nie znasz numeru, zostaw puste — uzupełni go sekcja">
+      <input type="text" id="projectNumber" data-save="projectNumber" data-i18n-placeholder="projectNumberPh" placeholder="Numer przypisany do projektu/grantu (znajdziesz go w umowie grantowej lub u kierownika projektu)">
     </div>
   </div>
 
@@ -1689,11 +1689,15 @@ button:focus-visible, .help-tip:focus-visible, [tabindex]:focus-visible {
   </div>
   <!-- Historia zmian — dyskretnie, pod przyciskami -->
   <details class="changelog">
-    <summary><span data-i18n="changelogTitle">Co nowego w wersji 1.7</span></summary>
+    <summary><span data-i18n="changelogTitle">Co nowego w wersji 1.8</span></summary>
     <div class="changelog-body" data-lang-block="pl">
+      <p><strong>1.8</strong> · październik 2026</p>
+      <ul>
+        <li>Przy numerze PSP wróciła podpowiedź, gdzie go znaleźć (umowa grantowa lub kierownik projektu).</li>
+      </ul>
       <p><strong>1.7</strong> · październik 2026</p>
       <ul>
-        <li>Numer PSP (źródło finansowania) nie jest już obowiązkowy — jeśli go nie znasz, zostaw puste, uzupełni go sekcja.</li>
+        <li>Numer PSP (źródło finansowania) nie blokuje już pobrania wniosku, gdy nie jest jeszcze znany.</li>
       </ul>
       <p><strong>1.6</strong> · październik 2026</p>
       <ul>
@@ -1720,9 +1724,13 @@ button:focus-visible, .help-tip:focus-visible, [tabindex]:focus-visible {
       <p><strong>1.2</strong> · sierpień 2026 — instrukcja „Jak korzystać z narzędzia" i informacja o prywatności.</p>
     </div>
     <div class="changelog-body" data-lang-block="en" style="display:none;">
+      <p><strong>1.8</strong> · October 2026</p>
+      <ul>
+        <li>The PSP field again explains where to find the number (grant agreement or project manager).</li>
+      </ul>
       <p><strong>1.7</strong> · October 2026</p>
       <ul>
-        <li>The PSP number (funding source) is no longer mandatory — if you do not know it, leave it blank and the section will fill it in.</li>
+        <li>The PSP number (funding source) no longer blocks downloading the form when it is not yet known.</li>
       </ul>
       <p><strong>1.6</strong> · October 2026</p>
       <ul>
@@ -1770,7 +1778,7 @@ const TRANSLATIONS = {
     step2: "Podaj cel wyjazdu, instytucję przyjmującą i środek transportu (sekcja 2).",
     step3: "Wprowadź trasę i daty (sekcja 3). Godziny są opcjonalne — podaj je, jeśli znasz, a kalkulator dokładnie policzy niepełną dobę. Przy wyjeździe i powrocie tego samego dnia są wymagane.",
     step4: "Jeśli część pobytu jest prywatna, zaznacz to i podaj okres służbowy — diety, noclegi i ryczałt policzą się tylko za ten okres.",
-    step5: "Dodaj koszty przyciskiem „Dodaj koszt” (sekcja 4): bilety, wiza, opłata konferencyjna, ubezpieczenie. Każda pozycja może być w innej walucie. Jeśli znasz numer finansowo-księgowy projektu (PSP), wpisz go — jeśli nie, uzupełni go sekcja.",
+    step5: "Dodaj koszty przyciskiem „Dodaj koszt” (sekcja 4): bilety, wiza, opłata konferencyjna, ubezpieczenie. Każda pozycja może być w innej walucie. Podaj też numer finansowo-księgowy projektu (PSP) — znajdziesz go w umowie grantowej lub u kierownika projektu.",
     step6: "W kalkulatorze (sekcja 5) wybierz sposób rozliczenia noclegu. Przy rachunku wpisz łączny koszt za cały pobyt — nie przeliczaj na doby. Zaznacz posiłki zapewnione przez organizatora, jeśli takie były.",
     step7: "Wypełnij sekcję 6 tylko wtedy, gdy potrzebujesz zaliczki przed wyjazdem.",
     step8: "Eksportuj wniosek do DOCX lub wydrukuj jako PDF.",
@@ -1899,12 +1907,12 @@ const TRANSLATIONS = {
     helpLabel: "Pomoc",
     bankName: "Nazwa banku",
     combinedTrip: "Podróż łączona (kilka krajów lub miast)",
-    changelogTitle: "Co nowego w wersji 1.7",
+    changelogTitle: "Co nowego w wersji 1.8",
     legsHint: "Pierwszym przystankiem jest miejsce docelowe wpisane wyżej. Poniżej dodaj każde kolejne miasto lub kraj i datę, kiedy tam przyjeżdżasz. Dzień przelotu liczy się już do nowego miejsca — np. lecisz z Kuala Lumpur do Singapuru 28 września, więc od 28 września należy Ci dieta singapurska.",
     addLeg: "Dodaj kolejny etap",
     bankSelectPrompt: "— wybierz bank —",
     bankOther: "Inny…",
-    projectNumberPh: "Jeśli nie znasz numeru, zostaw puste — uzupełni go sekcja",
+    projectNumberPh: "Numer przypisany do projektu/grantu (znajdziesz go w umowie grantowej lub u kierownika projektu)",
     bankNameOtherPh: "Wpisz nazwę banku",
     bankSwift: "SWIFT/BIC banku",
     swiftHint: "Opcjonalne — tylko przy zagranicznym koncie bankowym",
@@ -1955,7 +1963,7 @@ const TRANSLATIONS = {
     step2: "State the purpose of the trip, the host institution and the means of transport (Section 2).",
     step3: "Enter the route and dates (Section 3). Times are optional — provide them if known and the calculator will compute partial days precisely. They are required when departure and return fall on the same day.",
     step4: "If part of the stay is private, tick this and give the business period — per diems, accommodation and lump sums will cover that period only.",
-    step5: "Add costs with the „Add cost” button (Section 4): tickets, visa, conference fee, insurance. Each item can use a different currency. If you know the project ledger number (PSP), enter it — otherwise the section will fill it in.",
+    step5: "Add costs with the „Add cost” button (Section 4): tickets, visa, conference fee, insurance. Each item can use a different currency. Also enter the project ledger number (PSP) — you will find it in the grant agreement or can ask the project manager.",
     step6: "In the calculator (Section 5) choose how accommodation is settled. For an invoice, enter the total cost for the whole stay — do not convert it to a nightly rate. Tick any meals provided by the organiser.",
     step7: "Fill in Section 6 only if you need an advance payment before departure.",
     step8: "Export the form to DOCX or print it as PDF.",
@@ -2078,12 +2086,12 @@ const TRANSLATIONS = {
     helpLabel: "Help",
     bankName: "Bank name",
     combinedTrip: "Combined trip (several countries or cities)",
-    changelogTitle: "What's new in version 1.7",
+    changelogTitle: "What's new in version 1.8",
     legsHint: "Your first stop is the destination entered above. Below, add every further city or country and the date you arrive there. The travel day already counts towards the new place — e.g. you fly from Kuala Lumpur to Singapore on 28 September, so from 28 September the Singapore per diem applies.",
     addLeg: "Add another stage",
     bankSelectPrompt: "— select bank —",
     bankOther: "Other…",
-    projectNumberPh: "If you do not know the number, leave it blank — the section will fill it in",
+    projectNumberPh: "Ledger number assigned to the project/grant (check the grant agreement or ask the project manager)",
     bankNameOtherPh: "Enter the bank name",
     bankSwift: "Bank SWIFT/BIC",
     swiftHint: "Optional — only for foreign bank accounts",
